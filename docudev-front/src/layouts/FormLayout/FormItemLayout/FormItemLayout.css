@@ -1,0 +1,37 @@
+.form-item-layout {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.3rem;
+	width: 100%;
+
+	.form-item-label {
+		font-size: 0.875rem;
+		font-weight: 400;
+		line-height: 1.137rem;
+	}
+
+	.form-item-label {
+		text-align: left;
+		margin-bottom: 0.3rem;
+		color: var(--text-label);
+		display: flex;
+		align-items: center;
+		gap: 0.3rem;
+
+		.form-item-required {
+			color: var(--error);
+		}
+
+		&.error {
+			color: var(--error);
+		}
+	}
+
+	.form-item-error {
+		text-align: left;
+		font-size: 0.625rem;
+		margin-top: 0.25rem;
+		color: var(--error);
+	}
+}

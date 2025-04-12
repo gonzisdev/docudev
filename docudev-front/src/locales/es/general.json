@@ -1,0 +1,140 @@
+{
+	"general": {
+		"confirm": "Confirmar",
+		"cancel": "Cancelar",
+		"or": "O",
+		"logout": "Cerrar sesión",
+		"save": "Guardar"
+	},
+	"common": {
+		"home": "Inicio",
+		"docus": "Mis docus",
+		"teams": "Equipos",
+		"management": "Gestión de equipos"
+	},
+	"forms": {
+		"attach_file": "Adjuntar archivo",
+		"search_file": "Buscar archivo",
+		"change_file": "Cambiar archivo"
+	},
+	"register": {
+		"title": "Crear cuenta",
+		"description": "Crea una cuenta para acceder a todas las funciones de DocuDev.",
+		"question": "¿Ya tienes una cuenta?",
+		"login": "Iniciar sesión",
+		"name": "Nombre",
+		"surname": "Apellidos",
+		"email": "Correo electrónico",
+		"password": "Contraseña",
+		"confirm_password": "Confirmar contraseña",
+		"name_placeholder": "Nombre",
+		"surname_placeholder": "Apellidos",
+		"email_placeholder": "email@email.com",
+		"password_placeholder": "********",
+		"sign_up": "Registrarse",
+		"terms": "Al registrarte aceptas nuestros <terms>Términos de servicio</terms> y <privacy>Política de privacidad</privacy>",
+		"validations": {
+			"email": {
+				"required": "Introduce tu correo electrónico",
+				"invalid": "La dirección de correo electrónico no es válida"
+			},
+			"password": {
+				"required": "Introduce tu contraseña",
+				"min_length": "La contraseña debe tener al menos 8 caracteres"
+			},
+			"confirm_password": {
+				"required": "Confirma tu contraseña",
+				"match": "Las contraseñas no coinciden"
+			},
+			"name": {
+				"required": "Introduce tu nombre",
+				"min_length": "El nombre debe tener al menos 2 caracteres"
+			},
+			"surname": {
+				"required": "Introduce tus apellidos",
+				"min_length": "Los apellidos deben tener al menos 2 caracteres"
+			}
+		},
+		"toast": {
+			"success_title": "¡Bienvenido a DocuDev!",
+			"success_description": "Tu cuenta ha sido creada con éxito",
+			"error_title": "Error al crear cuenta",
+			"error_description": "Error al crear la cuenta. Por favor, verifica tus datos"
+		}
+	},
+	"login": {
+		"title": "Iniciar sesión",
+		"description": "Inicia sesión en tu cuenta de DocuDev.",
+		"email": "Correo electrónico",
+		"password": "Contraseña",
+		"email_placeholder": "email@email.com",
+		"password_placeholder": "********",
+		"terms": "Al iniciar sesión aceptas nuestros <terms>Términos de servicio</terms> y <privacy>Política de privacidad</privacy>",
+		"sign_in": "Iniciar sesión",
+		"forgot_password": "¿Olvidaste tu contraseña?",
+		"validations": {
+			"email": {
+				"required": "Introduce tu correo electrónico",
+				"invalid": "La dirección de correo electrónico no es válida"
+			},
+			"password": {
+				"required": "Introduce tu contraseña",
+				"min_length": "La contraseña debe tener al menos 7 caracteres"
+			}
+		},
+		"toast": {
+			"success_title": "¡Bienvenido de nuevo!",
+			"success_description": "Has iniciado sesión correctamente",
+			"error_title": "Error al iniciar sesión",
+			"error_description": "Error al iniciar sesión. Por favor, verifica tus credenciales"
+		}
+	},
+	"forgot_password": {
+		"title": "Recuperar contraseña",
+		"description": "Introduce tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña",
+		"email": "Correo electrónico",
+		"email_placeholder": "email@email.com",
+		"recover": "Recuperar contraseña",
+		"question": "¿No tienes una cuenta?",
+		"register": "Crear cuenta",
+		"login": "Iniciar sesión",
+		"validations": {
+			"email": {
+				"required": "Introduce tu correo electrónico",
+				"invalid": "La dirección de correo electrónico no es válida"
+			}
+		},
+		"toast": {
+			"success_title": "¡Correo enviado!",
+			"success_description": "Te hemos enviado un correo electrónico con instrucciones para restablecer tu contraseña",
+			"error_title": "Error al enviar correo",
+			"error_description": "Error al enviar el correo electrónico. Por favor, verifica tu dirección de correo electrónico"
+		}
+	},
+	"recover_password": {
+		"title": "Nueva contraseña",
+		"code_description": "Introduce el código de verificación que hemos enviado a tu correo electrónico",
+		"description": "Introduce una nueva contraseña para tu cuenta en DocuDev",
+		"password": "Contraseña",
+		"confirm_password": "Confirmar contraseña",
+		"password_placeholder": "********",
+		"change_password": "Cambiar contraseña",
+		"login": "Iniciar sesión",
+		"validations": {
+			"password": {
+				"required": "Introduce tu contraseña",
+				"min_length": "La contraseña debe tener al menos 8 caracteres"
+			},
+			"confirm_password": {
+				"required": "Confirma tu contraseña",
+				"match": "Las contraseñas no coinciden"
+			}
+		},
+		"toast": {
+			"success_title": "¡Contraseña cambiada!",
+			"success_description": "La contraseña se ha cambiado correctamente",
+			"error_title": "Error al cambiar contraseña",
+			"error_description": "Error al cambiar la contraseña. Por favor, verifica tus datos"
+		}
+	}
+}

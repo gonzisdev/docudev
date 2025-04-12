@@ -1,0 +1,37 @@
+:root {
+	/* Main Palette */
+	--primary: #34d399;
+	--primary-dark: #064e3b;
+	--primary-light: #34d3990f;
+
+	--secondary: #33ecbb;
+
+	/* Neutral */
+	--neutral-neutral00: #0f172a;
+	--neutral-neutral05: #1e293b;
+	--neutral-neutral10: #334155;
+	--neutral-neutral20: #94a3b8;
+	--secondary-secondary100: #14532d;
+
+	--neutral-neutral-black: #000000;
+
+	/* Error */
+	--error: #fc8b8b;
+
+	/* Texts Palette */
+	--text-heading: #f1f5f9;
+	--text-body: #cbd5e1;
+	--text-label: #e2e8f0;
+	--text-disabled: #64748b;
+	--text-light: #ffffff;
+
+	/* Backgrounds */
+	--background: #0f172a;
+	--background-light: #0f1b2e;
+
+	/* Other */
+	--border-color: #334155;
+
+	--white: #ffffff;
+	--black: #000000;
+}

@@ -1,0 +1,29 @@
+.card-component {
+	flex: 1;
+	box-sizing: border-box;
+	padding: 1.875rem;
+	width: 100%;
+	background-color: var(--background-light);
+	border-radius: 1rem;
+
+	&.center-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	p {
+		color: var(--text-label);
+		font-weight: 500;
+		margin-bottom: 0;
+	}
+
+	ul {
+		li {
+			font-weight: 500;
+			color: var(--text-label);
+			line-height: 1.875rem;
+		}
+	}
+}

@@ -1,0 +1,42 @@
+{
+  "name": "cashtrackr_backend",
+  "version": "1.0.0",
+  "description": "Proyecto CashTracker",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "dev:api": "nodemon src/index.ts --api",
+    "build": "tsc",
+    "start": "node ./dist/index.js"
+  },
+  "author": "Gonzalo Vasco López",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.2",
+    "morgan": "^1.10.0",
+    "resend": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.8",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.14.1",
+    "@types/nodemailer": "^6.4.17",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}

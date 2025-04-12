@@ -1,0 +1,45 @@
+.register {
+	display: flex;
+	flex-direction: column;
+
+	.register-description {
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+
+	footer {
+		text-align: center;
+
+		.login-question {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin: 1.5rem 0;
+
+			.link {
+				display: block;
+				color: var(--primary);
+				font-size: 0.875rem;
+				text-decoration: none;
+				font-weight: 500;
+				transition: color 0.2s ease;
+
+				&:hover {
+					color: var(--secondary);
+				}
+			}
+		}
+
+		.terms-link {
+			color: var(--primary);
+			text-decoration: none;
+			font-weight: 500;
+			transition: color 0.2s ease;
+		}
+
+		.terms-link:hover {
+			color: var(--secondary);
+			text-decoration: underline;
+		}
+	}
+}

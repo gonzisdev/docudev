@@ -1,0 +1,5 @@
+.form-row-layout {
+	display: flex;
+	gap: 2.31rem;
+	width: 100%;
+}

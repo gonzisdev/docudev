@@ -1,0 +1,6 @@
+:root {
+	--input-height: 2.5rem;
+	--input-padding: 1rem;
+	--input-border-radius: 0.625rem;
+	--input-border-color: var(--neutral-neutral10);
+}

@@ -1,0 +1,34 @@
+.radio-button-wrapper {
+	display: flex;
+	gap: 1rem;
+	flex-wrap: wrap;
+
+	.radio-button-container {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		align-items: center;
+		border-radius: 1.56rem;
+		padding: 0.5rem 1rem;
+		font-size: 0.875rem;
+		font-weight: 500;
+		line-height: 1.3rem;
+		color: var(--input-label);
+		background: var(--neutral-neutral00);
+		cursor: pointer;
+		border: 0.0625rem solid var(--input-border-color);
+
+		&.error {
+			border-color: var(--error);
+		}
+
+		input {
+			border: none;
+			height: 1.17rem;
+			width: 1.17rem;
+			accent-color: var(--secondary);
+			cursor: pointer;
+			margin: 0;
+		}
+	}
+}

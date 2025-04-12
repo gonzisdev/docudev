@@ -1,0 +1,89 @@
+.table-filter-container {
+	position: relative;
+
+	.table-filter-button {
+		background: none;
+		border: none;
+		cursor: pointer;
+
+		svg {
+			min-width: 1rem;
+			max-width: 1rem;
+		}
+
+		&.active {
+			svg {
+				stroke: var(--primary);
+			}
+		}
+	}
+
+	.table-filter {
+		background-color: var(--neutral-neutral00);
+		border-radius: 0.625rem;
+		border: 0.0625rem solid var(--border-color);
+		padding: 0.3rem 0.625rem;
+		max-width: 12rem;
+		font-size: 0.875rem;
+		font-weight: 400;
+
+		&:focus {
+			outline: none;
+			border-color: var(--primary-dark);
+		}
+
+		&.numeric {
+			max-width: 6rem;
+		}
+
+		&::placeholder {
+			font-size: 0.875rem;
+			font-weight: 400;
+		}
+
+		&select {
+			outline: 0.0625rem solid var(--border-color);
+			border: none;
+			border-right: 0.5rem solid transparent;
+
+			&:focus {
+				outline: 0.0625rem solid var(--primary-dark);
+				border: none;
+			}
+		}
+	}
+
+	.table-filter-wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+
+		label {
+			font-size: 0.875rem;
+			color: var(--text-label);
+		}
+	}
+
+	.table-filter-reset {
+		background: none;
+		border: none;
+		cursor: pointer;
+		font-size: 0.7rem;
+		color: var(--primary-dark);
+		width: fit-content;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	.table-filter-reset-empty {
+		height: 1rem;
+	}
+
+	.table-filter-range {
+		display: flex;
+		gap: 0.5rem;
+		align-items: center;
+	}
+}

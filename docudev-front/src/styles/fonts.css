@@ -1,0 +1,72 @@
+*,
+body {
+	font-family: 'Inter';
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: var(--secondary);
+}
+
+h1 {
+	font-family: 'Inter', sans-serif;
+	font-size: 1.563rem;
+	line-height: 2.031rem;
+	font-weight: 600;
+	letter-spacing: 0;
+}
+
+h2 {
+	font-family: 'Inter', sans-serif;
+	font-size: 1.25rem;
+	line-height: 1.625rem;
+	font-weight: 600;
+	letter-spacing: 0;
+}
+
+h3 {
+	font-family: 'Inter', sans-serif;
+	font-size: 1.125rem;
+	line-height: 1.462rem;
+	font-weight: 600;
+	letter-spacing: 0;
+}
+
+h4 {
+	font-family: 'Inter', sans-serif;
+	font-size: 1rem;
+	line-height: 1.3rem;
+	font-weight: 400;
+}
+
+h5 {
+	font-family: 'Inter', sans-serif;
+	font-size: 0.75rem;
+	line-height: 0.975rem;
+	font-weight: 400;
+}
+
+.body-large {
+	font-family: 'Inter', sans-serif;
+	font-size: 1rem;
+	line-height: 1.5rem;
+	font-weight: 400;
+}
+
+.body-default {
+	font-family: 'Inter', sans-serif;
+	font-size: 0.875rem;
+	font-weight: 400;
+	line-height: 1.31rem;
+}
+
+.body-small {
+	font-family: 'Inter', sans-serif;
+	font-size: 0.75rem;
+	font-weight: 400;
+	line-height: 1.125rem;
+}

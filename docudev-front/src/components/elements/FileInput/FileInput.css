@@ -1,0 +1,31 @@
+.file-input-wrapper {
+	width: 100%;
+	background: var(--input-file-background);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 1.375rem 1.25rem 1.875rem 1.25rem;
+	border-radius: 0.625rem;
+	border: 0.062rem dashed var(--primary);
+
+	svg {
+		path {
+			stroke: var(--primary-dark);
+		}
+	}
+	&.uploaded {
+		border-style: solid;
+	}
+
+	p {
+		margin: 0.31rem 0 1.68rem;
+		color: var(--text-label);
+		text-align: center;
+		line-height: 130%;
+	}
+
+	.file-input {
+		display: none;
+	}
+}

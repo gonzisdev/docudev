@@ -1,0 +1,12 @@
+.form-group-layout {
+	display: flex;
+	flex-direction: column;
+	gap: 1.37rem;
+	padding: 1.25rem;
+	border-radius: 1rem;
+	background: var(--section-background);
+
+	.form-group-title {
+		font-weight: 500;
+	}
+}

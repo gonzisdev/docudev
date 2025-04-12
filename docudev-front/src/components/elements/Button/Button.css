@@ -1,0 +1,116 @@
+.button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1.5rem;
+	border-radius: var(--input-border-radius);
+	border: 0.125rem solid transparent;
+	font-weight: 500;
+	font-size: 0.875rem;
+	width: fit-content;
+	cursor: pointer;
+	color: var(--text-light);
+
+	&.primary {
+		background: var(--primary);
+		color: var(--neutral-neutral00);
+
+		&:not(.disabled):hover {
+			background: var(--secondary);
+		}
+
+		&.disabled {
+			background: var(--primary-light);
+			cursor: not-allowed;
+			color: var(--primary-dark);
+		}
+	}
+
+	&.secondary {
+		background: var(--neutral-neutral00);
+		color: var(--primary);
+		border-color: var(--primary);
+
+		&:not(.disabled):hover {
+			background: var(--secondary);
+			color: var(--neutral-neutral00);
+			border-color: transparent;
+		}
+
+		&.disabled {
+			color: var(--primary-dark);
+			border-color: var(--primary-light);
+			cursor: not-allowed;
+		}
+	}
+
+	&.link {
+		color: var(--neutral-grey-05);
+		background: none;
+		border: none;
+
+		&:hover {
+			color: var(--secondary);
+		}
+
+		&.disabled {
+			cursor: not-allowed;
+		}
+	}
+
+	&.loading {
+		pointer-events: none;
+		cursor: default;
+	}
+
+	&.only-icon {
+		background: none;
+		border-color: transparent;
+		max-height: auto;
+	}
+
+	svg {
+		min-width: 1rem;
+		min-height: 1rem;
+	}
+
+	.button-loading {
+		width: 1rem;
+		height: 1rem;
+		border: 0.125rem solid var(--neutral-neutral00);
+		border-bottom-color: transparent;
+		border-radius: 50%;
+		display: inline-block;
+		animation: rotation 1s linear infinite;
+
+		@keyframes rotation {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+
+		&.secondary {
+			border-color: var(--primary);
+			border-bottom-color: var(--neutral-neutral00);
+		}
+
+		&.white {
+			border-color: var(--neutral-neutral00);
+			border-bottom-color: transparent;
+		}
+	}
+
+	&.no-padding {
+		padding: 0;
+	}
+
+	&.full-width {
+		width: 100%;
+		max-width: 100%;
+	}
+}

@@ -1,0 +1,6 @@
+.form-layout {
+	display: flex;
+	flex-direction: column;
+	background-color: var(--neutral-neutral100);
+	gap: 1.75rem;
+}
