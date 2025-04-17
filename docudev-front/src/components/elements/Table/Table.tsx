@@ -28,7 +28,7 @@ import { FunnelSimpleIcon } from 'assets/svgs'
 import TableFilter from 'components/elements/Table/TableFilter/TableFilter'
 import Pagination from 'components/elements/Table/Pagination/Pagination'
 import TableSelectionCheckbox from 'components/elements/Table/TableSelectionCheckbox/TableSelectionCheckbox'
-import Loading from 'components/elements/Table/Loading/Loading'
+import Loading from 'components/elements/Loading/Loading'
 import './Table.css'
 
 declare module '@tanstack/react-table' {

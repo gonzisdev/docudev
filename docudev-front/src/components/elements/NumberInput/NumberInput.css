@@ -23,7 +23,7 @@
 		border-radius: var(--input-border-radius);
 		font-size: 0.875rem;
 		font-weight: 400;
-		color: var(--neutral-neutral-black);
+		color: var(--black);
 
 		&:focus {
 			outline: none;

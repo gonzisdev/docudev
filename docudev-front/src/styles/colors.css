@@ -11,18 +11,13 @@
 	--neutral-neutral05: #1e293b;
 	--neutral-neutral10: #334155;
 	--neutral-neutral20: #94a3b8;
-	--secondary-secondary100: #14532d;
-
-	--neutral-neutral-black: #000000;
 
 	/* Error */
 	--error: #fc8b8b;
+	--error-light: #fc8b8b0f;
 
 	/* Texts Palette */
-	--text-heading: #f1f5f9;
-	--text-body: #cbd5e1;
 	--text-label: #e2e8f0;
-	--text-disabled: #64748b;
 	--text-light: #ffffff;
 
 	/* Backgrounds */

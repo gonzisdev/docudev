@@ -3,7 +3,6 @@ export { ReactComponent as CloseSessionIcon } from 'assets/svgs/CloseSessionIcon
 export { ReactComponent as GroupIcon } from 'assets/svgs/GroupIcon.svg'
 export { ReactComponent as HomeIcon } from 'assets/svgs/HomeIcon.svg'
 export { ReactComponent as FunnelSimpleIcon } from 'assets/svgs/FunnelSimpleIcon.svg'
-export { ReactComponent as PencilIcon } from 'assets/svgs/PencilIcon.svg'
 export { ReactComponent as TrashIcon } from 'assets/svgs/TrashIcon.svg'
 export { ReactComponent as EyeIcon } from 'assets/svgs/Eye.svg'
 export { ReactComponent as EyeCloseIcon } from 'assets/svgs/EyeClose.svg'
@@ -15,3 +14,5 @@ export { ReactComponent as CaretDoubleRightIcon } from 'assets/svgs/CaretDoubleR
 export { ReactComponent as Logo } from 'assets/svgs/Logo.svg'
 export { ReactComponent as DocsIcon } from 'assets/svgs/DocsIcon.svg'
 export { ReactComponent as ManagementIcon } from 'assets/svgs/ManagementIcon.svg'
+export { ReactComponent as EditIcon } from 'assets/svgs/EditIcon.svg'
+export { ReactComponent as TwoArrowsIcon } from 'assets/svgs/TwoArrowsIcon.svg'

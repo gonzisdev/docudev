@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import { sendEmail } from '../utils/email'
 
 export class AuthController {
-  static async createAccount(req: Request, res: Response): Promise<void> {
+  static async createAccount(req: Request, res: Response) {
     try {
       const { name, surname, email, password } = req.body
       const userExists = await User.findOne({ email })
@@ -26,7 +26,7 @@ export class AuthController {
     }
   }
 
-  static async login(req: Request, res: Response): Promise<void> {
+  static async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body
       const user = await User.findOne({ email })
@@ -59,7 +59,7 @@ export class AuthController {
       }
       await user.save()
       const userResponse = await User.findById(user._id)
-        .select('-password')
+        .select('-password -code')
         .lean()
       res.status(200).json(userResponse)
     } catch (error) {
@@ -68,7 +68,7 @@ export class AuthController {
     }
   }
 
-  static async recoverPassword(req: Request, res: Response): Promise<void> {
+  static async recoverPassword(req: Request, res: Response) {
     try {
       const { email } = req.body
       const user = await User.findOne({ email })
@@ -90,7 +90,7 @@ export class AuthController {
     }
   }
 
-  static async newPassword(req: Request, res: Response): Promise<void> {
+  static async newPassword(req: Request, res: Response) {
     try {
       const { password, code, email } = req.body
       const user = await User.findOne({ email })

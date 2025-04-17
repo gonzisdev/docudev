@@ -1,4 +1,4 @@
-const colors = {
+export const colors = {
 	// Main Palette
 	primary: '#34d399',
 	primaryDark: '#064e3b',
@@ -11,18 +11,13 @@ const colors = {
 	neutralNeutral05: '#1e293b',
 	neutralNeutral10: '#334155',
 	neutralNeutral20: '#94a3b8',
-	secondarySecondary100: '#14532d',
-
-	neutralNeutralBlack: '#000000',
 
 	// Error
 	error: '#fc8b8b',
+	erroright: '#fc8b8b0f',
 
 	// Texts Palette
-	textHeading: '#f1f5f9',
-	textBody: '#cbd5e1',
 	textLabel: '#e2e8f0',
-	textDisabled: '#64748b',
 	textLight: '#ffffff',
 
 	// Backgrounds

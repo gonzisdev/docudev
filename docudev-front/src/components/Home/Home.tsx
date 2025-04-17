@@ -1,5 +1,4 @@
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
-import PtgLogo from 'assets/images/ptg-logo.png'
 import Card from 'components/elements/Card/Card'
 import './Home.css'
 
@@ -8,7 +7,6 @@ const Home = () => {
 		<DashboardLayout>
 			<div className='home-wrapper'>
 				<Card className='center-content'>
-					<img src={PtgLogo} alt='ptg-logo' />
 					<h1>Welcome to PTG React Dashboard Boilerplate</h1>
 					<p>This boilerplate includes the following features:</p>
 					<ul>

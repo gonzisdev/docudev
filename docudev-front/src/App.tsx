@@ -18,7 +18,7 @@ import RecoverPassword from './components/RecoverPassword/RecoverPassword'
 import Home from './components/Home/Home'
 import Events from './components/Events/Events'
 import Forms from './components/Forms/Forms'
-import CustomPage from './components/Admin/CustomPage/CustomPage'
+import CustomPage from './components/Teams/Teams'
 import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import { Toaster } from 'sonner'
 

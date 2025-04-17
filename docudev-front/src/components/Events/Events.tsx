@@ -2,7 +2,7 @@ import { Event } from 'models/Event'
 import { useEffect, useState } from 'react'
 import { createColumnHelper } from '@tanstack/react-table'
 import { eventsMock } from 'mock/EventsMock'
-import { PencilIcon, TrashIcon } from 'assets/svgs'
+import { EditIcon, TrashIcon } from 'assets/svgs'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Table from 'components/elements/Table/Table'
 import TableActionLayout from 'components/elements/Table/TableActionLayout/TableActionLayout'
@@ -76,7 +76,7 @@ const Events = () => {
 				return (
 					<div className='table-actions'>
 						<TableActionLayout>
-							<PencilIcon />
+							<EditIcon />
 						</TableActionLayout>
 						<TableActionLayout>
 							<TrashIcon />

@@ -10,7 +10,7 @@
 			padding: 0 var(--input-padding);
 			padding-right: 0;
 			width: 100%;
-			color: var(--neutral-neutral-black);
+			color: var(--black);
 			font-size: 0.875rem;
 
 			&.error {

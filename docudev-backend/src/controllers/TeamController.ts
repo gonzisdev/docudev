@@ -1,0 +1,110 @@
+import { Request, Response } from 'express'
+import Team from '../models/Team'
+import User from '../models/User'
+
+export class TeamController {
+  static async createTeam(req: Request, res: Response) {
+    try {
+      const { name, description } = req.body
+      const team = await Team.create({
+        name,
+        description,
+        owner: req.user._id
+      })
+      await User.findByIdAndUpdate(req.user._id, {
+        $push: { teams: team._id }
+      })
+      res.status(201).json(true)
+    } catch (error) {
+      console.error('Error creating team:', error)
+      res.status(500).json({ error: 'Error creating team' })
+    }
+  }
+
+  static async getTeams(req: Request, res: Response) {
+    try {
+      const teams = await Team.find({ owner: req.user._id }).populate({
+        path: 'collaborators',
+        select: '-password -code -token'
+      })
+
+      res.status(200).json(teams)
+    } catch (error) {
+      console.error('Error getting teams:', error)
+      res.status(500).json({ error: 'Error getting teams' })
+    }
+  }
+
+  static async getTeam(req: Request, res: Response) {
+    try {
+      const { teamId } = req.params
+      const team = await Team.findById(teamId).populate({
+        path: 'collaborators',
+        select: '-password -code -token'
+      })
+      if (!team) {
+        res.status(404).json({ error: 'Team not found' })
+        return
+      }
+      if (
+        team.owner.toString() !== req.user._id.toString() &&
+        !team.collaborators.some(
+          (collaborator) =>
+            collaborator._id.toString() === req.user._id.toString()
+        )
+      ) {
+        res.status(403).json({ error: 'Invalid credentials' })
+        return
+      }
+      res.status(200).json(team)
+    } catch (error) {
+      console.error('Error getting team:', error)
+      res.status(500).json({ error: 'Error getting team' })
+    }
+  }
+
+  static async updateTeam(req: Request, res: Response) {
+    try {
+      const { name, description } = req.body
+      const { teamId } = req.params
+      const team = await Team.findById(teamId)
+      if (!team) {
+        res.status(404).json({ error: 'Team not found' })
+        return
+      }
+      if (team.owner.toString() !== req.user._id.toString()) {
+        res.status(403).json({ error: 'Invalid credentials' })
+        return
+      }
+      await Team.findByIdAndUpdate(teamId, {
+        name,
+        description
+      })
+      res.status(200).json(true)
+    } catch (error) {
+      console.error('Error updating team:', error)
+      res.status(500).json({ error: 'Error updating team' })
+    }
+  }
+
+  static async deleteTeam(req: Request, res: Response) {
+    try {
+      const { teamId } = req.params
+      const team = await Team.findById(teamId)
+      if (!team) {
+        res.status(404).json({ error: 'Team not found' })
+        return
+      }
+      if (team.owner.toString() !== req.user._id.toString()) {
+        res.status(403).json({ error: 'Invalid credentials' })
+        return
+      }
+      await Team.findByIdAndDelete(teamId)
+      //TODO: REMOVE DOCUS FROM TEAM
+      res.status(200).json(true)
+    } catch (error) {
+      console.error('Error deleting team:', error)
+      res.status(500).json({ error: 'Error deleting team' })
+    }
+  }
+}

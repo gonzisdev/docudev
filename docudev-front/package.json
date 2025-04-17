@@ -35,6 +35,7 @@
 		"react-i18next": "^15.4.1",
 		"react-router-dom": "^7.5.0",
 		"react-select": "^5.10.1",
+		"react-swipeable-list": "^1.10.0",
 		"react-verification-input": "^4.2.2",
 		"sonner": "^2.0.3",
 		"vite-plugin-svgr": "^4.3.0",

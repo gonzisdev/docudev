@@ -22,7 +22,7 @@
 			padding: 0 var(--input-padding);
 
 			.select__single-value {
-				color: var(--neutral-neutral-black);
+				color: var(--black);
 				text-align: left;
 				margin-left: -0.5px;
 				font-size: 0.875rem;

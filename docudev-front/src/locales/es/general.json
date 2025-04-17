@@ -58,7 +58,7 @@
 		"toast": {
 			"success_title": "¡Bienvenido a DocuDev!",
 			"success_description": "Tu cuenta ha sido creada con éxito",
-			"error_title": "Error al crear cuenta",
+			"error_title": "Error al crear la cuenta",
 			"error_description": "Error al crear la cuenta. Por favor, verifica tus datos"
 		}
 	},
@@ -135,6 +135,47 @@
 			"success_description": "La contraseña se ha cambiado correctamente",
 			"error_title": "Error al cambiar contraseña",
 			"error_description": "Error al cambiar la contraseña. Por favor, verifica tus datos"
+		}
+	},
+	"teams": {
+		"title": "Equipos",
+		"subtitle": "Equipos a los que perteneces en DocuDev",
+		"my_teams_subtitle": "Equipos que has creado",
+		"collaborative_teams_subtitle": "Equipos en los que colaboras",
+		"create_team": "Crear equipo",
+		"update_team": "Actualizar equipo",
+		"delete_team": "Eliminar equipo",
+		"delete_team_description": "¿Estás seguro de que quieres eliminar este equipo? Esta acción no se puede deshacer",
+		"name": "Nombre del equipo",
+		"name_placeholder": "Nombre del equipo",
+		"description": "Descripción del equipo",
+		"description_placeholder": "Descripción del equipo",
+		"no_owned_teams": "No tienes equipos creados",
+		"no_collaborative_teams": "No tienes equipos colaborativos",
+		"validations": {
+			"name": {
+				"required": "Introduce el nombre del equipo",
+				"min_length": "El nombre debe tener al menos 2 caracteres"
+			},
+			"description": {
+				"required": "Introduce la descripción del equipo",
+				"min_length": "La descripción debe tener al menos 5 caracteres",
+				"max_length": "La descripción no puede tener más de 120 caracteres"
+			}
+		},
+		"toast": {
+			"success_title": "¡Equipo creado!",
+			"success_description": "El equipo se ha creado correctamente",
+			"error_title": "Error al crear el equipo",
+			"error_description": "Error al crear el equipo. Vuelve a intentarlo más tarde",
+			"success_update_title": "¡Equipo actualizao!",
+			"success_update_description": "El equipo se ha actualizado correctamente",
+			"error_update_title": "Error al actualizar el equipo",
+			"error_update_description": "Error al actualizar el equipo. Vuelve a intentarlo más tarde",
+			"success_delete_title": "¡Equipo eliminado!",
+			"success_delete_description": "El equipo se ha eliminado correctamente",
+			"error_delete_title": "Error al eliminar el equipo",
+			"error_delete_description": "Error al eliminar el equipo. Vuelve a intentarlo más tarde"
 		}
 	}
 }

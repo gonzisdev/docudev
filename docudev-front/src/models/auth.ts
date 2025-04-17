@@ -10,7 +10,9 @@ export interface User {
 	phone?: string
 	code?: string
 	status: 'active' | 'inactive' | 'suspended'
-	teams?: string[]
+	teams: string[]
+	createdAt: string
+	updatedAt: string
 }
 
 export type UserFormPayload = Pick<User, 'email' | 'password'>

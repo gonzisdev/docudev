@@ -32,9 +32,7 @@ const FileInput = ({ id, onChange, type = '.pdf' }: Props) => {
 	return (
 		<div className={`file-input-wrapper ${fileUploaded ? 'uploaded' : ''}`}>
 			{fileUploaded ? <FileIcon /> : <FileArrowUpIcon />}
-			<p className='body-default'>
-				{fileUploaded ? DOMPurify.sanitize(fileUploaded.name) : t('forms.attach_file')}
-			</p>
+			<p>{fileUploaded ? DOMPurify.sanitize(fileUploaded.name) : t('forms.attach_file')}</p>
 			<input
 				id={id}
 				className='file-input'

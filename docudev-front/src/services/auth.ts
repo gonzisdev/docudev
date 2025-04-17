@@ -1,5 +1,5 @@
-import { User, UserFormPayload, UserNewPasswordPayload } from '../models/Auth'
 import customFetch from './customFetch'
+import { User, UserFormPayload, UserNewPasswordPayload } from '../models/Auth'
 import { endpoints } from './endpoints'
 
 export const createAccountService = async (data: UserFormPayload) => {

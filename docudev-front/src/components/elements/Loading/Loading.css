@@ -1,0 +1,25 @@
+.loading-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+
+	.loader {
+		width: 2rem;
+		height: 2rem;
+		border: 0.2rem solid var(--secondary);
+		border-bottom-color: transparent;
+		border-radius: 50%;
+		animation: rotation 1s linear infinite;
+	}
+}
+
+@keyframes rotation {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
