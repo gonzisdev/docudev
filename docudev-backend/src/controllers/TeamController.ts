@@ -11,9 +11,6 @@ export class TeamController {
         description,
         owner: req.user._id
       })
-      await User.findByIdAndUpdate(req.user._id, {
-        $push: { teams: team._id }
-      })
       res.status(201).json(true)
     } catch (error) {
       console.error('Error creating team:', error)
@@ -23,12 +20,18 @@ export class TeamController {
 
   static async getTeams(req: Request, res: Response) {
     try {
-      const teams = await Team.find({ owner: req.user._id }).populate({
+      const ownedTeams = await Team.find({ owner: req.user._id }).populate({
         path: 'collaborators',
         select: '-password -code -token'
       })
-
-      res.status(200).json(teams)
+      const collaborativeTeams = await Team.find({
+        collaborators: req.user._id
+      }).populate({
+        path: 'collaborators',
+        select: '-password -code -token'
+      })
+      const allTeams = [...ownedTeams, ...collaborativeTeams]
+      res.status(200).json(allTeams)
     } catch (error) {
       console.error('Error getting teams:', error)
       res.status(500).json({ error: 'Error getting teams' })

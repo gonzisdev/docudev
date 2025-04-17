@@ -12,7 +12,6 @@ export interface IUser extends Document {
   phone: string
   status: 'active' | 'inactive' | 'suspended'
   code: string
-  teams: mongoose.Types.ObjectId[]
   comparePassword(candidatePassword: string): Promise<boolean>
 }
 
@@ -61,13 +60,7 @@ const UserSchema: Schema = new Schema(
       type: String,
       default: '',
       expires: '1h'
-    },
-    teams: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Team'
-      }
-    ]
+    }
   },
   {
     timestamps: true,

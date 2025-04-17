@@ -59,7 +59,7 @@ export class AuthController {
       }
       await user.save()
       const userResponse = await User.findById(user._id)
-        .select('-password -code')
+        .select('-password -code ')
         .lean()
       res.status(200).json(userResponse)
     } catch (error) {
