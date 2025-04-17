@@ -5,12 +5,11 @@ export interface User {
 	email: string
 	password?: string
 	token: string
-	image?: string
+	image: string
 	role: 'admin' | 'user'
 	phone?: string
 	code?: string
 	status: 'active' | 'inactive' | 'suspended'
-	teams: string[]
 	createdAt: string
 	updatedAt: string
 }

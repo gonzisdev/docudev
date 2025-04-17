@@ -143,6 +143,7 @@
 		"my_teams_subtitle": "Equipos que has creado",
 		"collaborative_teams_subtitle": "Equipos en los que colaboras",
 		"create_team": "Crear equipo",
+		"create_team_disabled": "Actualiza tu plan para crear equipos",
 		"update_team": "Actualizar equipo",
 		"delete_team": "Eliminar equipo",
 		"delete_team_description": "¿Estás seguro de que quieres eliminar este equipo? Esta acción no se puede deshacer",

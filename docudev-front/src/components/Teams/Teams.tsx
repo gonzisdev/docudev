@@ -36,8 +36,10 @@ const Teams = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isEditing, setIsEditing] = useState(false)
 	const [selectedTeamId, setSelectedTeamId] = useState<Team['_id'] | undefined>(undefined)
+
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 	const [teamToDelete, setTeamToDelete] = useState<Team['_id'] | undefined>(undefined)
+
 	const [isSwiping, setIsSwiping] = useState(false)
 
 	const {
@@ -162,8 +164,12 @@ const Teams = () => {
 		<DashboardLayout>
 			<div className='teams-header'>
 				<Header title={t('teams.title')} />
-				<Button variant='secondary' className='teams-create-button' onClick={openCreateModal}>
-					{t('teams.create_team')}
+				<Button
+					variant='secondary'
+					className='teams-create-button'
+					onClick={openCreateModal}
+					disabled={user?.role !== 'admin'}>
+					{user?.role === 'admin' ? t('teams.create_team') : t('teams.create_team_disabled')}
 				</Button>
 			</div>
 			{isLoadingTeams ? (

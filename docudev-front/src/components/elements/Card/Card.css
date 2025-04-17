@@ -17,7 +17,6 @@
 	&.empty-state {
 		background-color: var(--primary-light);
 		border-radius: 1rem;
-
 		display: flex;
 		align-items: center;
 		justify-content: center;
