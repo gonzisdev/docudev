@@ -8,25 +8,51 @@
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
-	height: 100%;
-	height: calc(100vh - 6.1rem);
-	overflow: hidden;
+	height: calc(100vh - 6.3rem);
 
 	h2 {
 		margin: 1rem 0;
 	}
 
 	.create_docu-editor {
-		height: 100%;
-		width: 100%;
-		overflow: hidden;
-		border-radius: 0.6rem;
+		align-self: center;
+		width: 210mm;
+		height: 297mm;
+		overflow: auto;
+		border-radius: 0.125rem;
 		background-color: var(--white);
+
+		.bn-container {
+			height: 297mm;
+			padding: 20mm 15mm;
+		}
 
 		.bn-toolbar [role='combobox'] {
 			display: flex;
 			gap: 1rem;
 			width: fit-content;
+		}
+
+		.bn-block-content {
+			padding: 1rem;
+			select {
+				font-size: 0.95rem;
+				border-radius: 4px;
+				background-color: var(--background-light);
+				color: var(--white);
+				border: 1px solid var(--border-color);
+				appearance: menulist;
+
+				&:focus,
+				&:hover {
+					opacity: 1;
+				}
+
+				option {
+					background-color: var(--background-light);
+					color: var(--white);
+				}
+			}
 		}
 	}
 }
