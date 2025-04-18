@@ -1,0 +1,32 @@
+.create-docu-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.create_docu-container {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	height: 100%;
+	height: calc(100vh - 6.1rem);
+	overflow: hidden;
+
+	h2 {
+		margin: 1rem 0;
+	}
+
+	.create_docu-editor {
+		height: 100%;
+		width: 100%;
+		overflow: hidden;
+		border-radius: 0.6rem;
+		background-color: var(--white);
+
+		.bn-toolbar [role='combobox'] {
+			display: flex;
+			gap: 1rem;
+			width: fit-content;
+		}
+	}
+}

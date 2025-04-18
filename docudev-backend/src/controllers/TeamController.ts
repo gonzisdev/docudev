@@ -6,7 +6,11 @@ export class TeamController {
   static async createTeam(req: Request, res: Response) {
     try {
       const { name, description } = req.body
-      const team = await Team.create({
+      if (req.user.role !== 'admin' || req.user.status !== 'active') {
+        res.status(403).json({ error: 'Invalid credentials' })
+        return
+      }
+      await Team.create({
         name,
         description,
         owner: req.user._id
@@ -75,7 +79,11 @@ export class TeamController {
         res.status(404).json({ error: 'Team not found' })
         return
       }
-      if (team.owner.toString() !== req.user._id.toString()) {
+      if (
+        team.owner.toString() !== req.user._id.toString() ||
+        req.user.role !== 'admin' ||
+        req.user.status !== 'active'
+      ) {
         res.status(403).json({ error: 'Invalid credentials' })
         return
       }
@@ -98,7 +106,11 @@ export class TeamController {
         res.status(404).json({ error: 'Team not found' })
         return
       }
-      if (team.owner.toString() !== req.user._id.toString()) {
+      if (
+        team.owner.toString() !== req.user._id.toString() ||
+        req.user.role !== 'admin' ||
+        req.user.status !== 'active'
+      ) {
         res.status(403).json({ error: 'Invalid credentials' })
         return
       }

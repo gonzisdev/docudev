@@ -7,5 +7,6 @@ export const CHANGE_PASSWORD_URL = '/change-password'
 
 export const HOME_URL = '/home'
 export const DOCUS_URL = '/docus'
+export const CREATE_DOCU_URL = '/new-docu'
 export const TEAMS_URL = '/teams'
 export const MANAGEMENT_URL = '/management'

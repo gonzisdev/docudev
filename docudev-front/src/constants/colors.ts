@@ -16,6 +16,10 @@ export const colors = {
 	error: '#fc8b8b',
 	erroright: '#fc8b8b0f',
 
+	/* Warning */
+	warningLight: '#fff3cd',
+	warning: '#ffc107',
+
 	// Texts Palette
 	textLabel: '#e2e8f0',
 	textLight: '#ffffff',

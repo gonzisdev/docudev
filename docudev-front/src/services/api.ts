@@ -24,7 +24,6 @@ const createApiInstance = (baseURL: string = BASE_URL): AxiosInstance => {
 			if (token) {
 				config.headers.Authorization = `Bearer ${token}`
 			}
-
 			return config
 		},
 		(error) => Promise.reject(error)
@@ -46,6 +45,8 @@ const createApiInstance = (baseURL: string = BASE_URL): AxiosInstance => {
 			if (error.response && error.response.status === 401 && error.response.data?.tokenExpired) {
 				const authStore = useAuthStore.getState()
 				authStore.logout()
+			} else if (useAuthStore.getState().isAuthenticated) {
+				useAuthStore.getState().refreshUser()
 			}
 			const errorMessage =
 				error.response?.data?.error || error.response?.data || error.message || 'Unknown error'

@@ -16,6 +16,10 @@
 	--error: #fc8b8b;
 	--error-light: #fc8b8b0f;
 
+	/* Warning */
+	--warning-light: #fff3cd;
+	--warning: #ffc107;
+
 	/* Texts Palette */
 	--text-label: #e2e8f0;
 	--text-light: #ffffff;

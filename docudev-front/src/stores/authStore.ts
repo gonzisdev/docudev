@@ -5,12 +5,14 @@ import {
 	loginService,
 	createAccountService,
 	recoverPasswordService,
-	newPasswordService
+	newPasswordService,
+	getUserService
 } from '../services/auth'
 
 interface AuthState {
 	user: User | null
 	setUser: (user: User) => void
+	refreshUser: () => Promise<User | null>
 	login: (data: UserFormPayload) => Promise<User | void>
 	register: (data: UserFormPayload) => Promise<boolean>
 	logout: () => void
@@ -30,6 +32,16 @@ export const useAuthStore = create<AuthState>()(
 						user,
 						isAuthenticated: !!user
 					})),
+				refreshUser: async () => {
+					if (!get().isAuthenticated) return null
+					const user = await getUserService()
+					set((state) => ({
+						...state,
+						user,
+						isAuthenticated: !!user
+					}))
+					return user
+				},
 				login: async (data: UserFormPayload) => {
 					const store = get()
 					const response = await loginService(data)

@@ -177,6 +177,19 @@
 			"success_delete_description": "El equipo se ha eliminado correctamente",
 			"error_delete_title": "Error al eliminar el equipo",
 			"error_delete_description": "Error al eliminar el equipo. Vuelve a intentarlo más tarde"
+		},
+		"warning": {
+			"warning_title": "¡Actualiza tu plan para poder crear y gestionar equipos!",
+			"warning_description": "No puedes crear mas equipos o gestionarlos porque tu plan no lo permite"
 		}
+	},
+	"docus": {
+		"title": "Mis docus",
+		"create_docu": "Crear docu",
+		"subtitle": "Tus docus en DocuDev"
+	},
+	"create_docu": {
+		"title": "Crear docu",
+		"subtitle": "Crea un nuevo docu usando el editor y guardalo en tu cuenta"
 	}
 }

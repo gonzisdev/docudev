@@ -31,7 +31,7 @@ export const authenticate = async (
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     if (typeof decoded === 'object' && decoded.id) {
       req.user = (await User.findById(decoded.id)
-        .select('-password')
+        .select('-password -code')
         .lean()) as IUser
       next()
     }

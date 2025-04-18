@@ -27,6 +27,7 @@ import {
 } from 'react-swipeable-list'
 import 'react-swipeable-list/dist/styles.css'
 import './Teams.css'
+import Warning from 'components/Warning/Warning'
 
 const Teams = () => {
 	const { t } = useTranslation()
@@ -177,6 +178,12 @@ const Teams = () => {
 			) : (
 				<div className='teams-container'>
 					<h2>{t('teams.subtitle')}</h2>
+					{user?.role !== 'admin' && (
+						<Warning
+							title={t('teams.warning.warning_title')}
+							description={t('teams.warning.warning_description')}
+						/>
+					)}
 					<div className='teams-grid'>
 						<div className='user-owned-teams'>
 							<h3>{t('teams.my_teams_subtitle')}</h3>
@@ -187,8 +194,8 @@ const Teams = () => {
 										.map((team) => (
 											<SwipeableListItem
 												key={team._id}
-												leadingActions={leadingActions(team._id)}
-												trailingActions={trailingActions(team._id)}
+												leadingActions={user?.role === 'admin' && leadingActions(team._id)}
+												trailingActions={user?.role === 'admin' && trailingActions(team._id)}
 												onSwipeStart={() => setIsSwiping(true)}
 												onSwipeEnd={() => setIsSwiping(false)}>
 												<Card className='team-card'>
@@ -196,7 +203,9 @@ const Teams = () => {
 														<span className='team-card-name'>{team.name}</span>
 														<span className='team-card-description'>{team.description}</span>
 													</div>
-													<TwoArrowsIcon className='team-card-swipe-hint' />
+													{user?.role === 'admin' && (
+														<TwoArrowsIcon className='team-card-swipe-hint' />
+													)}
 												</Card>
 											</SwipeableListItem>
 										))}

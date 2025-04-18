@@ -5,8 +5,9 @@ import { DocsIcon, Logo, ManagementIcon } from 'assets/svgs'
 import DropdownMyAccount from 'components/elements/DropdownMyAccount/DropdownMyAccount'
 import { GroupIcon, HomeIcon } from 'assets/svgs'
 import { useAuthStore } from 'stores/authStore'
-import './DashboardLayout.css'
 import { useSidebarStore } from 'stores/sidebarStore'
+import { useUser } from 'hooks/useUser'
+import './DashboardLayout.css'
 
 interface Props {
 	children: React.ReactNode
@@ -18,7 +19,7 @@ const DashboardLayout = ({ children }: Props) => {
 	const pathname = location.pathname
 	const { user, logout } = useAuthStore()
 	const { collapsed, toggleSidebar } = useSidebarStore()
-
+	useUser()
 	const routes = [
 		{
 			icon: <HomeIcon />,

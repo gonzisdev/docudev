@@ -115,4 +115,8 @@ export class AuthController {
       res.status(500).json({ error: 'Error changing password' })
     }
   }
+
+  static async user(req: Request, res: Response) {
+    res.status(200).json(req.user)
+  }
 }
