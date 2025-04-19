@@ -39,8 +39,6 @@ export const newPasswordService = async (data: UserNewPasswordPayload) => {
 }
 
 export const getUserService = async () => {
-	const response = await customFetch<User>(endpoints.user, {
-		method: 'GET'
-	})
+	const response = await customFetch<User>(endpoints.user)
 	return response
 }

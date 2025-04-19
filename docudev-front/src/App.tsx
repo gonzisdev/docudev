@@ -5,6 +5,7 @@ import {
 	BASE_URL,
 	CREATE_DOCU_URL,
 	DOCUS_URL,
+	EDIT_DOCU_URL,
 	FORGOT_PASSWORD_URL,
 	HOME_URL,
 	LOGIN_URL,
@@ -19,10 +20,10 @@ import RecoverPassword from './components/RecoverPassword/RecoverPassword'
 import Home from './components/Home/Home'
 import Events from './components/Events/Events'
 import Docus from './components/Docus/Docus'
-import CustomPage from './components/Teams/Teams'
+import Teams from './components/Teams/Teams'
 import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import { Toaster } from 'sonner'
-import CreateDocu from 'components/Docus/CreateDocu/CreateDocu'
+import DocuEditor from 'components/Docus/DocuEditor/DocuEditor'
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 	const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
@@ -65,8 +66,9 @@ export const App = () => {
 					}>
 					<Route path={HOME_URL} element={<Home />} />
 					<Route path={DOCUS_URL} element={<Docus />} />
-					<Route path={CREATE_DOCU_URL} element={<CreateDocu />} />
-					<Route path={TEAMS_URL} element={<CustomPage />} />
+					<Route path={CREATE_DOCU_URL} element={<DocuEditor />} />
+					<Route path={`${EDIT_DOCU_URL}/:docuId`} element={<DocuEditor />} />
+					<Route path={TEAMS_URL} element={<Teams />} />
 					<Route path={MANAGEMENT_URL} element={<Events />} />
 				</Route>
 

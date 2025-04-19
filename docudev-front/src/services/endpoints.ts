@@ -6,5 +6,10 @@ export const endpoints = {
 	newPassword: 'auth/new-password',
 
 	teams: 'teams',
-	createTeam: 'teams/create-team'
+	createTeam: 'teams/create-team',
+
+	docus: 'docus',
+	createDocu: 'docus/create-docu',
+	updateDocu: 'docus/update-docu',
+	deleteDocu: 'docus/delete-docu'
 }

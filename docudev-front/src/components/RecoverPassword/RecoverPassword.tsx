@@ -24,13 +24,20 @@ const RecoverPassword = () => {
 	const [loading, setLoading] = useState(false)
 	const [code, setCode] = useState<User['code']>('')
 
-	const validationSchema = z.object({
-		password: z
-			.string()
-			.min(1, t('register.validations.password.required'))
-			.min(8, t('register.validations.password.min_length')),
-		confirmPassword: z.string().min(1, t('register.validations.confirm_password.required'))
-	})
+	const validationSchema = z
+		.object({
+			password: z
+				.string()
+				.min(1, t('recover_password.validations.password.required'))
+				.min(8, t('recover_password.validations.password.min_length')),
+			confirmPassword: z
+				.string()
+				.min(1, t('recover_password.validations.confirm_password.required'))
+		})
+		.refine((data) => data.password === data.confirmPassword, {
+			message: t('recover_password.validations.confirm_password.match'),
+			path: ['confirmPassword']
+		})
 
 	const methods = useForm({
 		defaultValues: {

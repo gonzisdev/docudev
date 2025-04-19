@@ -76,7 +76,8 @@
 				align-items: center;
 
 				&:hover {
-					background: var(--primary-light);
+					color: var(--neutral-neutral00);
+					background: var(--secondary);
 				}
 
 				&.select__option--is-selected {

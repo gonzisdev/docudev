@@ -11,10 +11,11 @@ interface Props extends FormProps {
 	options: Option[]
 	placeholder?: string
 	disabled?: boolean
+	isClearable?: boolean
 }
 
 const FormSelect = forwardRef<SelectInstance<Option, false, GroupBase<Option>>, Props>(
-	({ id, label, required = false, options, placeholder, disabled }, ref) => {
+	({ id, label, required = false, options, placeholder, disabled, isClearable = false }, ref) => {
 		const {
 			control,
 			formState: { errors, touchedFields }
@@ -41,6 +42,7 @@ const FormSelect = forwardRef<SelectInstance<Option, false, GroupBase<Option>>, 
 							hasError={!!errors[id]}
 							placeholder={placeholder}
 							disabled={disabled}
+							isClearable={isClearable}
 						/>
 					)}
 				/>

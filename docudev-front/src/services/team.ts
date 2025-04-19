@@ -11,9 +11,7 @@ export const createTeamService = async (data: TeamFormPayload) => {
 }
 
 export const getTeamsService = async () => {
-	const response = await customFetch<Team[]>(endpoints.teams, {
-		method: 'GET'
-	})
+	const response = await customFetch<Team[]>(endpoints.teams)
 	return response
 }
 

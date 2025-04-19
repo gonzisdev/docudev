@@ -21,6 +21,7 @@ interface Props
 	variant?: 'rounded' | 'default'
 	disabled?: boolean
 	isSearchable?: boolean
+	isClearable?: boolean
 	onChange: (value: string) => void
 	onBlur?: (e: FocusEvent<HTMLElement>) => void
 }
@@ -38,7 +39,8 @@ const Select = forwardRef<SelectInstance<Option, false>, Props>(
 			onChange,
 			onBlur,
 			disabled,
-			isSearchable = true
+			isSearchable = true,
+			isClearable = false
 		},
 		ref
 	) => {
@@ -74,6 +76,7 @@ const Select = forwardRef<SelectInstance<Option, false>, Props>(
 				placeholder={placeholder}
 				isDisabled={disabled}
 				isSearchable={isSearchable}
+				isClearable={isClearable}
 				components={{
 					DropdownIndicator,
 					IndicatorSeparator: () => null

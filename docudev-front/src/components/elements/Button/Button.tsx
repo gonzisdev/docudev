@@ -4,7 +4,7 @@ interface BaseProps {
 	className?: string
 	children: React.ReactNode
 	type?: 'button' | 'submit' | 'reset'
-	variant?: 'primary' | 'secondary' | 'only-icon' | 'link'
+	variant?: 'primary' | 'secondary' | 'danger' | 'only-icon' | 'link'
 	leftIcon?: React.ReactNode
 	rightIcon?: React.ReactNode
 	disabled?: boolean

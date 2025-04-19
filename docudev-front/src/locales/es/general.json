@@ -186,10 +186,53 @@
 	"docus": {
 		"title": "Mis docus",
 		"create_docu": "Crear docu",
-		"subtitle": "Tus docus en DocuDev"
+		"delete_docu": "Eliminar docu",
+		"subtitle": "Tus docus en DocuDev",
+		"export_pdf": "Exportar a PDF",
+		"save_docu": "Guardar cambios",
+		"no_docus": "No tienes ni colaboras en ningun docu",
+		"form": {
+			"title": "Nombre del docu",
+			"title_placeholder": "Nombre del docu",
+			"team": "Equipo",
+			"team_placeholder": "Selecciona un equipo",
+			"validations": {
+				"title": {
+					"required": "Introduce el nombre del docu",
+					"min_length": "El nombre debe tener al menos 2 caracteres",
+					"max_length": "El nombre no puede tener más de 50 caracteres"
+				}
+			}
+		}
 	},
 	"create_docu": {
 		"title": "Crear docu",
-		"subtitle": "Crea un nuevo docu usando el editor y guardalo en tu cuenta"
+		"subtitle": "Documenta tus proyectos de forma intuitiva y colabora en tiempo real con tu equipo",
+		"toast": {
+			"success_title": "¡Docu creado!",
+			"success_description": "El docu se ha creado correctamente",
+			"error_title": "Error al crear el docu",
+			"error_description": "Error al crear el docu. Vuelve a intentarlo más tarde"
+		}
+	},
+	"update_docu": {
+		"title": "Editar docu",
+		"subtitle": "Perfecciona tu documentación, actualiza su contenido y comparte con tu equipo",
+		"toast": {
+			"success_title": "¡Docu actualizado!",
+			"success_description": "El docu se ha actualizado correctamente",
+			"error_title": "Error al actualizar el docu",
+			"error_description": "Error al actualizar el docu. Vuelve a intentarlo más tarde"
+		}
+	},
+	"delete_docu": {
+		"title": "Eliminar docu",
+		"description": "¿Estás seguro de que quieres eliminar este docu? Esta acción no se puede deshacer",
+		"toast": {
+			"success_title": "¡Docu eliminado!",
+			"success_description": "El docu se ha eliminado correctamente",
+			"error_title": "Error al eliminar el docu",
+			"error_description": "Error al eliminar el docu. Vuelve a intentarlo más tarde"
+		}
 	}
 }

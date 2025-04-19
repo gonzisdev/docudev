@@ -45,6 +45,24 @@
 		}
 	}
 
+	&.danger {
+		background: var(--neutral-neutral00);
+		color: var(--error);
+		border-color: var(--error);
+
+		&:not(.disabled):hover {
+			background: var(--error);
+			color: var(--neutral-neutral00);
+			border-color: transparent;
+		}
+
+		&.disabled {
+			color: var(--primary-dark);
+			border-color: var(--primary-light);
+			cursor: not-allowed;
+		}
+	}
+
 	&.link {
 		color: var(--neutral-grey-05);
 		background: none;

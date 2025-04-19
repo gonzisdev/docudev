@@ -12,4 +12,53 @@
 	h2 {
 		margin: 1rem 0;
 	}
+
+	.docus-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.docu-card {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background-color: var(--background);
+		border-bottom: 1px solid var(--input-border-color);
+		border-radius: 0;
+		padding: 1rem;
+		margin-bottom: 0.25rem;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+
+		&:hover {
+			background-color: var(--primary-light);
+		}
+
+		.docu-card-content {
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+			flex: 1;
+			overflow: hidden;
+
+			.docu-card-name {
+				font-weight: 500;
+				font-size: 1rem;
+				transition: color 0.2s ease;
+
+				&:hover {
+					color: var(--secondary);
+				}
+			}
+
+			.docu-card-description {
+				color: var(--text-label);
+				font-size: 0.875rem;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+	}
 }

@@ -8,6 +8,7 @@ import Form from 'components/elements/Form/Form'
 import FormInput from 'components/elements/Form/FormInput'
 import Loading from 'components/elements/Loading/Loading'
 import Card from 'components/elements/Card/Card'
+import Warning from 'components/Warning/Warning'
 import useTeams from 'hooks/useTeams'
 import useTeam from 'hooks/useTeam'
 import { EditIcon, TrashIcon, TwoArrowsIcon } from 'assets/svgs'
@@ -27,7 +28,6 @@ import {
 } from 'react-swipeable-list'
 import 'react-swipeable-list/dist/styles.css'
 import './Teams.css'
-import Warning from 'components/Warning/Warning'
 
 const Teams = () => {
 	const { t } = useTranslation()
