@@ -5,7 +5,7 @@ export interface Team {
 	name: string
 	owner: User['_id']
 	description: string
-	collaborators: User['_id'][]
+	collaborators: User[]
 	docus: string[]
 	createdAt: string
 	updatedAt: string

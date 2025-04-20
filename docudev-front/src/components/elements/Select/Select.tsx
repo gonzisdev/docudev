@@ -1,5 +1,5 @@
 import { Option } from 'models/Common'
-import { FocusEvent, forwardRef } from 'react'
+import { FocusEvent, forwardRef, useEffect, useState } from 'react'
 import ReactSelect, {
 	GroupBase,
 	SelectInstance,
@@ -44,6 +44,8 @@ const Select = forwardRef<SelectInstance<Option, false>, Props>(
 		},
 		ref
 	) => {
+		const [menuPortalTarget, setMenuPortalTarget] = useState<HTMLElement | null>(null)
+
 		const classNames = () => {
 			let classes = 'select-container'
 			if (className) classes += ` ${className}`
@@ -51,6 +53,10 @@ const Select = forwardRef<SelectInstance<Option, false>, Props>(
 			if (hasError) classes += ' error'
 			return classes
 		}
+
+		useEffect(() => {
+			setMenuPortalTarget(document.body)
+		}, [])
 
 		const DropdownIndicator: React.FC<DropdownIndicatorProps<Option, false, GroupBase<Option>>> = (
 			props
@@ -77,6 +83,11 @@ const Select = forwardRef<SelectInstance<Option, false>, Props>(
 				isDisabled={disabled}
 				isSearchable={isSearchable}
 				isClearable={isClearable}
+				menuPortalTarget={menuPortalTarget}
+				menuPosition='fixed'
+				styles={{
+					menuPortal: (base) => ({ ...base, zIndex: 9999 })
+				}}
 				components={{
 					DropdownIndicator,
 					IndicatorSeparator: () => null

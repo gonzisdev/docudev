@@ -54,7 +54,7 @@
 			}
 
 			.team-card-description {
-				color: var(--text-label);
+				color: var(--neutral-neutral20);
 				font-size: 0.875rem;
 				white-space: nowrap;
 				overflow: hidden;
@@ -82,7 +82,7 @@
 		gap: 1rem;
 
 		.swipe-action {
-			border-radius: 1rem;
+			border-radius: var(--input-border-radius);
 
 			.edit-action {
 				background-color: var(--primary-light);
@@ -108,11 +108,4 @@
 			}
 		}
 	}
-}
-
-.swiping {
-	user-select: none !important;
-	-webkit-user-select: none !important;
-	-moz-user-select: none !important;
-	-ms-user-select: none !important;
 }

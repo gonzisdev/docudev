@@ -1,7 +1,7 @@
 import './Header.css'
 
 interface Props {
-	title: string
+	title: string | React.ReactNode
 }
 
 const Header = ({ title }: Props) => {

@@ -12,6 +12,10 @@
 		"teams": "Equipos",
 		"management": "Gestión de equipos"
 	},
+	"pagination": {
+		"previous": "Anterior",
+		"next": "Siguiente"
+	},
 	"forms": {
 		"attach_file": "Adjuntar archivo",
 		"search_file": "Buscar archivo",
@@ -186,11 +190,25 @@
 	"docus": {
 		"title": "Mis docus",
 		"create_docu": "Crear docu",
+		"update_docu": "Editar docu",
 		"delete_docu": "Eliminar docu",
 		"subtitle": "Tus docus en DocuDev",
-		"export_pdf": "Exportar a PDF",
 		"save_docu": "Guardar cambios",
+		"team": "Equipo",
+		"created": "Fecha de creación",
+		"updated": "Última actualización",
 		"no_docus": "No tienes ni colaboras en ningun docu",
+		"owner": "Creador",
+		"search": "Buscar docu",
+		"filter_team": "Filtrar por equipo",
+		"filter_owner": "Filtrar por creador",
+		"sort": "Ordenar por",
+		"sort_title_asc": "Título (A-Z)",
+		"sort_title_desc": "Título (Z-A)",
+		"sort_created_asc": "Fecha de creación (ASC)",
+		"sort_created_desc": "Fecha de creación (DESC)",
+		"sort_updated_asc": "Última actualización (ASC)",
+		"sort_updated_desc": "Última actualización (DESC)",
 		"form": {
 			"title": "Nombre del docu",
 			"title_placeholder": "Nombre del docu",
@@ -218,6 +236,7 @@
 	"update_docu": {
 		"title": "Editar docu",
 		"subtitle": "Perfecciona tu documentación, actualiza su contenido y comparte con tu equipo",
+		"save_docu": "Guardar cambios",
 		"toast": {
 			"success_title": "¡Docu actualizado!",
 			"success_description": "El docu se ha actualizado correctamente",

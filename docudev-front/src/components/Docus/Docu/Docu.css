@@ -1,20 +1,10 @@
-.docu-editor-header {
+.docu-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-
-	.docu-editor-header-title {
-		color: var(--white);
-	}
-
-	.docu-editor-header-actions {
-		display: flex;
-		gap: 1rem;
-		align-items: center;
-	}
 }
 
-.docu-editor-container {
+.docu-container {
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
@@ -24,17 +14,11 @@
 		margin: 1rem 0;
 	}
 
-	.docu-editor-editor {
+	.docu-editor {
 		height: calc(100vh - 6.3rem);
 		background-color: var(--white);
 		border-radius: 0.5rem;
 		overflow: auto;
-
-		.bn-toolbar [role='combobox'] {
-			display: flex;
-			gap: 1rem;
-			width: fit-content;
-		}
 
 		.bn-block-content {
 			padding: 1rem;

@@ -9,7 +9,7 @@
 	position: relative;
 
 	&:focus-within {
-		border-color: var(--neutral-neutral20);
+		border-color: var(--secondary);
 	}
 
 	&.error {
@@ -25,10 +25,10 @@
 	}
 
 	&.readonly {
-		background: var(--color-inputs-bg-readonly);
+		background: var(--background);
 
 		.input {
-			color: var(--color-inputs-text-read-only);
+			color: var(--text-light);
 		}
 	}
 
@@ -40,7 +40,8 @@
 		border-radius: var(--input-border-radius);
 		font-size: 0.875rem;
 		font-weight: 400;
-		color: var(--black);
+		color: var(--text-light);
+		background: var(--background);
 
 		&:focus {
 			outline: none;
@@ -50,6 +51,10 @@
 		&[type='number']::-webkit-inner-spin-button {
 			appearance: none;
 			margin: 0;
+		}
+
+		&::placeholder {
+			color: var(--neutral-neutral10);
 		}
 	}
 
@@ -74,5 +79,32 @@
 		right: 0;
 		top: 50%;
 		transform: translateY(-50%);
+
+		svg {
+			path {
+				fill: var(--input-border-color);
+			}
+		}
 	}
+}
+
+.input-container .input:autofill {
+	background-color: var(--background) !important;
+	color: var(--text-light) !important;
+	-webkit-text-fill-color: var(--text-light) !important;
+	-moz-text-fill-color: var(--text-light) !important;
+}
+
+.input-container .input:-webkit-autofill,
+.input-container .input:-webkit-autofill:hover,
+.input-container .input:-webkit-autofill:focus,
+.input-container .input:-webkit-autofill:active {
+	-webkit-text-fill-color: var(--text-light) !important;
+	caret-color: var(--text-light) !important;
+	-webkit-box-shadow: 0 0 0 1000px var(--background) inset !important;
+	box-shadow: 0 0 0 1000px var(--background) inset !important;
+	transition:
+		background-color 5000s ease-in-out 0s,
+		color 5000s ease-in-out 0s;
+	border-color: var(--input-border-color) !important;
 }

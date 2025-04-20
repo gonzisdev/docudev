@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import Team from '../models/Team'
-import User from '../models/User'
+import Docu from '../models/Docu'
 
 export class TeamController {
   static async createTeam(req: Request, res: Response) {
@@ -80,9 +80,11 @@ export class TeamController {
         return
       }
       if (
-        team.owner.toString() !== req.user._id.toString() ||
-        req.user.role !== 'admin' ||
-        req.user.status !== 'active'
+        !(
+          team.owner.toString() === req.user._id.toString() &&
+          req.user.role === 'admin' &&
+          req.user.status === 'active'
+        )
       ) {
         res.status(403).json({ error: 'Invalid credentials' })
         return
@@ -107,15 +109,18 @@ export class TeamController {
         return
       }
       if (
-        team.owner.toString() !== req.user._id.toString() ||
-        req.user.role !== 'admin' ||
-        req.user.status !== 'active'
+        !(
+          team.owner.toString() === req.user._id.toString() &&
+          req.user.role === 'admin' &&
+          req.user.status === 'active'
+        )
       ) {
         res.status(403).json({ error: 'Invalid credentials' })
         return
       }
+
       await Team.findByIdAndDelete(teamId)
-      //TODO: REMOVE DOCUS FROM TEAM
+      await Docu.deleteMany({ team: teamId })
       res.status(200).json(true)
     } catch (error) {
       console.error('Error deleting team:', error)

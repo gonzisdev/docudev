@@ -47,7 +47,12 @@ const Modal: React.FC<ModalProps> = ({
 
 	const handleOutsideClick = (e: React.MouseEvent) => {
 		if (closeOnClickOutside && modalRef.current && !modalRef.current.contains(e.target as Node)) {
-			toggleVisibility()
+			const selectPortals = document.querySelectorAll('.select__menu-portal')
+			const portals = Array.from(selectPortals) as HTMLElement[]
+			const clickedInPortal = portals.some((portal) => portal.contains(e.target as Node))
+			if (!clickedInPortal) {
+				toggleVisibility()
+			}
 		}
 	}
 

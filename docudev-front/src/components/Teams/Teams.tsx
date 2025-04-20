@@ -2,10 +2,8 @@ import { useState, useEffect } from 'react'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Header from 'components/elements/Header/Header'
 import Button from 'components/elements/Button/Button'
-import Modal from 'components/elements/Modal/Modal'
-import ConfirmationModal from 'components/elements/ConfirmationModal/ConfirmationModal'
-import Form from 'components/elements/Form/Form'
-import FormInput from 'components/elements/Form/FormInput'
+import TeamFormModal from './Modals/TeamFormModal'
+import TeamDeleteModal from './Modals/TeamDeleteModal'
 import Loading from 'components/elements/Loading/Loading'
 import Card from 'components/elements/Card/Card'
 import Warning from 'components/Warning/Warning'
@@ -146,7 +144,6 @@ const Teams = () => {
 
 	useEffect(() => {
 		isSwiping ? document.body.classList.add('swiping') : document.body.classList.remove('swiping')
-
 		return () => {
 			document.body.classList.remove('swiping')
 		}
@@ -241,43 +238,18 @@ const Teams = () => {
 					</div>
 				</div>
 			)}
-			<Modal
+			<TeamFormModal
 				isVisible={isModalOpen}
 				toggleVisibility={closeModal}
-				title={isEditing ? t('teams.update_team') : t('teams.create_team')}>
-				{isEditing && isLoadingTeam ? (
-					<Loading />
-				) : (
-					<Form methods={methods} onSubmit={methods.handleSubmit(handleSubmit)}>
-						<FormInput
-							id='name'
-							label={t('teams.name')}
-							placeholder={t('teams.name_placeholder')}
-							required
-						/>
-						<FormInput
-							id='description'
-							label={t('teams.description')}
-							placeholder={t('teams.description_placeholder')}
-							required
-						/>
-						<footer>
-							<Button
-								type='submit'
-								variant='secondary'
-								loading={isCreatingTeam || isUpdatingTeam}
-								fullWidth>
-								{isEditing ? t('teams.update_team') : t('teams.create_team')}
-							</Button>
-						</footer>
-					</Form>
-				)}
-			</Modal>
-			<ConfirmationModal
+				methods={methods}
+				isEditing={isEditing}
+				isLoadingTeam={isLoadingTeam}
+				isSubmitting={isCreatingTeam || isUpdatingTeam}
+				onSubmit={handleSubmit}
+			/>
+			<TeamDeleteModal
 				isVisible={isDeleteModalOpen}
 				toggleVisibility={closeDeleteModal}
-				title={t('teams.delete_team')}
-				message={t('teams.delete_team_description')}
 				onConfirm={handleDeleteTeam}
 				isLoading={isDeletingTeam}
 			/>

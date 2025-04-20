@@ -4,6 +4,7 @@ import { useAuthStore } from './stores/authStore'
 import {
 	BASE_URL,
 	CREATE_DOCU_URL,
+	DOCU_URL,
 	DOCUS_URL,
 	EDIT_DOCU_URL,
 	FORGOT_PASSWORD_URL,
@@ -21,9 +22,10 @@ import Home from './components/Home/Home'
 import Events from './components/Events/Events'
 import Docus from './components/Docus/Docus'
 import Teams from './components/Teams/Teams'
+import DocuEditor from 'components/Docus/DocuEditor/DocuEditor'
+import Docu from 'components/Docus/Docu/Docu'
 import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import { Toaster } from 'sonner'
-import DocuEditor from 'components/Docus/DocuEditor/DocuEditor'
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 	const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
@@ -65,6 +67,7 @@ export const App = () => {
 						</ProtectedRoute>
 					}>
 					<Route path={HOME_URL} element={<Home />} />
+					<Route path={`${DOCU_URL}/:docuId`} element={<Docu />} />
 					<Route path={DOCUS_URL} element={<Docus />} />
 					<Route path={CREATE_DOCU_URL} element={<DocuEditor />} />
 					<Route path={`${EDIT_DOCU_URL}/:docuId`} element={<DocuEditor />} />
