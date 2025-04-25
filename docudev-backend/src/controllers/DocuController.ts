@@ -50,20 +50,75 @@ export class DocuController {
         res.status(403).json({ error: 'Invalid credentials' })
         return
       }
+      const page = parseInt(req.query.page as string) || 1
+      const limit = parseInt(req.query.limit as string) || 10
+      const search = req.query.search as string
+      const teamId = req.query.teamId as string
+      const ownerId = req.query.ownerId as string
+      const sortField = (req.query.sortField as string) || 'updatedAt'
+      const sortDirection = (req.query.sortDirection as string) || 'desc'
+
       const userTeams = await Team.find({
         $or: [{ owner: req.user._id }, { collaborators: req.user._id }]
       }).select('_id')
       const teamIds = userTeams.map((team) => team._id)
-      const docus = await Docu.find({
+
+      const baseQuery = {
         $or: [{ owner: req.user._id }, { team: { $in: teamIds } }]
-      }).populate('owner', 'name surname')
-      res.status(200).json(docus)
+      }
+
+      let query: any = { ...baseQuery }
+
+      if (search) {
+        query.title = { $regex: search, $options: 'i' }
+      }
+
+      if (teamId) {
+        const teamExists = teamIds.some((id) => id.toString() === teamId)
+        if (!teamExists) {
+          res.status(403).json({ error: 'Invalid team access' })
+          return
+        }
+        query.team = teamId
+      }
+
+      if (ownerId) {
+        query.owner = ownerId
+      }
+
+      const skip = (page - 1) * limit
+
+      const sort: { [key: string]: 'asc' | 'desc' } = {}
+      if (['title', 'createdAt', 'updatedAt'].includes(sortField)) {
+        sort[sortField] = sortDirection === 'asc' ? 'asc' : 'desc'
+      } else {
+        sort.updatedAt = 'desc'
+      }
+      const collationOptions =
+        sortField === 'title' ? { locale: 'es', strength: 2 } : undefined
+      const docus = await Docu.find(query)
+        .populate('owner', 'name surname')
+        .sort(sort)
+        .collation(collationOptions)
+        .skip(skip)
+        .limit(limit)
+        .exec()
+      const total = await Docu.countDocuments(query)
+
+      res.status(200).json({
+        data: docus,
+        pagination: {
+          total,
+          page,
+          limit,
+          pages: Math.ceil(total / limit)
+        }
+      })
     } catch (error) {
       console.error('Error getting docus:', error)
       res.status(500).json({ error: 'Error getting docus' })
     }
   }
-
   static async getDocu(req: Request, res: Response) {
     try {
       const docu = await Docu.findById(req.params.docuId).populate(

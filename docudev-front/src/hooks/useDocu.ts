@@ -18,11 +18,16 @@ const useDocu = ({ docuId }: Props) => {
 	const { t } = useTranslation()
 	const queryClient = useQueryClient()
 
-	const { data: docu, isLoading: isLoadingDocu } = useQuery({
+	const {
+		data: docu,
+		isLoading: isLoadingDocu,
+		error: errorDocu
+	} = useQuery({
 		queryKey: [docuQueryKey, docuId],
 		queryFn: () => getDocuService(docuId!),
 		enabled: !!docuId,
-		refetchOnWindowFocus: 'always'
+		refetchOnWindowFocus: 'always',
+		retry: false
 	})
 
 	const { mutateAsync: createDocu, isPending: isCreatingDocu } = useMutation({
@@ -104,6 +109,7 @@ const useDocu = ({ docuId }: Props) => {
 	return {
 		docu,
 		isLoadingDocu,
+		errorDocu,
 		createDocu,
 		isCreatingDocu,
 		updateDocu,

@@ -13,4 +13,24 @@ export interface Docu {
 	updatedAt: Date
 }
 
+export interface DocusResponse {
+	data: Docu[]
+	pagination: {
+		total: number
+		page: number
+		limit: number
+		pages: number
+	}
+}
+
 export type DocuFormPayload = Pick<Docu, 'title' | 'content' | 'team'>
+
+export interface DocusParams {
+	page?: number
+	limit?: number
+	search?: string
+	teamId?: string
+	ownerId?: string
+	sortField?: string
+	sortDirection?: string
+}

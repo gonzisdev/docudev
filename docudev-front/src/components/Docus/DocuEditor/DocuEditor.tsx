@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { DOCUS_URL } from 'constants/routes'
+import { DOCU_URL, DOCUS_URL } from 'constants/routes'
 import { codeBlock } from 'constants/editor'
 import { DocuFormPayload } from 'models/Docu'
 import useDocu from 'hooks/useDocu'
@@ -20,6 +20,8 @@ import { en } from '@blocknote/core/locales'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { exportToPdf } from 'utils/pdf'
+import { formatDateWithTime } from 'utils/dates'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/shadcn/style.css'
 import './DocuEditor.css'
@@ -38,6 +40,7 @@ const DocuEditor = () => {
 	const {
 		docu,
 		isLoadingDocu,
+		errorDocu,
 		createDocu,
 		isCreatingDocu,
 		updateDocu,
@@ -45,7 +48,13 @@ const DocuEditor = () => {
 		deleteDocu,
 		isDeletingDocu
 	} = useDocu(docuId ? { docuId } : {})
-	const { teams } = useTeams()
+	const { teams, isLoadingTeams } = useTeams()
+
+	const findTeamName = (teamId: string) => {
+		if (!teams) return ''
+		const team = teams.find((team) => team._id === teamId)
+		return team ? team.name : ''
+	}
 
 	const editor = useCreateBlockNote({
 		dictionary,
@@ -93,6 +102,7 @@ const DocuEditor = () => {
 		}
 		if (docuId) {
 			await updateDocu({ docuId, data: docuData })
+			navigate(`${DOCU_URL}/${docuId}`)
 		} else {
 			await createDocu(docuData)
 			navigate(DOCUS_URL)
@@ -123,47 +133,83 @@ const DocuEditor = () => {
 		}
 	}, [docu, editor])
 
+	if (errorDocu) return <Navigate to={DOCUS_URL} />
+
 	return (
 		<DashboardLayout>
-			<div className='docu-editor-header'>
-				<Header
-					title={
-						docuId ? (
-							<>
-								{t('update_docu.title')}:{' '}
-								<span className='docu-editor-header-title'>{docu?.title}</span>
-							</>
-						) : (
-							t('create_docu.title')
-						)
-					}
-				/>{' '}
-				<div className='docu-editor-header-actions'>
-					{docuId ? (
-						<>
-							<Button variant='primary' onClick={openModal}>
-								{t('docus.save_docu')}
-							</Button>
-							<Button variant='danger' onClick={openDeleteModal}>
-								{t('docus.delete_docu')}
-							</Button>
-						</>
-					) : (
-						<Button variant='primary' onClick={openModal}>
-							{t('docus.save_docu')}
-						</Button>
-					)}
-				</div>
-			</div>
-			{docuId && isLoadingDocu ? (
+			{docuId && (isLoadingDocu || isLoadingTeams) ? (
 				<Loading />
 			) : (
-				<div className='docu-editor-container'>
-					<h2>{docuId ? t('update_docu.subtitle') : t('create_docu.subtitle')}</h2>
-					<div className='docu-editor-editor'>
-						<BlockNoteView editor={editor} ref={editorRef} />
+				<>
+					<div className='docu-editor-header'>
+						<Header
+							title={
+								docuId ? (
+									<>
+										{t('update_docu.title')}:{' '}
+										<span className='docu-editor-header-title'>{docu?.title}</span>
+									</>
+								) : (
+									t('create_docu.title')
+								)
+							}
+						/>{' '}
+						<div className='docu-editor-header-actions'>
+							{docuId ? (
+								<>
+									<Button variant='primary' onClick={openModal}>
+										{t('docus.save_docu')}
+									</Button>
+									<Button
+										variant='secondary'
+										onClick={() => exportToPdf(editorRef.current, docu?.title)}>
+										{t('docus.export_pdf')}
+									</Button>
+									<Button variant='danger' onClick={openDeleteModal}>
+										{t('docus.delete_docu')}
+									</Button>
+								</>
+							) : (
+								<Button variant='primary' onClick={openModal}>
+									{t('docus.save_docu')}
+								</Button>
+							)}
+						</div>
 					</div>
-				</div>
+
+					<div className='docu-editor-container'>
+						{docu ? (
+							<div className='docu-editor-details'>
+								<div className='docu-editor-details-info'>
+									<div className='docu-editor-details-left'>
+										<span>
+											<span>{t('docus.owner')}:</span> {docu.owner?.name} {docu.owner?.surname}
+										</span>
+										{docu.team && (
+											<span>
+												<span>{t('docus.team')}:</span>{' '}
+												<span className='team-tag'>{findTeamName(docu.team)}</span>
+											</span>
+										)}
+									</div>
+									<div className='docu-editor-details-right'>
+										<span>
+											<span>{t('docus.created')}:</span> {formatDateWithTime(docu.createdAt)}
+										</span>
+										<span>
+											<span>{t('docus.updated')}:</span> {formatDateWithTime(docu.updatedAt)}
+										</span>
+									</div>
+								</div>
+							</div>
+						) : (
+							<h2>{t('create_docu.subtitle')}</h2>
+						)}
+						<div className='docu-editor-editor'>
+							<BlockNoteView editor={editor} ref={editorRef} />
+						</div>
+					</div>
+				</>
 			)}
 			<DocuFormModal
 				isVisible={isModalOpen}

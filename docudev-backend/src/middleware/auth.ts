@@ -17,22 +17,27 @@ export const authenticate = async (
 ) => {
   const bearer = req.headers.authorization
   if (!bearer) {
-    const error = new Error('Unauthorized')
-    res.status(401).json({ error: error.message })
+    const error = new Error('Missing authorization header')
+    res.status(401).json({ error: error.message, invalidToken: true })
     return
   }
   const [, token] = bearer.split(' ')
   if (!token) {
-    const error = new Error('Invalid token')
-    res.status(401).json({ error: error.message })
+    const error = new Error('Missing token')
+    res.status(401).json({ error: error.message, invalidToken: true })
     return
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     if (typeof decoded === 'object' && decoded.id) {
-      req.user = (await User.findById(decoded.id)
+      const user = (await User.findById(decoded.id)
         .select('-password -code')
         .lean()) as IUser
+      if (!user.token || user.token !== token) {
+        res.status(401).json({ error: 'Invalid token', invalidToken: true })
+        return
+      }
+      req.user = user
       next()
     }
   } catch (error) {
@@ -42,7 +47,7 @@ export const authenticate = async (
     ) {
       res
         .status(401)
-        .json({ error: 'Expired or invalid session', tokenExpired: true })
+        .json({ error: 'Expired or invalid session', invalidToken: true })
     } else {
       res.status(500).json({ error: 'There was a server error' })
     }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { ADMIN_TEAM_LIMIT } from 'constants/limits'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Header from 'components/elements/Header/Header'
 import Button from 'components/elements/Button/Button'
@@ -53,6 +54,8 @@ const Teams = () => {
 	} = useTeam({
 		teamId: selectedTeamId
 	})
+
+	const ownedTeams = teams?.filter((team) => team.owner === user?._id).length || 0
 
 	const validationSchema = z.object({
 		name: z
@@ -160,83 +163,115 @@ const Teams = () => {
 
 	return (
 		<DashboardLayout>
-			<div className='teams-header'>
-				<Header title={t('teams.title')} />
-				<Button
-					variant='secondary'
-					className='teams-create-button'
-					onClick={openCreateModal}
-					disabled={user?.role !== 'admin'}>
-					{user?.role === 'admin' ? t('teams.create_team') : t('teams.create_team_disabled')}
-				</Button>
-			</div>
 			{isLoadingTeams ? (
 				<Loading />
 			) : (
-				<div className='teams-container'>
-					<h2>{t('teams.subtitle')}</h2>
-					{user?.role !== 'admin' && (
-						<Warning
-							title={t('teams.warning.warning_title')}
-							description={t('teams.warning.warning_description')}
-						/>
-					)}
-					<div className='teams-grid'>
-						<div className='user-owned-teams'>
-							<h3>{t('teams.my_teams_subtitle')}</h3>
-							{teams && teams.filter((team) => team.owner === user?._id).length > 0 ? (
-								<SwipeableList type={ListType.IOS} fullSwipe={true} threshold={0.3}>
-									{teams
-										.filter((team) => team.owner === user?._id)
-										.map((team) => (
-											<SwipeableListItem
-												key={team._id}
-												leadingActions={user?.role === 'admin' && leadingActions(team._id)}
-												trailingActions={user?.role === 'admin' && trailingActions(team._id)}
-												onSwipeStart={() => setIsSwiping(true)}
-												onSwipeEnd={() => setIsSwiping(false)}>
-												<Card className='team-card'>
-													<div className='team-card-content'>
-														<span className='team-card-name'>{team.name}</span>
-														<span className='team-card-description'>{team.description}</span>
-													</div>
-													{user?.role === 'admin' && (
-														<TwoArrowsIcon className='team-card-swipe-hint' />
-													)}
-												</Card>
-											</SwipeableListItem>
-										))}
-								</SwipeableList>
-							) : (
-								<Card empty>{t('teams.no_owned_teams')}</Card>
-							)}
-						</div>
-						<div className='collaborative-teams'>
-							<h3>{t('teams.collaborative_teams_subtitle')}</h3>
-							{teams && teams.filter((team) => team.owner !== user?._id).length > 0 ? (
-								<SwipeableList type={ListType.IOS} fullSwipe={true} threshold={0.5}>
-									{teams
-										?.filter((team) => team.owner !== user?._id)
-										.map((team) => (
-											<SwipeableListItem
-												key={team._id}
-												onSwipeStart={() => setIsSwiping(true)}
-												onSwipeEnd={() => setIsSwiping(false)}>
-												<Card className='team-card'>
-													<div className='team-card-content'>
-														<span className='team-card-name'>{team.name}</span>
-														<span className='team-card-description'>{team.description}</span>
-													</div>
-												</Card>
-											</SwipeableListItem>
-										))}
-								</SwipeableList>
-							) : (
-								<Card empty>{t('teams.no_collaborative_teams')}</Card>
-							)}
+				<>
+					<div className='teams-header'>
+						<Header title={t('teams.title')} />
+						<Button
+							variant='secondary'
+							className='teams-create-button'
+							onClick={openCreateModal}
+							disabled={user?.role !== 'admin' || ownedTeams == ADMIN_TEAM_LIMIT}>
+							{user?.role !== 'admin'
+								? t('teams.create_team_disabled')
+								: ownedTeams >= ADMIN_TEAM_LIMIT
+									? t('teams.create_team_disabled_limit_reached')
+									: t('teams.create_team')}
+						</Button>
+					</div>
+					<div className='teams-container'>
+						<h2>{t('teams.subtitle')}</h2>
+						{user?.role !== 'admin' && (
+							<Warning
+								title={t('teams.warning.warning_title')}
+								description={t('teams.warning.warning_description')}
+							/>
+						)}
+						{ownedTeams >= ADMIN_TEAM_LIMIT && (
+							<Warning
+								title={t('teams.warning.warning_title_limit')}
+								description={t('teams.warning.warning_description_limit')}
+							/>
+						)}
+						<div className='teams-grid'>
+							<div className='user-owned-teams'>
+								<h3>{t('teams.my_teams_subtitle')}</h3>
+								{teams && teams.filter((team) => team.owner === user?._id).length > 0 ? (
+									<SwipeableList type={ListType.IOS} fullSwipe={true} threshold={0.3}>
+										{teams
+											.filter((team) => team.owner === user?._id)
+											.map((team) => (
+												<SwipeableListItem
+													key={team._id}
+													leadingActions={user?.role === 'admin' && leadingActions(team._id)}
+													trailingActions={user?.role === 'admin' && trailingActions(team._id)}
+													onSwipeStart={() => setIsSwiping(true)}
+													onSwipeEnd={() => setIsSwiping(false)}>
+													<Card className='team-card'>
+														<div className='team-card-content'>
+															<span className='team-card-name'>{team.name}</span>
+															<span className='team-card-description'>{team.description}</span>
+														</div>
+														{user?.role === 'admin' && (
+															<TwoArrowsIcon className='team-card-swipe-hint' />
+														)}
+													</Card>
+												</SwipeableListItem>
+											))}
+										{teams
+											.filter((team) => team.owner === user?._id)
+											.map((team) => (
+												<SwipeableListItem
+													key={team._id}
+													leadingActions={user?.role === 'admin' && leadingActions(team._id)}
+													trailingActions={user?.role === 'admin' && trailingActions(team._id)}
+													onSwipeStart={() => setIsSwiping(true)}
+													onSwipeEnd={() => setIsSwiping(false)}>
+													<Card className='team-card'>
+														<div className='team-card-content'>
+															<span className='team-card-name'>{team.name}</span>
+															<span className='team-card-description'>{team.description}</span>
+														</div>
+														{user?.role === 'admin' && (
+															<TwoArrowsIcon className='team-card-swipe-hint' />
+														)}
+													</Card>
+												</SwipeableListItem>
+											))}
+									</SwipeableList>
+								) : (
+									<Card empty>{t('teams.no_owned_teams')}</Card>
+								)}
+							</div>
+							<div className='collaborative-teams'>
+								<h3>{t('teams.collaborative_teams_subtitle')}</h3>
+								{teams && teams.filter((team) => team.owner !== user?._id).length > 0 ? (
+									<SwipeableList type={ListType.IOS} fullSwipe={true} threshold={0.5}>
+										{teams
+											?.filter((team) => team.owner !== user?._id)
+											.map((team) => (
+												<SwipeableListItem
+													key={team._id}
+													onSwipeStart={() => setIsSwiping(true)}
+													onSwipeEnd={() => setIsSwiping(false)}>
+													<Card className='team-card'>
+														<div className='team-card-content'>
+															<span className='team-card-name'>{team.name}</span>
+															<span className='team-card-description'>{team.description}</span>
+														</div>
+													</Card>
+												</SwipeableListItem>
+											))}
+									</SwipeableList>
+								) : (
+									<Card empty>{t('teams.no_collaborative_teams')}</Card>
+								)}
+							</div>
 						</div>
 					</div>
-				</div>
+				</>
 			)}
 			<TeamFormModal
 				isVisible={isModalOpen}

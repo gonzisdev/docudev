@@ -1,7 +1,6 @@
 {
-  "name": "cashtrackr_backend",
+  "name": "docudev-back",
   "version": "1.0.0",
-  "description": "Proyecto CashTracker",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",

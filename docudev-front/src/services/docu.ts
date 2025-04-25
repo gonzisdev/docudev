@@ -1,5 +1,5 @@
 import customFetch from './customFetch'
-import { Docu, DocuFormPayload } from 'models/Docu'
+import { Docu, DocuFormPayload, DocusParams, DocusResponse } from 'models/Docu'
 import { endpoints } from './endpoints'
 
 export const createDocuService = async (data: DocuFormPayload) => {
@@ -10,8 +10,10 @@ export const createDocuService = async (data: DocuFormPayload) => {
 	return response
 }
 
-export const getDocusService = async () => {
-	const response = await customFetch<Docu[]>(endpoints.docus)
+export const getDocusService = async (params?: DocusParams) => {
+	const response = await customFetch<DocusResponse>(endpoints.docus, {
+		params: params ? { ...params } : undefined
+	})
 	return response
 }
 

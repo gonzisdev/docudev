@@ -24,10 +24,40 @@
 		margin: 1rem 0;
 	}
 
+	.docu-editor-details {
+		margin-top: 2rem;
+
+		.docu-editor-details-info {
+			display: flex;
+			justify-content: space-between;
+			gap: 1rem;
+			width: 100%;
+
+			.docu-editor-details-left,
+			.docu-editor-details-right {
+				display: flex;
+				flex-direction: column;
+				gap: 0.25rem;
+				font-size: 0.9rem;
+
+				span {
+					color: var(--neutral-neutral20);
+
+					> span {
+						color: var(--warning-light);
+					}
+
+					.team-tag {
+						color: var(--warning);
+					}
+				}
+			}
+		}
+	}
+
 	.docu-editor-editor {
 		height: calc(100vh - 6.3rem);
 		background-color: var(--white);
-		border-radius: 0.5rem;
 		overflow: auto;
 
 		.bn-toolbar [role='combobox'] {

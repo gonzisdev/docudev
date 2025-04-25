@@ -42,7 +42,7 @@ const createApiInstance = (baseURL: string = BASE_URL): AxiosInstance => {
 			return response.data
 		},
 		(error) => {
-			if (error.response && error.response.status === 401 && error.response.data?.tokenExpired) {
+			if (error.response && error.response.status === 401 && error.response.data?.invalidToken) {
 				const authStore = useAuthStore.getState()
 				authStore.logout()
 			} else if (useAuthStore.getState().isAuthenticated) {

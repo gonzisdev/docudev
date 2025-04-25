@@ -148,6 +148,7 @@
 		"collaborative_teams_subtitle": "Equipos en los que colaboras",
 		"create_team": "Crear equipo",
 		"create_team_disabled": "Actualiza tu plan para crear equipos",
+		"create_team_disabled_limit_reached": "Has alcanzado el límite de equipos",
 		"update_team": "Actualizar equipo",
 		"delete_team": "Eliminar equipo",
 		"delete_team_description": "¿Estás seguro de que quieres eliminar este equipo? Esta acción no se puede deshacer",
@@ -184,12 +185,15 @@
 		},
 		"warning": {
 			"warning_title": "¡Actualiza tu plan para poder crear y gestionar equipos!",
-			"warning_description": "No puedes crear mas equipos o gestionarlos porque tu plan no lo permite"
+			"warning_description": "No puedes crear mas equipos o gestionarlos porque tu plan no lo permite",
+			"warning_title_limit": "¡Has alcanzado el límite de equipos!",
+			"warning_description_limit": "No puedes crear más equipos porque has alcanzado el límite de tu plan."
 		}
 	},
 	"docus": {
 		"title": "Mis docus",
 		"create_docu": "Crear docu",
+		"export_pdf": "Exportar a PDF",
 		"update_docu": "Editar docu",
 		"delete_docu": "Eliminar docu",
 		"subtitle": "Tus docus en DocuDev",

@@ -10,6 +10,11 @@ export class TeamController {
         res.status(403).json({ error: 'Invalid credentials' })
         return
       }
+      const ownedTeamsCount = await Team.countDocuments({ owner: req.user._id })
+      if (ownedTeamsCount >= 10) {
+        res.status(403).json({ error: 'Maximum number of teams (10) reached' })
+        return
+      }
       await Team.create({
         name,
         description,
