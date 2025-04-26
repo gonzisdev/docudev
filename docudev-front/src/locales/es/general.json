@@ -313,5 +313,10 @@
 			"error_title": "Error al eliminar el docu",
 			"error_description": "Error al eliminar el docu. Vuelve a intentarlo más tarde"
 		}
+	},
+	"collaboration": {
+		"connected": "Conectado",
+		"disconnected": "Desconectado",
+		"active_users": "Usuarios activos"
 	}
 }

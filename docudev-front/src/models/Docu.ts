@@ -6,7 +6,7 @@ export type DocuOwner = Pick<User, '_id' | 'name' | 'surname'>
 export interface Docu {
 	_id: string
 	title: string
-	content: string
+	content?: string
 	owner: DocuOwner
 	team?: Team['_id']
 	createdAt: Date

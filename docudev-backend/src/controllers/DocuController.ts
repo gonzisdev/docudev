@@ -97,6 +97,7 @@ export class DocuController {
         sortField === 'title' ? { locale: 'es', strength: 2 } : undefined
       const docus = await Docu.find(query)
         .populate('owner', 'name surname')
+        .select('-content')
         .sort(sort)
         .collation(collationOptions)
         .skip(skip)

@@ -48,7 +48,7 @@ const Docu = () => {
 
 	useEffect(() => {
 		if (docu) {
-			const parsedContent = JSON.parse(docu.content)
+			const parsedContent = JSON.parse(docu.content!)
 			setInitialContent(parsedContent)
 			if (editor && parsedContent) {
 				editor.replaceBlocks(editor.document, parsedContent)

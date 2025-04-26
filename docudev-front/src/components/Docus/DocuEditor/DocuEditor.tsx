@@ -6,13 +6,15 @@ import { codeBlock } from 'constants/editor'
 import { DocuFormPayload } from 'models/Docu'
 import useDocu from 'hooks/useDocu'
 import useTeams from 'hooks/useTeams'
+import { useCollaborativeEditor } from 'hooks/useCollaborativeEditor'
+import { useAuthStore } from 'stores/authStore'
 import Header from 'components/elements/Header/Header'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Button from 'components/elements/Button/Button'
 import DocuFormModal from '../Modals/DocuFormModal'
 import DeleteDocuModal from '../Modals/DeleteDocuModal'
 import Loading from 'components/elements/Loading/Loading'
-import { useCreateBlockNote } from '@blocknote/react'
+import CollaborationStatus from './CollaborationStatus/CollaborationStatus'
 import { BlockNoteView } from '@blocknote/shadcn'
 import { PartialBlock } from '@blocknote/core'
 import { es } from '@blocknote/core/locales'
@@ -49,6 +51,7 @@ const DocuEditor = () => {
 		isDeletingDocu
 	} = useDocu(docuId ? { docuId } : {})
 	const { teams, isLoadingTeams } = useTeams()
+	const { user } = useAuthStore()
 
 	const findTeamName = (teamId: string) => {
 		if (!teams) return ''
@@ -56,10 +59,18 @@ const DocuEditor = () => {
 		return team ? team.name : ''
 	}
 
-	const editor = useCreateBlockNote({
+	const {
+		editor,
+		isLoading: isLoadingEditor,
+		isConnected,
+		activeUsers
+	} = useCollaborativeEditor({
+		docuId,
+		initialContent,
 		dictionary,
 		codeBlock,
-		initialContent
+		username: `${user?.name} ${user?.surname}`,
+		userImage: user?.image as string
 	})
 
 	const validationSchema = z.object({
@@ -120,7 +131,7 @@ const DocuEditor = () => {
 
 	useEffect(() => {
 		if (docu) {
-			const parsedContent = JSON.parse(docu.content)
+			const parsedContent = JSON.parse(docu.content!)
 			setInitialContent(parsedContent)
 			if (editor && parsedContent) {
 				editor.replaceBlocks(editor.document, parsedContent)
@@ -137,7 +148,7 @@ const DocuEditor = () => {
 
 	return (
 		<DashboardLayout>
-			{docuId && (isLoadingDocu || isLoadingTeams) ? (
+			{(docuId && (isLoadingDocu || isLoadingTeams)) || isLoadingEditor || !editor ? (
 				<Loading />
 			) : (
 				<>
@@ -201,6 +212,9 @@ const DocuEditor = () => {
 										</span>
 									</div>
 								</div>
+								{docuId && (
+									<CollaborationStatus isConnected={isConnected} activeUsers={activeUsers} />
+								)}
 							</div>
 						) : (
 							<h2>{t('create_docu.subtitle')}</h2>
