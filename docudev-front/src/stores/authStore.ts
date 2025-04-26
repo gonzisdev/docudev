@@ -1,12 +1,21 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { User, UserFormPayload, UserNewPasswordPayload } from '../models/Auth'
+import {
+	User,
+	UserFormPayload,
+	UserNewPasswordPayload,
+	UserAccountPayload,
+	UserRegisterPayload
+} from '../models/Auth'
 import {
 	loginService,
 	createAccountService,
 	recoverPasswordService,
 	newPasswordService,
-	getUserService
+	getUserService,
+	updateAccountService,
+	deleteAccountService,
+	updatePlanService
 } from '../services/auth'
 
 interface AuthState {
@@ -14,10 +23,13 @@ interface AuthState {
 	setUser: (user: User) => void
 	refreshUser: () => Promise<User | null>
 	login: (data: UserFormPayload) => Promise<User | void>
-	register: (data: UserFormPayload) => Promise<boolean>
+	register: (data: UserRegisterPayload) => Promise<boolean>
 	logout: () => void
 	recoverPassword: (email: User['email']) => Promise<boolean>
 	newPassword: (data: UserNewPasswordPayload) => Promise<boolean>
+	updateAccount: (data: UserAccountPayload | FormData) => Promise<boolean>
+	updatePlan: () => Promise<boolean>
+	deleteAccount: () => Promise<boolean>
 	isAuthenticated: boolean
 }
 
@@ -51,7 +63,7 @@ export const useAuthStore = create<AuthState>()(
 						return response
 					}
 				},
-				register: async (data: UserFormPayload) => {
+				register: async (data: UserRegisterPayload) => {
 					return await createAccountService(data)
 				},
 				logout: () =>
@@ -67,6 +79,41 @@ export const useAuthStore = create<AuthState>()(
 				},
 				newPassword: async (data: UserNewPasswordPayload) => {
 					return await newPasswordService(data)
+				},
+				updateAccount: async (data: UserAccountPayload | FormData) => {
+					const result = await updateAccountService(data)
+					if (result) {
+						const user = await getUserService()
+						set((state) => ({
+							...state,
+							user,
+							isAuthenticated: !!user
+						}))
+					}
+					return result
+				},
+				updatePlan: async () => {
+					const result = await updatePlanService()
+					if (result) {
+						const user = await getUserService()
+						set((state) => ({
+							...state,
+							user,
+							isAuthenticated: !!user
+						}))
+					}
+					return result
+				},
+				deleteAccount: async () => {
+					const result = await deleteAccountService()
+					if (result) {
+						set((state) => ({
+							...state,
+							user: null,
+							isAuthenticated: false
+						}))
+					}
+					return result
 				},
 				isAuthenticated: false
 			}

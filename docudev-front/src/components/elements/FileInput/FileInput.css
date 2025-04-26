@@ -8,6 +8,7 @@
 	padding: 1.375rem 1.25rem 1.875rem 1.25rem;
 	border-radius: 0.625rem;
 	border: 0.062rem dashed var(--primary);
+	cursor: pointer;
 
 	svg {
 		path {
@@ -27,5 +28,11 @@
 
 	.file-input {
 		display: none;
+	}
+
+	&.dragging {
+		background: var(--primary-light);
+		transform: scale(1.02);
+		transition: all 0.2s ease;
 	}
 }

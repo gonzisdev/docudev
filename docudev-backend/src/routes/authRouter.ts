@@ -4,6 +4,7 @@ import { AuthController } from '../controllers/AuthController'
 import { handleInputErrors } from '../middleware/validation'
 import { limiter } from '../config/limiter'
 import { authenticate } from '../middleware/auth'
+import { upload, deletePreviousImage, deleteImage } from '../middleware/multer'
 
 const router = Router()
 
@@ -40,7 +41,6 @@ router.post(
     .withMessage('Email not valid')
     .normalizeEmail()
     .trim(),
-
   handleInputErrors,
   AuthController.createAccount
 )
@@ -83,6 +83,58 @@ router.patch(
   handleInputErrors,
   AuthController.newPassword
 )
+
+router.put(
+  '/update-account',
+  authenticate,
+  upload.single('image'),
+  deletePreviousImage,
+  body('name')
+    .notEmpty()
+    .withMessage('Name is required')
+    .isString()
+    .withMessage('Name must be text')
+    .isLength({ min: 2 })
+    .withMessage('Name must be at least 2 characters long')
+    .isLength({ max: 50 })
+    .withMessage('Name must not exceed 50 characters')
+    .trim(),
+  body('surname')
+    .notEmpty()
+    .withMessage('Surname is required')
+    .isString()
+    .withMessage('Surname must be text')
+    .isLength({ min: 2 })
+    .withMessage('Surname must be at least 2 characters long')
+    .isLength({ max: 50 })
+    .withMessage('Surname must not exceed 50 characters')
+    .trim(),
+  body('email')
+    .isEmail()
+    .withMessage('Email not valid')
+    .normalizeEmail()
+    .trim(),
+  body('phone')
+    .optional()
+    .isString()
+    .withMessage('Phone must be text')
+    .isLength({ min: 7 })
+    .withMessage('Phone must be at least 7 characters long')
+    .isLength({ max: 20 })
+    .withMessage('Phone must not exceed 20 characters')
+    .trim(),
+  handleInputErrors,
+  AuthController.updateAccount
+)
+
+router.delete(
+  '/delete',
+  authenticate,
+  deleteImage,
+  AuthController.deleteAccount
+)
+
+router.patch('/update-plan', authenticate, AuthController.updatePlan)
 
 router.get('/user', authenticate, AuthController.user)
 

@@ -8,11 +8,12 @@ import './FileInput.css'
 interface Props {
 	id?: string
 	onChange: (file: File) => void
-	type?: '.jpg' | '.png' | '.pdf'
+	type?: '.jpg' | '.png' | '.pdf' | '.gif' | '.webp' | string
 }
 
-const FileInput = ({ id, onChange, type = '.pdf' }: Props) => {
+const FileInput = ({ id, onChange, type = 'image/*' }: Props) => {
 	const [fileUploaded, setFileUploaded] = useState<File | null>(null)
+	const [isDragging, setIsDragging] = useState(false)
 	const { t } = useTranslation()
 
 	const fileInputRef = useRef<HTMLInputElement>(null)
@@ -29,10 +30,59 @@ const FileInput = ({ id, onChange, type = '.pdf' }: Props) => {
 		}
 	}
 
+	const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		e.stopPropagation()
+		setIsDragging(true)
+	}
+
+	const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		e.stopPropagation()
+		setIsDragging(false)
+	}
+
+	const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		e.stopPropagation()
+		if (!isDragging) {
+			setIsDragging(true)
+		}
+	}
+
+	const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		e.stopPropagation()
+		setIsDragging(false)
+
+		const files = e.dataTransfer.files
+		if (files && files.length > 0) {
+			const file = files[0]
+			const fileType = file.type
+
+			if (type === 'image/*' && !fileType.startsWith('image/')) {
+				return
+			}
+			onChange(file)
+			setFileUploaded(file)
+		}
+	}
+
 	return (
-		<div className={`file-input-wrapper ${fileUploaded ? 'uploaded' : ''}`}>
+		<div
+			className={`file-input-wrapper ${fileUploaded ? 'uploaded' : ''} ${isDragging ? 'dragging' : ''}`}
+			onDragEnter={handleDragEnter}
+			onDragLeave={handleDragLeave}
+			onDragOver={handleDragOver}
+			onDrop={handleDrop}>
 			{fileUploaded ? <FileIcon /> : <FileArrowUpIcon />}
-			<p>{fileUploaded ? DOMPurify.sanitize(fileUploaded.name) : t('forms.attach_file')}</p>
+			<p>
+				{fileUploaded
+					? DOMPurify.sanitize(fileUploaded.name)
+					: isDragging
+						? t('forms.drop_here') || 'Suelta aquí tu archivo'
+						: t('forms.attach_file')}
+			</p>
 			<input
 				id={id}
 				className='file-input'

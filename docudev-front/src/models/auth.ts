@@ -5,7 +5,7 @@ export interface User {
 	email: string
 	password?: string
 	token: string
-	image: string
+	image: File | string | null
 	role: 'admin' | 'user'
 	phone?: string
 	code?: string
@@ -17,6 +17,7 @@ export interface User {
 export type UserFormPayload = Pick<User, 'email' | 'password'>
 export type UserRegisterPayload = Pick<User, 'name' | 'surname' | 'email' | 'password'>
 export type UserNewPasswordPayload = Pick<User, 'email' | 'password' | 'code'>
+export type UserAccountPayload = Pick<User, 'name' | 'surname' | 'email' | 'image' | 'phone'>
 
 export interface NewPasswordFormValues {
 	password: string

@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import Team from '../models/Team'
-import User from '../models/User'
 import Docu from '../models/Docu'
 
 export class DocuController {

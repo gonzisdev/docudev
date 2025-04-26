@@ -1,8 +1,14 @@
 import customFetch from './customFetch'
-import { User, UserFormPayload, UserNewPasswordPayload } from '../models/Auth'
+import {
+	User,
+	UserFormPayload,
+	UserNewPasswordPayload,
+	UserAccountPayload,
+	UserRegisterPayload
+} from '../models/Auth'
 import { endpoints } from './endpoints'
 
-export const createAccountService = async (data: UserFormPayload) => {
+export const createAccountService = async (data: UserRegisterPayload) => {
 	const response = await customFetch<boolean>(endpoints.createAccount, {
 		method: 'POST',
 		bodyReq: data,
@@ -34,6 +40,28 @@ export const newPasswordService = async (data: UserNewPasswordPayload) => {
 		method: 'PATCH',
 		bodyReq: data,
 		skipAuth: true
+	})
+	return response
+}
+
+export const updateAccountService = async (data: UserAccountPayload | FormData) => {
+	const response = await customFetch<boolean>(endpoints.updateAccount, {
+		method: 'PUT',
+		bodyReq: data
+	})
+	return response
+}
+
+export const deleteAccountService = async () => {
+	const response = await customFetch<boolean>(endpoints.deleteAccount, {
+		method: 'DELETE'
+	})
+	return response
+}
+
+export const updatePlanService = async () => {
+	const response = await customFetch<boolean>(endpoints.updatePlan, {
+		method: 'PATCH'
 	})
 	return response
 }

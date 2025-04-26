@@ -100,7 +100,9 @@ export const sendEmail = async (email: IUser['email'], code: IUser['code']) => {
                 
                 <p class="instructions">Este código expirará en una hora. Si no solicitaste un cambio de contraseña, puedes ignorar este mensaje.</p>
                 
-                <a href="http://localhost:5173/recover-password?email=${encodeURIComponent(email)}" class="button">Ir a recuperar contraseña</a>
+                <a href="http://localhost:5173/recover-password?email=${encodeURIComponent(
+                  email
+                )}" class="button">Ir a recuperar contraseña</a>
                 
                 <div class="warning">
                     <strong>Importante:</strong> Por seguridad, nunca compartas este código con nadie. Nuestro equipo nunca te pedirá este código por teléfono o email.

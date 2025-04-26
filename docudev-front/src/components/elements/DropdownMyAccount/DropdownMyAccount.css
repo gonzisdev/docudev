@@ -11,12 +11,12 @@
 			cursor: pointer;
 
 			span {
-				color: var(--primary);
+				color: var(--secondary);
 			}
 
 			svg {
 				path {
-					stroke: var(--primary);
+					stroke: var(--secondary);
 				}
 			}
 		}
@@ -69,10 +69,9 @@
 		bottom: 3rem;
 		right: 0;
 		border-radius: var(--input-border-radius);
+		overflow: hidden;
+		z-index: 9999;
 
-		:is(.dashboard-sidebar.collapsed) .dropdown-my-account-options {
-			left: 0;
-		}
 		.option {
 			display: flex;
 			align-items: center;
@@ -80,12 +79,11 @@
 			height: 1.875rem;
 			padding: 1.25rem;
 			color: var(--neutral-neutral00);
-			border-radius: 0.625rem;
 			transition: all 0.2s ease;
 
 			&:hover {
 				cursor: pointer;
-				background-color: var(--primary);
+				background-color: var(--secondary);
 			}
 
 			span {
@@ -94,5 +92,10 @@
 				font-weight: 500;
 			}
 		}
+	}
+
+	.dashboard-sidebar.collapsed & .dropdown-my-account-options {
+		left: auto;
+		right: -8rem;
 	}
 }

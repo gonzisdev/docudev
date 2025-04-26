@@ -13,6 +13,7 @@ import {
 	MANAGEMENT_URL,
 	RECOVER_PASSWORD_URL,
 	REGISTER_URL,
+	SETTINGS_URL,
 	TEAMS_URL
 } from './constants/routes'
 import Login from './components/Login/Login'
@@ -26,6 +27,7 @@ import DocuEditor from 'components/Docus/DocuEditor/DocuEditor'
 import Docu from 'components/Docus/Docu/Docu'
 import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import { Toaster } from 'sonner'
+import { Settings } from 'components/Settings/Settings'
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 	const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
@@ -67,6 +69,8 @@ export const App = () => {
 						</ProtectedRoute>
 					}>
 					<Route path={HOME_URL} element={<Home />} />
+					<Route path={SETTINGS_URL} element={<Settings />} />
+					{/* Docus routes */}
 					<Route path={`${DOCU_URL}/:docuId`} element={<Docu />} />
 					<Route path={DOCUS_URL} element={<Docus />} />
 					<Route path={CREATE_DOCU_URL} element={<DocuEditor />} />

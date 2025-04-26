@@ -4,6 +4,9 @@ export const endpoints = {
 	user: 'auth/user',
 	recoverPassword: 'auth/recover-password',
 	newPassword: 'auth/new-password',
+	updateAccount: 'auth/update-account',
+	deleteAccount: 'auth/delete',
+	updatePlan: 'auth/update-plan',
 
 	teams: 'teams',
 	createTeam: 'teams/create-team',

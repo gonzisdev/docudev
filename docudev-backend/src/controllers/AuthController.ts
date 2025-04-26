@@ -3,6 +3,8 @@ import User from '../models/User'
 import { generateJWT } from '../utils/jwt'
 import jwt from 'jsonwebtoken'
 import { sendEmail } from '../utils/email'
+import Docu from '../models/Docu'
+import Team from '../models/Team'
 
 export class AuthController {
   static async createAccount(req: Request, res: Response) {
@@ -113,6 +115,86 @@ export class AuthController {
     } catch (error) {
       console.error('Error changing password:', error)
       res.status(500).json({ error: 'Error changing password' })
+    }
+  }
+
+  static async updateAccount(req: Request, res: Response) {
+    try {
+      const { name, surname, phone } = req.body
+      const image = (req as any).file
+      const user = await User.findById(req.user._id)
+      if (!user) {
+        res.status(401).json({ error: 'Invalid credentials' })
+        return
+      }
+      if (user.status === 'suspended') {
+        res.status(401).json({ error: 'Your account is suspended' })
+        return
+      }
+      user.name = name
+      user.surname = surname
+      user.phone = phone
+      if (image) {
+        user.image = image.filename
+      }
+      await user.save()
+      res.status(200).json(true)
+    } catch (error) {
+      console.error('Error updating account:', error)
+      res.status(500).json({ error: 'Error updating account' })
+    }
+  }
+
+  static async deleteAccount(req: Request, res: Response) {
+    try {
+      const user = await User.findById(req.user._id)
+      if (!user) {
+        res.status(401).json({ error: 'Invalid credentials' })
+        return
+      }
+      if (user.status === 'suspended') {
+        res.status(401).json({ error: 'Your account is suspended' })
+        return
+      }
+      await Docu.deleteMany({ owner: req.user._id })
+      const ownedTeams = await Team.find({ owner: req.user._id })
+      for (const team of ownedTeams) {
+        await Docu.deleteMany({ team: team._id })
+      }
+      await Team.deleteMany({ owner: req.user._id })
+      await Team.updateMany(
+        { members: req.user._id },
+        { $pull: { members: req.user._id } }
+      )
+      await User.findByIdAndDelete(req.user._id)
+      res.status(200).json(true)
+    } catch (error) {
+      console.error('Error deleting account:', error)
+      res.status(500).json({ error: 'Error deleting account' })
+    }
+  }
+
+  static async updatePlan(req: Request, res: Response) {
+    try {
+      const user = await User.findById(req.user._id)
+      if (!user) {
+        res.status(401).json({ error: 'Invalid credentials' })
+        return
+      }
+      if (user.status === 'suspended') {
+        res.status(401).json({ error: 'Your account is suspended' })
+        return
+      }
+      if (user.role === 'admin') {
+        user.role = 'user'
+      } else if (user.role === 'user') {
+        user.role = 'admin'
+      }
+      await user.save()
+      res.status(200).json(true)
+    } catch (error) {
+      console.error('Error updating role:', error)
+      res.status(500).json({ error: 'Error updating role' })
     }
   }
 

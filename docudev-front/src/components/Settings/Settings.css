@@ -1,0 +1,46 @@
+.settings-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.settings-container {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	max-width: 50rem;
+
+	h2 {
+		margin: 1rem 0;
+	}
+
+	.settings-image {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		min-height: 15rem;
+		padding: 1rem;
+		background-color: var(--background);
+		border-radius: var(--input-border-radius);
+		box-shadow: var(--box-shadow);
+
+		img {
+			width: 15rem;
+			height: 15rem;
+			object-fit: cover;
+			object-position: center;
+			border-radius: 50%;
+		}
+	}
+
+	form {
+		footer {
+			text-align: center;
+
+			button {
+				margin-bottom: 1rem;
+			}
+		}
+	}
+}

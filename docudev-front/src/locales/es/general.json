@@ -4,6 +4,8 @@
 		"cancel": "Cancelar",
 		"or": "O",
 		"logout": "Cerrar sesión",
+		"settings": "Configuración",
+		"update_plan": "Actualizar plan",
 		"save": "Guardar"
 	},
 	"common": {
@@ -19,7 +21,8 @@
 	"forms": {
 		"attach_file": "Adjuntar archivo",
 		"search_file": "Buscar archivo",
-		"change_file": "Cambiar archivo"
+		"change_file": "Cambiar archivo",
+		"drop_here": "Suelta aquí el archivo"
 	},
 	"register": {
 		"title": "Crear cuenta",
@@ -139,6 +142,59 @@
 			"success_description": "La contraseña se ha cambiado correctamente",
 			"error_title": "Error al cambiar contraseña",
 			"error_description": "Error al cambiar la contraseña. Por favor, verifica tus datos"
+		}
+	},
+	"plan": {
+		"toast": {
+			"success_title": "¡Plan actualizado!",
+			"success_description": "Tu plan se ha actualizado correctamente",
+			"error_title": "Error al actualizar el plan",
+			"error_description": "Error al actualizar el plan. Por favor, verifica tus datos"
+		}
+	},
+	"settings": {
+		"title": "Configuración de la cuenta",
+		"subtitle": "Actualiza tu información personal y tu imagen de perfil",
+		"name": "Nombre",
+		"name_placeholder": "Nombre",
+		"surname": "Apellidos",
+		"surname_placeholder": "Apellidos",
+		"email": "Correo electrónico",
+		"email_placeholder": "email@email.com",
+		"phone": "Teléfono",
+		"phone_placeholder": "Teléfono",
+		"image": "Imagen de perfil",
+		"save_changes": "Actualizar perfil",
+		"delete_account": "Eliminar cuenta",
+		"delete_account_description": "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer",
+		"validations": {
+			"email": {
+				"required": "Introduce tu correo electrónico",
+				"invalid": "La dirección de correo electrónico no es válida"
+			},
+			"name": {
+				"required": "Introduce tu nombre",
+				"min_length": "El nombre debe tener al menos 2 caracteres"
+			},
+			"surname": {
+				"required": "Introduce tus apellidos",
+				"min_length": "Los apellidos deben tener al menos 2 caracteres"
+			},
+			"image": {
+				"size_limit": "El tamaño máximo del archivo es de 10MB",
+				"type_invalid": "El archivo debe ser una imagen (JPEG, PNG, GIF, WebP)"
+			},
+			"phone": {
+				"min_length": "El teléfono debe tener al menos 7 caracteres",
+				"max_length": "El teléfono no debe exceder los 20 caracteres",
+				"format": "Introduce un número de teléfono válido"
+			}
+		},
+		"toast": {
+			"success_title": "¡Perfil actualizado!",
+			"success_description": "Tu perfil se ha actualizado correctamente",
+			"error_title": "Error al actualizar perfil",
+			"error_description": "Error al actualizar el perfil. Por favor, verifica tus datos"
 		}
 	},
 	"teams": {
