@@ -7,16 +7,12 @@ export const connectDB = async (): Promise<void> => {
     const mongoURI = process.env.MONGODB_URI
     await mongoose.connect(mongoURI)
     console.log(
-      colors.magenta.bold('Conexión a MongoDB establecida correctamente')
+      colors.yellow.bold('MongoDB connection established successfully')
     )
   } catch (error) {
-    console.error(
-      colors.red.bold('Error al conectar a la base de datos:'),
-      error
-    )
+    console.error(colors.red.bold('Error connecting DDBB:'), error)
     process.exit(1)
   }
 }
 
-// Exportamos la instancia de mongoose para usarla en la aplicación
 export const db = mongoose

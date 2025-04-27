@@ -17,6 +17,7 @@ import Select from 'components/elements/Select/Select'
 import DeleteDocuModal from './Modals/DeleteDocuModal'
 import { EditIcon, TrashIcon, TwoArrowsIcon } from 'assets/svgs'
 import { formatDateWithTime } from 'utils/dates'
+import { findTeamName } from 'utils/team'
 import { debounce } from 'lodash'
 import {
 	SwipeableList,
@@ -93,12 +94,6 @@ const Docus = () => {
 	const handleTeamFilterChange = (option: string) => setTeamFilter(option)
 	const handleOwnerFilterChange = (option: string) => setOwnerFilter(option)
 	const handleSortChange = (option: string) => setSortOption(option)
-
-	const findTeamName = (teamId: string) => {
-		if (!teams) return ''
-		const team = teams.find((team) => team._id === teamId)
-		return team ? team.name : ''
-	}
 
 	const leadingActions = (docuId: string) => (
 		<LeadingActions>
@@ -241,7 +236,9 @@ const Docus = () => {
 																{docu.team && (
 																	<span>
 																		<span>{t('docus.team')}:</span>{' '}
-																		<span className='team-tag'>{findTeamName(docu.team)}</span>
+																		<span className='team-tag'>
+																			{findTeamName(teams!, docu.team)}
+																		</span>
 																	</span>
 																)}
 															</div>

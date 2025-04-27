@@ -38,9 +38,9 @@ const CollaborationStatus = ({ isConnected, activeUsers }: Props) => {
 				<div className='active-users-container'>
 					<span className='active-users-label'>{t('collaboration.active_users')}: </span>
 					<div className='user-avatars'>
-						{groupedUsers.map((user) => (
+						{groupedUsers.map((user, index) => (
 							<div
-								key={user.id}
+								key={index}
 								className='user-avatar'
 								style={{
 									borderColor: user.color,

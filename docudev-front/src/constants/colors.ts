@@ -36,29 +36,29 @@ export const colors = {
 }
 
 export const collaborationColors = [
-	'#E53935',
-	'#1E88E5',
-	'#43A047',
-	'#8E24AA',
-	'#FB8C00',
-	'#00ACC1',
-	'#FDD835',
-	'#6D4C41',
-	'#5E35B1',
-	'#00897B',
-	'#F4511E',
-	'#546E7A',
-	'#EC407A',
-	'#7CB342',
-	'#039BE5',
-	'#C0CA33',
-	'#D81B60',
-	'#00BFA5',
-	'#FFB300',
-	'#5D4037',
-	'#3949AB',
-	'#827717',
-	'#D84315',
-	'#00695C',
-	'#6200EA'
+	'#FF6F61', // Light Vibrant Red
+	'#42A5F5', // Light Bright Blue
+	'#66BB6A', // Light Intense Green
+	'#AB47BC', // Light Purple
+	'#FFB74D', // Light Warm Orange
+	'#4DD0E1', // Light Turquoise
+	'#FFEB3B', // Light Bright Yellow
+	'#A1887F', // Light Warm Brown
+	'#7E57C2', // Light Dark Purple
+	'#4DB6AC', // Light Emerald Green
+	'#FF7043', // Light Reddish Orange
+	'#78909C', // Light Bluish Gray
+	'#F48FB1', // Light Vibrant Pink
+	'#A5D6A7', // Light Lime Green
+	'#29B6F6', // Light Deep Blue
+	'#D4E157', // Light Bright Yellow-Green
+	'#F06292', // Light Intense Pink
+	'#4DB6AC', // Light Aqua Green
+	'#FFCA28', // Light Warm Yellow
+	'#8D6E63', // Light Dark Brown
+	'#5C6BC0', // Light Deep Blue
+	'#AED581', // Light Olive Green
+	'#FF7043', // Light Red-Orange
+	'#00796B', // Light Dark Green
+	'#7E57C2' // Light Electric Purple
 ]

@@ -1,43 +1,59 @@
-import { useEffect, useRef, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState, useRef } from 'react'
+import { useNavigate, useParams, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useForm } from 'react-hook-form'
+import { DocuFormPayload } from 'models/Docu'
+import { ActiveUser } from 'models/Collaboration'
 import { DOCU_URL, DOCUS_URL } from 'constants/routes'
 import { codeBlock } from 'constants/editor'
-import { DocuFormPayload } from 'models/Docu'
-import useDocu from 'hooks/useDocu'
 import useTeams from 'hooks/useTeams'
-import { useCollaborativeEditor } from 'hooks/useCollaborativeEditor'
+import useDocu from 'hooks/useDocu'
 import { useAuthStore } from 'stores/authStore'
+import { getRandomColor } from 'utils/getRandomColor'
 import Header from 'components/elements/Header/Header'
-import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Button from 'components/elements/Button/Button'
+import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
+import Loading from 'components/elements/Loading/Loading'
 import DocuFormModal from '../Modals/DocuFormModal'
 import DeleteDocuModal from '../Modals/DeleteDocuModal'
-import Loading from 'components/elements/Loading/Loading'
 import CollaborationStatus from './CollaborationStatus/CollaborationStatus'
 import { BlockNoteView } from '@blocknote/shadcn'
-import { PartialBlock } from '@blocknote/core'
+import { useBlockNote } from '@blocknote/react'
+import { WebsocketProvider } from 'y-websocket'
 import { es } from '@blocknote/core/locales'
 import { en } from '@blocknote/core/locales'
-import { useForm } from 'react-hook-form'
+import * as Y from 'yjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { exportToPdf } from 'utils/pdf'
 import { formatDateWithTime } from 'utils/dates'
+import { findTeamName } from 'utils/team'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/shadcn/style.css'
 import './DocuEditor.css'
 
 const DocuEditor = () => {
 	const { t, i18n } = useTranslation()
-	const navigate = useNavigate()
-	const dictionary = i18n.language.startsWith('es') ? es : en
-	const editorRef = useRef(null)
 	const { docuId } = useParams()
+	const navigate = useNavigate()
+	const { user } = useAuthStore()
+	const editorRef = useRef<HTMLDivElement>(null)
 
+	const dictionary = i18n.language.startsWith('es') ? es : en
+
+	const [doc] = useState(() => new Y.Doc())
+	const [provider, setProvider] = useState<WebsocketProvider | null>(null)
+	const [isSynced, setIsSynced] = useState(false)
+	const [initialSyncDone, setInitialSyncDone] = useState(false)
+	const [activeUsers, setActiveUsers] = useState<ActiveUser[]>([])
+	const [editorReady, setEditorReady] = useState(false)
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-	const [initialContent, setInitialContent] = useState<PartialBlock[] | undefined>(undefined)
+	const [localUser] = useState(() => ({
+		id: user?._id,
+		name: `${user?.name} ${user?.surname}`,
+		color: getRandomColor(),
+		image: user?.image
+	}))
 
 	const {
 		docu,
@@ -51,27 +67,79 @@ const DocuEditor = () => {
 		isDeletingDocu
 	} = useDocu(docuId ? { docuId } : {})
 	const { teams, isLoadingTeams } = useTeams()
-	const { user } = useAuthStore()
 
-	const findTeamName = (teamId: string) => {
-		if (!teams) return ''
-		const team = teams.find((team) => team._id === teamId)
-		return team ? team.name : ''
-	}
+	useEffect(() => {
+		if (!docuId) return
+		const wsProvider = new WebsocketProvider(import.meta.env.VITE_WEBSOCKET_URL, docuId, doc)
+		wsProvider.on('status', (event: any) => {
+			if (event.status === 'connected') {
+				setEditorReady(true)
+			}
+		})
+		wsProvider.on('connection-error', () => {})
+		wsProvider.on('connection-close', () => setEditorReady(false))
+		wsProvider.awareness.setLocalStateField('user', {
+			id: localUser.id,
+			name: localUser.name,
+			color: localUser.color,
+			image: localUser.image
+		})
+		wsProvider.on('sync', () => setIsSynced(true))
+		const updateActiveUsers = () => {
+			const users: ActiveUser[] = []
+			wsProvider.awareness.getStates().forEach((state: any) => {
+				if (state.user) {
+					users.push({
+						id: state.user.id,
+						name: state.user.name,
+						color: state.user.color,
+						image: state.user.image
+					})
+				}
+			})
+			setActiveUsers(users)
+		}
+		wsProvider.awareness.on('change', updateActiveUsers)
+		setProvider(wsProvider)
+		return () => {
+			wsProvider.awareness.off('change', updateActiveUsers)
+			wsProvider.disconnect()
+			wsProvider.destroy()
+			setProvider(null)
+			setEditorReady(false)
+		}
+	}, [docuId, doc, localUser])
 
-	const {
-		editor,
-		isLoading: isLoadingEditor,
-		isConnected,
-		activeUsers
-	} = useCollaborativeEditor({
-		docuId,
-		initialContent,
-		dictionary,
-		codeBlock,
-		username: `${user?.name} ${user?.surname}`,
-		userImage: user?.image as string
-	})
+	const editor = useBlockNote(
+		{
+			collaboration:
+				docuId && provider
+					? {
+							provider: provider,
+							fragment: doc.getXmlFragment('document'),
+							user: {
+								name: localUser.name,
+								color: localUser.color,
+								...(localUser.image && { image: localUser.image })
+							}
+						}
+					: undefined,
+			initialContent: undefined,
+			dictionary,
+			codeBlock
+		},
+		[provider, docuId, localUser, editorReady]
+	)
+
+	useEffect(() => {
+		if (!editor || !isSynced || !docu?.content || initialSyncDone) return
+		const fragment = doc.getXmlFragment('document')
+		if (fragment.length === 0) {
+			const parsedContent = JSON.parse(docu.content)
+			editor.replaceBlocks(editor.document, parsedContent)
+			setInitialSyncDone(true)
+		}
+	}, [editor, isSynced, docu, initialSyncDone, doc])
 
 	const validationSchema = z.object({
 		title: z
@@ -102,15 +170,10 @@ const DocuEditor = () => {
 		})
 	}
 
-	const openDeleteModal = () => setIsDeleteModalOpen(true)
-	const closeDeleteModal = () => setIsDeleteModalOpen(false)
-
-	const handleSubmit = async (data: DocuFormPayload) => {
+	const handleSubmit = async (data: any) => {
 		const editorContent = JSON.stringify(editor.document)
-		const docuData = {
-			...data,
-			content: editorContent
-		}
+		const docuData = { ...data, content: editorContent }
+
 		if (docuId) {
 			await updateDocu({ docuId, data: docuData })
 			navigate(`${DOCU_URL}/${docuId}`)
@@ -124,31 +187,26 @@ const DocuEditor = () => {
 	const handleDeleteDocu = async () => {
 		if (docuId) {
 			await deleteDocu({ docuId })
-			closeDeleteModal()
+			setIsDeleteModalOpen(false)
 			navigate(DOCUS_URL)
 		}
 	}
 
 	useEffect(() => {
 		if (docu) {
-			const parsedContent = JSON.parse(docu.content!)
-			setInitialContent(parsedContent)
-			if (editor && parsedContent) {
-				editor.replaceBlocks(editor.document, parsedContent)
-			}
 			methods.reset({
-				title: docu.title,
-				content: docu.content,
+				title: docu.title || '',
+				content: docu.content || '',
 				team: docu.team
 			})
 		}
-	}, [docu, editor])
+	}, [])
 
 	if (errorDocu) return <Navigate to={DOCUS_URL} />
 
 	return (
 		<DashboardLayout>
-			{(docuId && (isLoadingDocu || isLoadingTeams)) || isLoadingEditor || !editor ? (
+			{isLoadingDocu || isLoadingTeams || !editor ? (
 				<Loading />
 			) : (
 				<>
@@ -164,30 +222,18 @@ const DocuEditor = () => {
 									t('create_docu.title')
 								)
 							}
-						/>{' '}
+						/>
 						<div className='docu-editor-header-actions'>
-							{docuId ? (
-								<>
-									<Button variant='primary' onClick={openModal}>
-										{t('docus.save_docu')}
-									</Button>
-									<Button
-										variant='secondary'
-										onClick={() => exportToPdf(editorRef.current, docu?.title)}>
-										{t('docus.export_pdf')}
-									</Button>
-									<Button variant='danger' onClick={openDeleteModal}>
-										{t('docus.delete_docu')}
-									</Button>
-								</>
-							) : (
-								<Button variant='primary' onClick={openModal}>
-									{t('docus.save_docu')}
+							<Button variant='primary' onClick={openModal}>
+								{t('docus.save_docu')}
+							</Button>
+							{docuId && (
+								<Button variant='danger' onClick={() => setIsDeleteModalOpen(true)}>
+									{t('docus.delete_docu')}
 								</Button>
 							)}
 						</div>
 					</div>
-
 					<div className='docu-editor-container'>
 						{docu ? (
 							<div className='docu-editor-details'>
@@ -199,7 +245,7 @@ const DocuEditor = () => {
 										{docu.team && (
 											<span>
 												<span>{t('docus.team')}:</span>{' '}
-												<span className='team-tag'>{findTeamName(docu.team)}</span>
+												<span className='team-tag'>{findTeamName(teams!, docu.team)}</span>
 											</span>
 										)}
 									</div>
@@ -213,12 +259,16 @@ const DocuEditor = () => {
 									</div>
 								</div>
 								{docuId && (
-									<CollaborationStatus isConnected={isConnected} activeUsers={activeUsers} />
+									<CollaborationStatus
+										isConnected={provider?.wsconnected ?? false}
+										activeUsers={activeUsers}
+									/>
 								)}
 							</div>
 						) : (
 							<h2>{t('create_docu.subtitle')}</h2>
 						)}
+
 						<div className='docu-editor-editor'>
 							<BlockNoteView editor={editor} ref={editorRef} />
 						</div>
@@ -237,7 +287,7 @@ const DocuEditor = () => {
 			/>
 			<DeleteDocuModal
 				isVisible={isDeleteModalOpen}
-				toggleVisibility={closeDeleteModal}
+				toggleVisibility={() => setIsDeleteModalOpen(false)}
 				onConfirm={handleDeleteDocu}
 				isLoading={isDeletingDocu}
 			/>
