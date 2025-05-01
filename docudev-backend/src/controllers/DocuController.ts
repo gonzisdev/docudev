@@ -119,6 +119,7 @@ export class DocuController {
       res.status(500).json({ error: 'Error getting docus' })
     }
   }
+
   static async getDocu(req: Request, res: Response) {
     try {
       const docu = await Docu.findById(req.params.docuId).populate(

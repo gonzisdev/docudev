@@ -1,5 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { docuQueryKey, docusQueryKey, teamQueryKey, teamsQueryKey } from 'constants/queryKeys'
+import {
+	docuQueryKey,
+	docusQueryKey,
+	teamDocusQueryKey,
+	teamQueryKey,
+	teamsQueryKey
+} from 'constants/queryKeys'
 import { Docu, DocuFormPayload } from 'models/Docu'
 import { useTranslation } from 'react-i18next'
 import {
@@ -41,6 +47,9 @@ const useDocu = ({ docuId }: Props) => {
 			})
 			queryClient.invalidateQueries({
 				queryKey: [teamsQueryKey, docu?.team]
+			})
+			queryClient.invalidateQueries({
+				queryKey: [teamDocusQueryKey]
 			})
 			toast.success(t('create_docu.toast.success_title'), {
 				description: t('create_docu.toast.success_description')

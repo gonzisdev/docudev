@@ -243,8 +243,13 @@
 			"warning_title": "¡Actualiza tu plan para poder crear y gestionar equipos!",
 			"warning_description": "No puedes crear mas equipos o gestionarlos porque tu plan no lo permite",
 			"warning_title_limit": "¡Has alcanzado el límite de equipos!",
-			"warning_description_limit": "No puedes crear más equipos porque has alcanzado el límite de tu plan."
+			"warning_description_limit": "No puedes crear más equipos porque has alcanzado el límite de tu plan"
 		}
+	},
+	"team": {
+		"collaborators": "Colaboradores",
+		"no_docus": "No hay docus en este equipo",
+		"no_collaborators": "Este equipo no tiene colaboradores"
 	},
 	"docus": {
 		"title": "Mis docus",
@@ -281,6 +286,10 @@
 					"max_length": "El nombre no puede tener más de 50 caracteres"
 				}
 			}
+		},
+		"warning": {
+			"warning_title_save": "¡Importante!",
+			"warning_description_save": "Si no guardas el documento tus cambios se conservarán temporalmente durante 30 minutos"
 		}
 	},
 	"create_docu": {

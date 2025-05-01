@@ -3,7 +3,7 @@ import { User } from './Auth'
 export interface Team {
 	_id: string
 	name: string
-	owner: User['_id']
+	owner: User['_id'] | User
 	description: string
 	collaborators: User[]
 	docus: string[]

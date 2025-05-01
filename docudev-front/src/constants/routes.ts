@@ -15,4 +15,6 @@ export const CREATE_DOCU_URL = '/new-docu'
 export const EDIT_DOCU_URL = '/edit-docu'
 
 export const TEAMS_URL = '/teams'
+export const TEAM_URL = '/team'
+
 export const MANAGEMENT_URL = '/management'

@@ -27,9 +27,12 @@ import {
 } from 'react-swipeable-list'
 import 'react-swipeable-list/dist/styles.css'
 import './Teams.css'
+import { useNavigate } from 'react-router-dom'
+import { TEAM_URL } from 'constants/routes'
 
 const Teams = () => {
 	const { t } = useTranslation()
+	const navigate = useNavigate()
 	const { teams, isLoadingTeams } = useTeams()
 	const { user } = useAuthStore()
 
@@ -52,7 +55,7 @@ const Teams = () => {
 		deleteTeam,
 		isDeletingTeam
 	} = useTeam({
-		teamId: selectedTeamId
+		teamId: selectedTeamId!
 	})
 
 	const ownedTeams = teams?.filter((team) => team.owner === user?._id).length || 0
@@ -211,27 +214,11 @@ const Teams = () => {
 													onSwipeEnd={() => setIsSwiping(false)}>
 													<Card className='team-card'>
 														<div className='team-card-content'>
-															<span className='team-card-name'>{team.name}</span>
-															<span className='team-card-description'>{team.description}</span>
-														</div>
-														{user?.role === 'admin' && (
-															<TwoArrowsIcon className='team-card-swipe-hint' />
-														)}
-													</Card>
-												</SwipeableListItem>
-											))}
-										{teams
-											.filter((team) => team.owner === user?._id)
-											.map((team) => (
-												<SwipeableListItem
-													key={team._id}
-													leadingActions={user?.role === 'admin' && leadingActions(team._id)}
-													trailingActions={user?.role === 'admin' && trailingActions(team._id)}
-													onSwipeStart={() => setIsSwiping(true)}
-													onSwipeEnd={() => setIsSwiping(false)}>
-													<Card className='team-card'>
-														<div className='team-card-content'>
-															<span className='team-card-name'>{team.name}</span>
+															<span
+																className='team-card-name'
+																onClick={() => navigate(`${TEAM_URL}/${team._id}`)}>
+																{team.name}
+															</span>
 															<span className='team-card-description'>{team.description}</span>
 														</div>
 														{user?.role === 'admin' && (

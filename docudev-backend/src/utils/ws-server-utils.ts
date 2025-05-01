@@ -1,15 +1,14 @@
 import * as Y from 'yjs'
 import * as syncProtocol from 'y-protocols/sync'
 import * as awarenessProtocol from 'y-protocols/awareness'
-
 import * as encoding from 'lib0/encoding'
 import * as decoding from 'lib0/decoding'
 import * as map from 'lib0/map'
-
 import * as eventloop from 'lib0/eventloop'
 import { LeveldbPersistence } from 'y-leveldb'
-
 import { callbackHandler, isCallbackSet } from './ws-server-callback'
+import { config } from 'dotenv'
+config()
 
 const CALLBACK_DEBOUNCE_WAIT = parseInt(
   process.env.CALLBACK_DEBOUNCE_WAIT || '2000'

@@ -1,5 +1,6 @@
 export const userQueryKey = 'user'
 export const teamsQueryKey = 'teams'
 export const teamQueryKey = 'team'
+export const teamDocusQueryKey = 'teamDocus'
 export const docuQueryKey = 'docu'
 export const docusQueryKey = 'docus'

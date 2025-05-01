@@ -8,6 +8,7 @@ import FormInput from 'components/elements/Form/FormInput'
 import FormSelect from 'components/elements/Form/FormSelect'
 import Button from 'components/elements/Button/Button'
 import Loading from 'components/elements/Loading/Loading'
+import Warning from 'components/elements/Warning/Warning'
 
 interface Props {
 	isVisible: boolean
@@ -41,6 +42,12 @@ const DocuFormModal = ({
 				<Loading />
 			) : (
 				<Form methods={methods} onSubmit={methods.handleSubmit(onSubmit)}>
+					{docuId && (
+						<Warning
+							title={t('docus.warning.warning_title_save')}
+							description={t('docus.warning.warning_description_save')}
+						/>
+					)}
 					<FormInput
 						id='title'
 						label={t('docus.form.title')}

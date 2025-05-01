@@ -50,16 +50,22 @@ export class TeamController {
   static async getTeam(req: Request, res: Response) {
     try {
       const { teamId } = req.params
-      const team = await Team.findById(teamId).populate({
-        path: 'collaborators',
-        select: '-password -code -token'
-      })
+      const team = await Team.findById(teamId)
+        .populate({
+          path: 'collaborators',
+          select: '-password -code -token'
+        })
+        .populate({
+          path: 'owner',
+          select: '-password -code -token'
+        })
+
       if (!team) {
         res.status(404).json({ error: 'Team not found' })
         return
       }
       if (
-        team.owner.toString() !== req.user._id.toString() &&
+        team.owner._id.toString() !== req.user._id.toString() &&
         !team.collaborators.some(
           (collaborator) =>
             collaborator._id.toString() === req.user._id.toString()

@@ -2,10 +2,10 @@ import { useEffect, useState, useRef } from 'react'
 import { useNavigate, useParams, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
+import { DOCU_URL, DOCUS_URL, TEAM_URL } from 'constants/routes'
+import { codeBlock } from 'constants/editor'
 import { DocuFormPayload } from 'models/Docu'
 import { ActiveUser } from 'models/Collaboration'
-import { DOCU_URL, DOCUS_URL } from 'constants/routes'
-import { codeBlock } from 'constants/editor'
 import useTeams from 'hooks/useTeams'
 import useDocu from 'hooks/useDocu'
 import { useAuthStore } from 'stores/authStore'
@@ -179,7 +179,7 @@ const DocuEditor = () => {
 			navigate(`${DOCU_URL}/${docuId}`)
 		} else {
 			await createDocu(docuData)
-			navigate(DOCUS_URL)
+			docuData.team ? navigate(`${TEAM_URL}/${docuData.team}`) : navigate(DOCUS_URL)
 		}
 		closeModal()
 	}

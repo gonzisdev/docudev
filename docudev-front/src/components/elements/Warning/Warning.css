@@ -1,15 +1,15 @@
 .admin-warning-alert {
 	display: flex;
 	gap: 1rem;
-	padding: 12px 16px;
-	margin-bottom: 20px;
-	border-radius: 4px;
+	padding: 0.875rem 1rem;
+	border-radius: 0.25rem;
 	background-color: var(--warning-light);
 	border-left: 4px solid var(--warning);
+	color: var(--black);
 
 	.warning-icon {
-		font-size: 24px;
-		margin-right: 16px;
+		font-size: 1.5rem;
+		margin-right: 1rem;
 		display: flex;
 		align-items: center;
 	}
@@ -17,12 +17,13 @@
 	.warning-content h4 {
 		color: var(--black);
 		margin-top: 0;
-		margin-bottom: 8px;
+		margin-bottom: 0.5rem;
 		font-weight: 600;
 	}
 
 	.warning-content p {
 		margin-top: 0;
-		margin-bottom: 4px;
+		line-height: 1.5;
+		margin-bottom: 0.25rem;
 	}
 }

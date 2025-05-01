@@ -14,18 +14,20 @@ import {
 	RECOVER_PASSWORD_URL,
 	REGISTER_URL,
 	SETTINGS_URL,
+	TEAM_URL,
 	TEAMS_URL
 } from './constants/routes'
 import Login from './components/Login/Login'
 import Register from './components/Register/Register'
+import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import RecoverPassword from './components/RecoverPassword/RecoverPassword'
 import Home from './components/Home/Home'
-import Events from './components/Events/Events'
 import Docus from './components/Docus/Docus'
-import Teams from './components/Teams/Teams'
-import DocuEditor from 'components/Docus/DocuEditor/DocuEditor'
 import Docu from 'components/Docus/Docu/Docu'
-import ForgotPassword from './components/ForgotPassword/ForgotPassword'
+import DocuEditor from 'components/Docus/DocuEditor/DocuEditor'
+import Teams from './components/Teams/Teams'
+import Team from 'components/Teams/Team/Team'
+import Events from './components/Events/Events'
 import { Toaster } from 'sonner'
 import { Settings } from 'components/Settings/Settings'
 
@@ -75,7 +77,10 @@ export const App = () => {
 					<Route path={DOCUS_URL} element={<Docus />} />
 					<Route path={CREATE_DOCU_URL} element={<DocuEditor />} />
 					<Route path={`${EDIT_DOCU_URL}/:docuId`} element={<DocuEditor />} />
+					{/* Teams routes */}
 					<Route path={TEAMS_URL} element={<Teams />} />
+					<Route path={`${TEAM_URL}/:teamId`} element={<Team />} />
+
 					<Route path={MANAGEMENT_URL} element={<Events />} />
 				</Route>
 
