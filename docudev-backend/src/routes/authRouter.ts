@@ -2,9 +2,9 @@ import { Router } from 'express'
 import { body } from 'express-validator'
 import { AuthController } from '../controllers/AuthController'
 import { handleInputErrors } from '../middleware/validation'
-import { limiter } from '../config/limiter'
-import { authenticate } from '../middleware/auth'
+import { authenticate, validateUserStatus } from '../middleware/auth'
 import { upload, deletePreviousImage, deleteImage } from '../middleware/multer'
+import { limiter } from '../config/limiter'
 
 const router = Router()
 
@@ -50,6 +50,7 @@ router.post(
   body('password').notEmpty().withMessage('Password is required').trim(),
   body('email').isEmail().withMessage('Email not valid').trim(),
   handleInputErrors,
+  validateUserStatus,
   AuthController.login
 )
 
@@ -61,6 +62,7 @@ router.post(
     .normalizeEmail()
     .trim(),
   handleInputErrors,
+  validateUserStatus,
   AuthController.recoverPassword
 )
 
@@ -81,6 +83,7 @@ router.patch(
     .normalizeEmail()
     .trim(),
   handleInputErrors,
+  validateUserStatus,
   AuthController.newPassword
 )
 
@@ -124,17 +127,24 @@ router.put(
     .withMessage('Phone must not exceed 20 characters')
     .trim(),
   handleInputErrors,
+  validateUserStatus,
   AuthController.updateAccount
 )
 
 router.delete(
   '/delete',
   authenticate,
+  validateUserStatus,
   deleteImage,
   AuthController.deleteAccount
 )
 
-router.patch('/update-plan', authenticate, AuthController.updatePlan)
+router.patch(
+  '/update-plan',
+  authenticate,
+  validateUserStatus,
+  AuthController.updatePlan
+)
 
 router.get('/user', authenticate, AuthController.user)
 

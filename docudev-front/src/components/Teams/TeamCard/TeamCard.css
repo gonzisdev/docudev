@@ -1,0 +1,49 @@
+.team-card {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	justify-content: space-between;
+	background-color: var(--neutral-neutral00);
+	border: 1px solid var(--input-border-color);
+	cursor: pointer;
+
+	.team-card-content {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		flex: 1;
+		overflow: hidden;
+
+		.team-card-name {
+			cursor: pointer;
+			transition: color 0.2s ease;
+			min-width: fit-content;
+			font-weight: 500;
+
+			&:hover {
+				color: var(--secondary);
+			}
+		}
+
+		.team-card-description {
+			color: var(--neutral-neutral20);
+			font-size: 0.875rem;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+
+	.team-card-swipe-hint {
+		width: 1.5rem;
+		height: 1.5rem;
+		flex-shrink: 0;
+
+		g path:first-child {
+			fill: var(--error);
+		}
+		g path:last-child {
+			fill: var(--primary);
+		}
+	}
+}

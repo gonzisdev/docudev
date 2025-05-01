@@ -64,7 +64,7 @@ const Docu = () => {
 				<Loading />
 			) : (
 				<>
-					<div className='docu-header'>
+					<div className='header'>
 						<Header title={docu?.title} />
 						<div className='docu-header-actions'>
 							<Button
@@ -84,7 +84,7 @@ const Docu = () => {
 						</div>
 					</div>
 
-					<div className='docu-container'>
+					<div className='container'>
 						{docu && (
 							<div className='docu-details'>
 								<div className='docu-details-info'>

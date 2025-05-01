@@ -49,29 +49,9 @@ export class TeamController {
 
   static async getTeam(req: Request, res: Response) {
     try {
-      const { teamId } = req.params
-      const team = await Team.findById(teamId)
-        .populate({
-          path: 'collaborators',
-          select: '-password -code -token'
-        })
-        .populate({
-          path: 'owner',
-          select: '-password -code -token'
-        })
-
+      const team = req.team
       if (!team) {
         res.status(404).json({ error: 'Team not found' })
-        return
-      }
-      if (
-        team.owner._id.toString() !== req.user._id.toString() &&
-        !team.collaborators.some(
-          (collaborator) =>
-            collaborator._id.toString() === req.user._id.toString()
-        )
-      ) {
-        res.status(403).json({ error: 'Invalid credentials' })
         return
       }
       res.status(200).json(team)
@@ -84,23 +64,12 @@ export class TeamController {
   static async updateTeam(req: Request, res: Response) {
     try {
       const { name, description } = req.body
-      const { teamId } = req.params
-      const team = await Team.findById(teamId)
+      const team = req.team
       if (!team) {
         res.status(404).json({ error: 'Team not found' })
         return
       }
-      if (
-        !(
-          team.owner.toString() === req.user._id.toString() &&
-          req.user.role === 'admin' &&
-          req.user.status === 'active'
-        )
-      ) {
-        res.status(403).json({ error: 'Invalid credentials' })
-        return
-      }
-      await Team.findByIdAndUpdate(teamId, {
+      await Team.findByIdAndUpdate(team._id, {
         name,
         description
       })
@@ -113,25 +82,13 @@ export class TeamController {
 
   static async deleteTeam(req: Request, res: Response) {
     try {
-      const { teamId } = req.params
-      const team = await Team.findById(teamId)
+      const team = req.team
       if (!team) {
         res.status(404).json({ error: 'Team not found' })
         return
       }
-      if (
-        !(
-          team.owner.toString() === req.user._id.toString() &&
-          req.user.role === 'admin' &&
-          req.user.status === 'active'
-        )
-      ) {
-        res.status(403).json({ error: 'Invalid credentials' })
-        return
-      }
-
-      await Team.findByIdAndDelete(teamId)
-      await Docu.deleteMany({ team: teamId })
+      await Team.findByIdAndDelete(team._id)
+      await Docu.deleteMany({ team: team._id })
       res.status(200).json(true)
     } catch (error) {
       console.error('Error deleting team:', error)

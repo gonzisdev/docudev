@@ -1,9 +1,10 @@
 import { Router } from 'express'
 import { body } from 'express-validator'
-import { handleInputErrors } from '../middleware/validation'
-import { limiter } from '../config/limiter'
-import { authenticate } from '../middleware/auth'
 import { TeamController } from '../controllers/TeamController'
+import { handleInputErrors } from '../middleware/validation'
+import { authenticate } from '../middleware/auth'
+import { canAccessTeam, isTeamOwnerAdmin } from '../middleware/team'
+import { limiter } from '../config/limiter'
 
 const router = Router()
 
@@ -38,7 +39,7 @@ router.post(
 
 router.get('/', authenticate, TeamController.getTeams)
 
-router.get('/:teamId', authenticate, TeamController.getTeam)
+router.get('/:teamId', authenticate, canAccessTeam, TeamController.getTeam)
 
 router.patch(
   '/:teamId',
@@ -64,6 +65,7 @@ router.patch(
     .trim(),
   authenticate,
   handleInputErrors,
+  isTeamOwnerAdmin,
   TeamController.updateTeam
 )
 
@@ -71,6 +73,7 @@ router.delete(
   '/:teamId',
   authenticate,
   handleInputErrors,
+  isTeamOwnerAdmin,
   TeamController.deleteTeam
 )
 

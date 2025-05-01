@@ -139,10 +139,10 @@ export const Settings = () => {
 
 	return (
 		<DashboardLayout>
-			<div className='settings-header'>
+			<div className='header'>
 				<Header title={t('settings.title')} />
 			</div>
-			<div className='settings-container'>
+			<div className='container settings-container'>
 				<h2>{t('settings.subtitle')} </h2>
 				<Form methods={methods} onSubmit={methods.handleSubmit(submit)}>
 					<div className='settings-image'>
@@ -157,7 +157,6 @@ export const Settings = () => {
 						/>
 					</div>
 					<FormFileInput id='image' label={t('settings.image')} required />
-
 					<FormInput
 						id='name'
 						label={t('settings.name')}
@@ -181,7 +180,6 @@ export const Settings = () => {
 						label={t('settings.phone')}
 						placeholder={t('settings.phone_placeholder')}
 					/>
-
 					<footer>
 						<Button type='submit' variant='secondary' loading={loading} fullWidth>
 							{t('settings.save_changes')}

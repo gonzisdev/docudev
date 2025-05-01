@@ -1,8 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
-import { CREATE_DOCU_URL, DOCU_URL, EDIT_DOCU_URL, TEAMS_URL } from 'constants/routes'
-import { DocuOwner } from 'models/Docu'
+import { CREATE_DOCU_URL, EDIT_DOCU_URL, TEAMS_URL } from 'constants/routes'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import useTeam from 'hooks/useTeam'
 import useDocu from 'hooks/useDocu'
@@ -10,12 +9,14 @@ import Button from 'components/elements/Button/Button'
 import Header from 'components/elements/Header/Header'
 import Loading from 'components/elements/Loading/Loading'
 import Card from 'components/elements/Card/Card'
+import DocuCard from 'components/Docus/DocuCard/DocuCard'
 import Pagination from 'components/elements/Pagination/Pagination'
 import Input from 'components/elements/Input/Input'
 import Select from 'components/elements/Select/Select'
 import DeleteDocuModal from 'components/Docus/Modals/DeleteDocuModal'
-import { EditIcon, TrashIcon, TwoArrowsIcon } from 'assets/svgs'
+import { EditIcon, TrashIcon } from 'assets/svgs'
 import { formatDateWithTime } from 'utils/dates'
+import { getSortOptions, getUniqueOwners } from 'utils/filters'
 import { debounce } from 'lodash'
 import {
 	SwipeableList,
@@ -33,7 +34,6 @@ const Team = () => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 	const { teamId } = useParams()
-
 	const {
 		team,
 		isLoadingTeam,
@@ -44,6 +44,7 @@ const Team = () => {
 		filters: { searchTerm, setSearchTerm, ownerFilter, setOwnerFilter, sortOption, setSortOption },
 		handlePageChange
 	} = useTeam({ teamId })
+
 	const [isSwiping, setIsSwiping] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 	const [docuToDelete, setDocuToDelete] = useState<string | undefined>(undefined)
@@ -51,25 +52,8 @@ const Team = () => {
 
 	const { deleteDocu, isDeletingDocu } = useDocu(docuToDelete ? { docuId: docuToDelete } : {})
 
-	const sortOptions = [
-		{ value: 'title_asc', label: t('docus.sort_title_asc') },
-		{ value: 'title_desc', label: t('docus.sort_title_desc') },
-		{ value: 'created_asc', label: t('docus.sort_created_asc') },
-		{ value: 'created_desc', label: t('docus.sort_created_desc') },
-		{ value: 'updated_asc', label: t('docus.sort_updated_asc') },
-		{ value: 'updated_desc', label: t('docus.sort_updated_desc') }
-	]
-
-	const uniqueUsers = useMemo(() => {
-		if (!teamDocus) return []
-		const userMap = new Map<string, DocuOwner>()
-		teamDocus.forEach((docu) => {
-			if (docu.owner && docu.owner._id) {
-				userMap.set(docu.owner._id, docu.owner)
-			}
-		})
-		return Array.from(userMap.values())
-	}, [teamDocus])
+	const sortOptions = getSortOptions(t)
+	const uniqueUsers = useMemo(() => getUniqueOwners(teamDocus), [teamDocus])
 
 	const debouncedSearch = useCallback(
 		debounce((value: string) => {
@@ -83,9 +67,23 @@ const Team = () => {
 		setInputSearchValue(value)
 		debouncedSearch(value)
 	}
-
 	const handleOwnerFilterChange = (option: string) => setOwnerFilter(option)
 	const handleSortChange = (option: string) => setSortOption(option)
+
+	const openDeleteModal = (docuId: string) => {
+		setDocuToDelete(docuId)
+		setIsDeleteModalOpen(true)
+	}
+	const closeDeleteModal = () => {
+		setDocuToDelete(undefined)
+		setIsDeleteModalOpen(false)
+	}
+	const handleDeleteDocu = async () => {
+		if (docuToDelete) {
+			await deleteDocu({ docuId: docuToDelete })
+			closeDeleteModal()
+		}
+	}
 
 	const leadingActions = (docuId: string) => (
 		<LeadingActions>
@@ -106,23 +104,6 @@ const Team = () => {
 			</SwipeAction>
 		</TrailingActions>
 	)
-
-	const openDeleteModal = (docuId: string) => {
-		setDocuToDelete(docuId)
-		setIsDeleteModalOpen(true)
-	}
-
-	const closeDeleteModal = () => {
-		setDocuToDelete(undefined)
-		setIsDeleteModalOpen(false)
-	}
-
-	const handleDeleteDocu = async () => {
-		if (docuToDelete) {
-			await deleteDocu({ docuId: docuToDelete })
-			closeDeleteModal()
-		}
-	}
 
 	useEffect(() => {
 		isSwiping ? document.body.classList.add('swiping') : document.body.classList.remove('swiping')
@@ -145,7 +126,7 @@ const Team = () => {
 				<Loading />
 			) : (
 				<>
-					<div className='team-header'>
+					<div className='header'>
 						<Header title={team?.name} />
 						<Button
 							variant='secondary'
@@ -157,7 +138,7 @@ const Team = () => {
 						</Button>
 					</div>
 
-					<div className='team-container'>
+					<div className='container'>
 						<h2>{team?.description}</h2>
 						<div className='team-info'>
 							<div className='team-members-layout'>
@@ -256,7 +237,11 @@ const Team = () => {
 						</div>
 						{teamDocus && teamDocus.length > 0 ? (
 							<>
-								<SwipeableList type={ListType.IOS} fullSwipe={true} threshold={0.3}>
+								<SwipeableList
+									type={ListType.IOS}
+									fullSwipe={true}
+									threshold={0.3}
+									className='team-swipeable-list'>
 									{teamDocus.map((docu) => (
 										<SwipeableListItem
 											key={docu._id}
@@ -264,42 +249,7 @@ const Team = () => {
 											trailingActions={trailingActions(docu._id)}
 											onSwipeStart={() => setIsSwiping(true)}
 											onSwipeEnd={() => setIsSwiping(false)}>
-											<Card className='docu-card'>
-												<div className='docu-card-content'>
-													<span
-														className='docu-card-name'
-														onClick={() => navigate(`${DOCU_URL}/${docu._id}`)}>
-														{docu.title}
-													</span>
-													<div className='docu-card-details'>
-														<div className='docu-card-info'>
-															<div className='docu-card-left'>
-																<span>
-																	<span>{t('docus.owner')}:</span> {docu.owner.name}{' '}
-																	{docu.owner.surname}
-																</span>
-																{docu.team && (
-																	<span>
-																		<span>{t('docus.team')}:</span>{' '}
-																		<span className='team-tag'>{team?.name}</span>
-																	</span>
-																)}
-															</div>
-															<div className='docu-card-right'>
-																<span>
-																	<span>{t('docus.created')}:</span>{' '}
-																	{formatDateWithTime(docu.createdAt)}
-																</span>
-																<span>
-																	<span>{t('docus.updated')}:</span>{' '}
-																	{formatDateWithTime(docu.updatedAt)}
-																</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<TwoArrowsIcon className='docu-card-swipe-hint' />
-											</Card>
+											<DocuCard docu={docu} teamName={team?.name} />
 										</SwipeableListItem>
 									))}
 								</SwipeableList>

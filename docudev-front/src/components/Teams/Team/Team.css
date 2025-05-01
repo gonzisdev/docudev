@@ -1,238 +1,112 @@
-.team-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.team-container {
+.team-info {
 	display: flex;
 	flex-direction: column;
-	gap: 2rem;
+	gap: 1rem;
+	background-color: var(--background);
+	padding: 1rem;
 
-	h2 {
-		margin: 1rem 0;
-	}
-
-	.team-info {
+	.team-members-layout {
 		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-		background-color: var(--background);
-		padding: 1rem;
+		justify-content: space-between;
+		gap: 10rem;
+		min-height: 4rem;
 
-		.team-members-layout {
+		.owner-container {
+			flex: 0 0 auto;
 			display: flex;
-			justify-content: space-between;
-			gap: 10rem;
-			min-height: 4rem;
+			flex-direction: column;
+			gap: 0.5rem;
 
-			.owner-container {
-				flex: 0 0 auto;
-				display: flex;
-				flex-direction: column;
-				gap: 0.5rem;
-
-				.owner-label {
-					color: var(--text-light);
-					font-size: 0.875rem;
-				}
-
-				.owner-tag {
-					background-color: var(--warning-light);
-					color: var(--black);
-
-					.user-avatar {
-						border-color: var(--warning);
-					}
-				}
-			}
-
-			.collaborators-container {
-				flex: 1;
-				display: flex;
-				flex-direction: column;
-				align-items: flex-start;
-				gap: 0.5rem;
-				overflow: hidden;
-
-				.collaborators-label {
-					color: var(--text-light);
-					font-size: 0.875rem;
-				}
-
-				.collaborators-list {
-					display: flex;
-					flex-direction: column;
-					flex-wrap: wrap;
-					gap: 0.5rem;
-					overflow-y: auto;
-					max-height: 8rem;
-					padding-right: 0.5rem;
-					padding-bottom: 0.5rem;
-
-					.no-collaborators {
-						color: var(--neutral-neutral20);
-					}
-				}
-			}
-		}
-
-		.team-tag {
-			display: flex;
-			align-items: center;
-			background-color: var(--primary-light);
-			color: var(--primary);
-			padding: 0.25rem 0.5rem;
-			border-radius: 1rem;
-			font-size: 0.875rem;
-
-			.user-avatar {
-				width: 1.5rem;
-				height: 1.5rem;
-				border-radius: 50%;
-				margin-right: 0.5rem;
-				object-fit: cover;
-				border: 1px solid var(--secondary);
-			}
-		}
-
-		.team-dates {
-			display: flex;
-			justify-content: space-between;
-			border-top: 1px solid rgba(0, 0, 0, 0.1);
-			padding-top: 0.75rem;
-
-			.date-item {
-				display: flex;
-				align-items: center;
-				gap: 0.5rem;
+			.owner-label {
+				color: var(--text-light);
 				font-size: 0.875rem;
+			}
 
-				.date-label {
-					color: var(--text-light);
+			.owner-tag {
+				background-color: var(--warning-light);
+				color: var(--black);
+
+				.user-avatar {
+					border-color: var(--warning);
 				}
+			}
+		}
 
-				.date-info {
+		.collaborators-container {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.5rem;
+			overflow: hidden;
+
+			.collaborators-label {
+				color: var(--text-light);
+				font-size: 0.875rem;
+			}
+
+			.collaborators-list {
+				display: flex;
+				flex-direction: column;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				overflow-y: auto;
+				max-height: 8rem;
+				padding-right: 0.5rem;
+				padding-bottom: 0.5rem;
+
+				.no-collaborators {
 					color: var(--neutral-neutral20);
 				}
 			}
 		}
 	}
 
-	.team-filters {
-		display: flex;
-		flex-direction: row;
-		gap: 0.5rem;
-		align-items: center;
-	}
-
-	.team-list {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-	}
-
-	.docu-card {
+	.team-tag {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		background-color: var(--background);
-		border-bottom: 1px solid var(--input-border-color);
-		border-radius: 0;
-		padding: 1rem;
-		cursor: pointer;
-		transition: background-color 0.2s ease;
+		background-color: var(--primary-light);
+		color: var(--primary);
+		padding: 0.25rem 0.5rem;
+		border-radius: 1rem;
+		font-size: 0.875rem;
 
-		&:hover {
-			background-color: var(--primary-light);
-		}
-
-		.docu-card-content {
-			display: flex;
-			flex-direction: column;
-			gap: 0.5rem;
-			flex: 1;
-			overflow: hidden;
-
-			.docu-card-name {
-				transition: color 0.2s ease;
-
-				&:hover {
-					color: var(--secondary);
-				}
-			}
-
-			.docu-card-details {
-				display: flex;
-				flex-direction: column;
-				font-size: 0.8rem;
-				margin-top: 8px;
-				color: var(--neutral-neutral20);
-			}
-
-			.docu-card-info {
-				display: flex;
-				gap: 1rem;
-				width: 100%;
-			}
-
-			.docu-card-left,
-			.docu-card-right {
-				display: flex;
-				flex-direction: column;
-				gap: 0.25rem;
-
-				span {
-					.team-tag {
-						color: var(--warning);
-					}
-					> span {
-						color: var(--warning-light);
-					}
-				}
-			}
-		}
-
-		.docu-card-swipe-hint {
+		.user-avatar {
 			width: 1.5rem;
 			height: 1.5rem;
-			flex-shrink: 0;
-
-			g path:first-child {
-				fill: var(--error);
-			}
-			g path:last-child {
-				fill: var(--primary);
-			}
+			border-radius: 50%;
+			margin-right: 0.5rem;
+			object-fit: cover;
+			border: 1px solid var(--secondary);
 		}
 	}
 
-	.swipe-action {
-		.edit-action,
-		.delete-action {
-			border-bottom: 1px solid var(--input-border-color);
+	.team-dates {
+		display: flex;
+		justify-content: space-between;
+		border-top: 1px solid rgba(0, 0, 0, 0.1);
+		padding-top: 0.75rem;
 
-			.edit-icon {
-				cursor: pointer;
-				stroke: var(--primary);
-				transition: fill 0.2s ease;
+		.date-item {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-size: 0.875rem;
+
+			.date-label {
+				color: var(--text-light);
 			}
 
-			.trash-icon {
-				cursor: pointer;
-
-				path {
-					fill: var(--error);
-					transition: fill 0.2s ease;
-				}
+			.date-info {
+				color: var(--neutral-neutral20);
 			}
-		}
-		.edit-action {
-			background-color: var(--primary-light);
-		}
-
-		.delete-action {
-			background-color: var(--error-light);
 		}
 	}
+}
+
+.team-filters {
+	display: flex;
+	flex-direction: row;
+	gap: 0.5rem;
+	align-items: center;
 }

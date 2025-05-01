@@ -34,24 +34,20 @@ p {
 	margin: 0;
 }
 
-/* width */
 ::-webkit-scrollbar {
 	width: 2px;
 	height: 2px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
 	background: var(--primary-dark);
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
 	background: #34d399; /* It does not work in floating editor menu with var(--primary); */
 	border-radius: 1px;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
 	background: var(--secondary);
 }

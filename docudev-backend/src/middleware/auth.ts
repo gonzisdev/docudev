@@ -30,9 +30,9 @@ export const authenticate = async (
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     if (typeof decoded === 'object' && decoded.id) {
-      const user = (await User.findById(decoded.id)
-        .select('-password -code')
-        .lean()) as IUser
+      const user = (await User.findById(decoded.id).select(
+        '-password -code'
+      )) as IUser
       if (!user.token || user.token !== token) {
         res.status(401).json({ error: 'Invalid token', invalidToken: true })
         return
@@ -52,4 +52,25 @@ export const authenticate = async (
       res.status(500).json({ error: 'There was a server error' })
     }
   }
+}
+
+export const validateUserStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let user = req.user
+  if (!user && req.body?.email) {
+    user = await User.findOne({ email: req.body.email })
+  }
+  if (!user) {
+    res.status(401).json({ error: 'Invalid credentials' })
+    return
+  }
+  if (user.status === 'suspended') {
+    res.status(401).json({ error: 'Your account is suspended' })
+    return
+  }
+  req.user = user
+  next()
 }

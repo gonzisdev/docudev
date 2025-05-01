@@ -9,7 +9,7 @@ import { ActiveUser } from 'models/Collaboration'
 import useTeams from 'hooks/useTeams'
 import useDocu from 'hooks/useDocu'
 import { useAuthStore } from 'stores/authStore'
-import { getRandomColor } from 'utils/getRandomColor'
+import { getRandomColor } from 'utils/collaboration'
 import Header from 'components/elements/Header/Header'
 import Button from 'components/elements/Button/Button'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
@@ -210,7 +210,7 @@ const DocuEditor = () => {
 				<Loading />
 			) : (
 				<>
-					<div className='docu-editor-header'>
+					<div className='header'>
 						<Header
 							title={
 								docuId ? (
@@ -234,7 +234,7 @@ const DocuEditor = () => {
 							)}
 						</div>
 					</div>
-					<div className='docu-editor-container'>
+					<div className='container'>
 						{docu ? (
 							<div className='docu-editor-details'>
 								<div className='docu-editor-details-info'>

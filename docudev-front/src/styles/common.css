@@ -5,33 +5,18 @@
 	--input-border-color: var(--neutral-neutral10);
 }
 
-/* Avoids selecting page content when .swiping class is applied */
-.swiping {
-	user-select: none !important;
-	-webkit-user-select: none !important;
-	-moz-user-select: none !important;
-	-ms-user-select: none !important;
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
-/* PDF exporting styles  */
-@media print {
-	@page {
-		size: A4;
-		margin: 10mm;
-	}
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
 
-	.blockNote-root {
-		font-size: 12pt;
-		line-height: 1.5;
-	}
-
-	.docu-editor-header,
-	nav,
-	.sidebar {
-		display: none !important;
-	}
-
-	.bn-block {
-		page-break-inside: avoid;
+	h2 {
+		margin: 1rem 0;
 	}
 }

@@ -1,9 +1,10 @@
 import { Router } from 'express'
 import { body } from 'express-validator'
-import { handleInputErrors } from '../middleware/validation'
-import { limiter } from '../config/limiter'
-import { authenticate } from '../middleware/auth'
 import { DocuController } from '../controllers/DocuController'
+import { handleInputErrors } from '../middleware/validation'
+import { authenticate } from '../middleware/auth'
+import { canAccessDocu } from '../middleware/docu'
+import { limiter } from '../config/limiter'
 
 const router = Router()
 
@@ -29,7 +30,7 @@ router.post(
 
 router.get('/', authenticate, DocuController.getDocus)
 
-router.get('/:docuId', authenticate, DocuController.getDocu)
+router.get('/:docuId', authenticate, canAccessDocu, DocuController.getDocu)
 
 router.put(
   '/update-docu/:docuId',
@@ -45,10 +46,16 @@ router.put(
     .trim(),
   body('content').notEmpty().withMessage('Docu content is required'),
   authenticate,
+  canAccessDocu,
   handleInputErrors,
   DocuController.updateDocu
 )
 
-router.delete('/delete-docu/:docuId', authenticate, DocuController.deleteDocu)
+router.delete(
+  '/delete-docu/:docuId',
+  authenticate,
+  canAccessDocu,
+  DocuController.deleteDocu
+)
 
 export default router

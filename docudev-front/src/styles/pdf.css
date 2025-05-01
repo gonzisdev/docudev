@@ -1,0 +1,22 @@
+/* PDF exporting styles  */
+@media print {
+	@page {
+		size: A4;
+		margin: 10mm;
+	}
+
+	.blockNote-root {
+		font-size: 12pt;
+		line-height: 1.5;
+	}
+
+	.docu-editor-header,
+	nav,
+	.sidebar {
+		display: none !important;
+	}
+
+	.bn-block {
+		page-break-inside: avoid;
+	}
+}

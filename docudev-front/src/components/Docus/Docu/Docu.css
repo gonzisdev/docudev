@@ -1,79 +1,63 @@
-.docu-header {
+.docu-header-actions {
 	display: flex;
+	gap: 1rem;
 	align-items: center;
-	justify-content: space-between;
-
-	.docu-header-actions {
-		display: flex;
-		gap: 1rem;
-		align-items: center;
-	}
 }
 
-.docu-container {
-	display: flex;
-	flex-direction: column;
-	gap: 2rem;
-	height: calc(100vh - 6.3rem);
+.docu-details {
+	margin-top: 2rem;
 
-	h2 {
-		margin: 1rem 0;
-	}
-	.docu-details {
-		margin-top: 2rem;
+	.docu-details-info {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		width: 100%;
 
-		.docu-details-info {
+		.docu-details-left,
+		.docu-details-right {
 			display: flex;
-			justify-content: space-between;
-			gap: 1rem;
-			width: 100%;
+			flex-direction: column;
+			gap: 0.25rem;
+			font-size: 0.9rem;
 
-			.docu-details-left,
-			.docu-details-right {
-				display: flex;
-				flex-direction: column;
-				gap: 0.25rem;
-				font-size: 0.9rem;
+			span {
+				color: var(--neutral-neutral20);
 
-				span {
-					color: var(--neutral-neutral20);
+				> span {
+					color: var(--warning-light);
+				}
 
-					> span {
-						color: var(--warning-light);
-					}
-
-					.team-tag {
-						color: var(--warning);
-					}
+				.team-tag {
+					color: var(--warning);
 				}
 			}
 		}
 	}
+}
 
-	.docu-editor {
-		height: calc(100vh - 6.3rem);
-		background-color: var(--white);
-		overflow: auto;
+.docu-editor {
+	height: calc(100vh - 6.3rem);
+	background-color: var(--white);
+	overflow: auto;
 
-		.bn-block-content {
-			padding: 1rem;
-			select {
-				font-size: 0.95rem;
-				border-radius: 4px;
+	.bn-block-content {
+		padding: 1rem;
+		select {
+			font-size: 0.95rem;
+			border-radius: 4px;
+			background-color: var(--background-light);
+			color: var(--white);
+			border: 1px solid var(--border-color);
+			appearance: menulist;
+
+			&:focus,
+			&:hover {
+				opacity: 1;
+			}
+
+			option {
 				background-color: var(--background-light);
 				color: var(--white);
-				border: 1px solid var(--border-color);
-				appearance: menulist;
-
-				&:focus,
-				&:hover {
-					opacity: 1;
-				}
-
-				option {
-					background-color: var(--background-light);
-					color: var(--white);
-				}
 			}
 		}
 	}

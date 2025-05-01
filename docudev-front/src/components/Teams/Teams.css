@@ -1,111 +1,12 @@
-.teams-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+.teams-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 2rem;
 }
 
-.teams-container {
+.user-owned-teams,
+.collaborative-teams {
 	display: flex;
 	flex-direction: column;
-	gap: 2rem;
-
-	h2 {
-		margin: 1rem 0;
-	}
-
-	.teams-grid {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 2rem;
-	}
-
-	.user-owned-teams,
-	.collaborative-teams {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-
-	.team-card {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		justify-content: space-between;
-		background-color: var(--neutral-neutral00);
-		border: 1px solid var(--input-border-color);
-		cursor: pointer;
-
-		.team-card-content {
-			display: flex;
-			align-items: center;
-			gap: 1rem;
-			flex: 1;
-			overflow: hidden;
-
-			.team-card-name {
-				cursor: pointer;
-				transition: color 0.2s ease;
-				min-width: fit-content;
-				font-weight: 500;
-
-				&:hover {
-					color: var(--secondary);
-				}
-			}
-
-			.team-card-description {
-				color: var(--neutral-neutral20);
-				font-size: 0.875rem;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-		}
-
-		.team-card-swipe-hint {
-			width: 1.5rem;
-			height: 1.5rem;
-			flex-shrink: 0;
-
-			g path:first-child {
-				fill: var(--error);
-			}
-			g path:last-child {
-				fill: var(--primary);
-			}
-		}
-	}
-
-	.swipeable-list {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-
-		.swipe-action {
-			border-radius: var(--input-border-radius);
-
-			.edit-action {
-				background-color: var(--primary-light);
-
-				.edit-icon {
-					cursor: pointer;
-					stroke: var(--primary);
-					transition: fill 0.2s ease;
-				}
-			}
-
-			.delete-action {
-				background-color: var(--error-light);
-
-				.trash-icon {
-					cursor: pointer;
-
-					path {
-						fill: var(--error);
-						transition: fill 0.2s ease;
-					}
-				}
-			}
-		}
-	}
+	gap: 1rem;
 }

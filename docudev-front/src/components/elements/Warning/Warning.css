@@ -10,6 +10,7 @@
 	.warning-icon {
 		font-size: 1.5rem;
 		margin-right: 1rem;
+		line-height: 1.5;
 		display: flex;
 		align-items: center;
 	}

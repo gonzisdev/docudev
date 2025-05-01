@@ -30,37 +30,25 @@ export class AuthController {
 
   static async login(req: Request, res: Response) {
     try {
-      const { email, password } = req.body
-      const user = await User.findOne({ email })
-      if (!user) {
-        res.status(401).json({ error: 'Invalid credentials' })
-        return
-      }
-      if (user.status === 'suspended') {
-        res.status(401).json({ error: 'Your account is suspended' })
-        return
-      }
-      if (user.status === 'inactive') {
-        user.status = 'active'
-      }
-      const isMatch = await user.comparePassword(password)
+      const { password } = req.body
+      const isMatch = await req.user.comparePassword(password)
       if (!isMatch) {
         res.status(401).json({ error: 'Invalid credentials' })
         return
       }
-      if (user.token) {
+      if (req.user.token) {
         try {
-          jwt.verify(user.token, process.env.JWT_SECRET)
+          jwt.verify(req.user.token, process.env.JWT_SECRET)
         } catch (err) {
-          const token = generateJWT(user._id.toString())
-          user.token = token
+          const token = generateJWT(req.user._id.toString())
+          req.user.token = token
         }
       } else {
-        const token = generateJWT(user._id.toString())
-        user.token = token
+        const token = generateJWT(req.user._id.toString())
+        req.user.token = token
       }
-      await user.save()
-      const userResponse = await User.findById(user._id)
+      await req.user.save()
+      const userResponse = await User.findById(req.user._id)
         .select('-password -code ')
         .lean()
       res.status(200).json(userResponse)
@@ -72,19 +60,9 @@ export class AuthController {
 
   static async recoverPassword(req: Request, res: Response) {
     try {
-      const { email } = req.body
-      const user = await User.findOne({ email })
-      if (!user) {
-        res.status(401).json({ error: 'Invalid credentials' })
-        return
-      }
-      if (user.status === 'suspended') {
-        res.status(401).json({ error: 'Your account is suspended' })
-        return
-      }
-      user.code = Math.floor(100000 + Math.random() * 900000).toString()
-      await user.save()
-      await sendEmail(user.email, user.code)
+      req.user.code = Math.floor(100000 + Math.random() * 900000).toString()
+      await req.user.save()
+      await sendEmail(req.user.email, req.user.code)
       res.status(200).json(true)
     } catch (error) {
       console.error('Error sending email to recover password:', error)
@@ -94,23 +72,14 @@ export class AuthController {
 
   static async newPassword(req: Request, res: Response) {
     try {
-      const { password, code, email } = req.body
-      const user = await User.findOne({ email })
-      if (!user) {
-        res.status(401).json({ error: 'Invalid credentials' })
-        return
-      }
-      if (user.status === 'suspended') {
-        res.status(401).json({ error: 'Your account is suspended' })
-        return
-      }
-      if (user.code !== code) {
+      const { password, code } = req.body
+      if (req.user.code !== code) {
         res.status(401).json({ error: 'Invalid code' })
         return
       }
-      user.password = password
-      user.code = ''
-      user.save()
+      req.user.password = password
+      req.user.code = ''
+      req.user.save()
       res.status(200).json(true)
     } catch (error) {
       console.error('Error changing password:', error)
@@ -122,22 +91,13 @@ export class AuthController {
     try {
       const { name, surname, phone } = req.body
       const image = (req as any).file
-      const user = await User.findById(req.user._id)
-      if (!user) {
-        res.status(401).json({ error: 'Invalid credentials' })
-        return
-      }
-      if (user.status === 'suspended') {
-        res.status(401).json({ error: 'Your account is suspended' })
-        return
-      }
-      user.name = name
-      user.surname = surname
-      user.phone = phone
+      req.user.name = name
+      req.user.surname = surname
+      req.user.phone = phone
       if (image) {
-        user.image = image.filename
+        req.user.image = image.filename
       }
-      await user.save()
+      await req.user.save()
       res.status(200).json(true)
     } catch (error) {
       console.error('Error updating account:', error)
@@ -147,15 +107,6 @@ export class AuthController {
 
   static async deleteAccount(req: Request, res: Response) {
     try {
-      const user = await User.findById(req.user._id)
-      if (!user) {
-        res.status(401).json({ error: 'Invalid credentials' })
-        return
-      }
-      if (user.status === 'suspended') {
-        res.status(401).json({ error: 'Your account is suspended' })
-        return
-      }
       await Docu.deleteMany({ owner: req.user._id })
       const ownedTeams = await Team.find({ owner: req.user._id })
       for (const team of ownedTeams) {
@@ -176,21 +127,12 @@ export class AuthController {
 
   static async updatePlan(req: Request, res: Response) {
     try {
-      const user = await User.findById(req.user._id)
-      if (!user) {
-        res.status(401).json({ error: 'Invalid credentials' })
-        return
+      if (req.user.role === 'admin') {
+        req.user.role = 'user'
+      } else if (req.user.role === 'user') {
+        req.user.role = 'admin'
       }
-      if (user.status === 'suspended') {
-        res.status(401).json({ error: 'Your account is suspended' })
-        return
-      }
-      if (user.role === 'admin') {
-        user.role = 'user'
-      } else if (user.role === 'user') {
-        user.role = 'admin'
-      }
-      await user.save()
+      await req.user.save()
       res.status(200).json(true)
     } catch (error) {
       console.error('Error updating role:', error)

@@ -7,10 +7,11 @@ import TeamFormModal from './Modals/TeamFormModal'
 import TeamDeleteModal from './Modals/TeamDeleteModal'
 import Loading from 'components/elements/Loading/Loading'
 import Card from 'components/elements/Card/Card'
+import TeamCard from './TeamCard/TeamCard'
 import Warning from 'components/elements/Warning/Warning'
 import useTeams from 'hooks/useTeams'
 import useTeam from 'hooks/useTeam'
-import { EditIcon, TrashIcon, TwoArrowsIcon } from 'assets/svgs'
+import { EditIcon, TrashIcon } from 'assets/svgs'
 import { useAuthStore } from 'stores/authStore'
 import { Team, TeamFormPayload } from 'models/Team'
 import { useTranslation } from 'react-i18next'
@@ -27,12 +28,9 @@ import {
 } from 'react-swipeable-list'
 import 'react-swipeable-list/dist/styles.css'
 import './Teams.css'
-import { useNavigate } from 'react-router-dom'
-import { TEAM_URL } from 'constants/routes'
 
 const Teams = () => {
 	const { t } = useTranslation()
-	const navigate = useNavigate()
 	const { teams, isLoadingTeams } = useTeams()
 	const { user } = useAuthStore()
 
@@ -170,7 +168,7 @@ const Teams = () => {
 				<Loading />
 			) : (
 				<>
-					<div className='teams-header'>
+					<div className='header'>
 						<Header title={t('teams.title')} />
 						<Button
 							variant='secondary'
@@ -184,7 +182,7 @@ const Teams = () => {
 									: t('teams.create_team')}
 						</Button>
 					</div>
-					<div className='teams-container'>
+					<div className='container'>
 						<h2>{t('teams.subtitle')}</h2>
 						{user?.role !== 'admin' && (
 							<Warning
@@ -202,7 +200,11 @@ const Teams = () => {
 							<div className='user-owned-teams'>
 								<h3>{t('teams.my_teams_subtitle')}</h3>
 								{teams && teams.filter((team) => team.owner === user?._id).length > 0 ? (
-									<SwipeableList type={ListType.IOS} fullSwipe={true} threshold={0.3}>
+									<SwipeableList
+										type={ListType.IOS}
+										fullSwipe={true}
+										threshold={0.3}
+										className='teams-swipeable-list'>
 										{teams
 											.filter((team) => team.owner === user?._id)
 											.map((team) => (
@@ -212,19 +214,7 @@ const Teams = () => {
 													trailingActions={user?.role === 'admin' && trailingActions(team._id)}
 													onSwipeStart={() => setIsSwiping(true)}
 													onSwipeEnd={() => setIsSwiping(false)}>
-													<Card className='team-card'>
-														<div className='team-card-content'>
-															<span
-																className='team-card-name'
-																onClick={() => navigate(`${TEAM_URL}/${team._id}`)}>
-																{team.name}
-															</span>
-															<span className='team-card-description'>{team.description}</span>
-														</div>
-														{user?.role === 'admin' && (
-															<TwoArrowsIcon className='team-card-swipe-hint' />
-														)}
-													</Card>
+													<TeamCard team={team} isAdmin={user?.role === 'admin'} />
 												</SwipeableListItem>
 											))}
 									</SwipeableList>
@@ -235,7 +225,11 @@ const Teams = () => {
 							<div className='collaborative-teams'>
 								<h3>{t('teams.collaborative_teams_subtitle')}</h3>
 								{teams && teams.filter((team) => team.owner !== user?._id).length > 0 ? (
-									<SwipeableList type={ListType.IOS} fullSwipe={true} threshold={0.5}>
+									<SwipeableList
+										type={ListType.IOS}
+										fullSwipe={true}
+										threshold={0.5}
+										className='teams-swipeable-list'>
 										{teams
 											?.filter((team) => team.owner !== user?._id)
 											.map((team) => (
@@ -243,12 +237,7 @@ const Teams = () => {
 													key={team._id}
 													onSwipeStart={() => setIsSwiping(true)}
 													onSwipeEnd={() => setIsSwiping(false)}>
-													<Card className='team-card'>
-														<div className='team-card-content'>
-															<span className='team-card-name'>{team.name}</span>
-															<span className='team-card-description'>{team.description}</span>
-														</div>
-													</Card>
+													<TeamCard team={team} />
 												</SwipeableListItem>
 											))}
 									</SwipeableList>

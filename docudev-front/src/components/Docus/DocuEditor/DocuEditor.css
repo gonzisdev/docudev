@@ -1,90 +1,73 @@
-.docu-editor-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-
-	.docu-editor-header-title {
-		color: var(--white);
-	}
-
-	.docu-editor-header-actions {
-		display: flex;
-		gap: 1rem;
-		align-items: center;
-	}
+.docu-editor-header-title {
+	color: var(--white);
 }
 
-.docu-editor-container {
+.docu-editor-header-actions {
 	display: flex;
-	flex-direction: column;
-	gap: 2rem;
-	height: calc(100vh - 6.3rem);
+	gap: 1rem;
+	align-items: center;
+}
 
-	h2 {
-		margin: 1rem 0;
-	}
+.docu-editor-details {
+	margin-top: 2rem;
 
-	.docu-editor-details {
-		margin-top: 2rem;
+	.docu-editor-details-info {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		width: 100%;
 
-		.docu-editor-details-info {
+		.docu-editor-details-left,
+		.docu-editor-details-right {
 			display: flex;
-			justify-content: space-between;
-			gap: 1rem;
-			width: 100%;
+			flex-direction: column;
+			gap: 0.25rem;
+			font-size: 0.9rem;
 
-			.docu-editor-details-left,
-			.docu-editor-details-right {
-				display: flex;
-				flex-direction: column;
-				gap: 0.25rem;
-				font-size: 0.9rem;
+			span {
+				color: var(--neutral-neutral20);
 
-				span {
-					color: var(--neutral-neutral20);
+				> span {
+					color: var(--warning-light);
+				}
 
-					> span {
-						color: var(--warning-light);
-					}
-
-					.team-tag {
-						color: var(--warning);
-					}
+				.team-tag {
+					color: var(--warning);
 				}
 			}
 		}
 	}
+}
 
-	.docu-editor-editor {
-		height: calc(100vh - 6.3rem);
-		background-color: var(--white);
-		overflow: auto;
+.docu-editor-editor {
+	height: calc(100vh - 6.3rem);
+	background-color: var(--white);
+	overflow: auto;
 
-		.bn-toolbar [role='combobox'] {
-			display: flex;
-			gap: 1rem;
-			width: fit-content;
-		}
+	.bn-toolbar [role='combobox'] {
+		display: flex;
+		gap: 1rem;
+		width: fit-content;
+	}
 
-		.bn-block-content {
-			padding: 1rem;
-			select {
-				font-size: 0.95rem;
-				border-radius: 4px;
+	.bn-block-content {
+		padding: 1rem;
+		select {
+			font-size: 0.95rem;
+			border-radius: 4px;
+			background-color: var(--background-light);
+			color: var(--white);
+			border: 1px solid var(--border-color);
+			appearance: menulist;
+
+			&:focus,
+			&:hover {
+				opacity: 1;
+			}
+
+			option {
 				background-color: var(--background-light);
 				color: var(--white);
-				border: 1px solid var(--border-color);
-				appearance: menulist;
-
-				&:focus,
-				&:hover {
-					opacity: 1;
-				}
-
-				option {
-					background-color: var(--background-light);
-					color: var(--white);
-				}
 			}
 		}
 	}

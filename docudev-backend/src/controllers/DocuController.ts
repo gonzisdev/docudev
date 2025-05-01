@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 import Team from '../models/Team'
-import Docu from '../models/Docu'
+import Docu, { IDocu } from '../models/Docu'
+import { FilterQuery } from 'mongoose'
 
 export class DocuController {
   static async createDocu(req: Request, res: Response) {
     try {
       const { title, content, team } = req.body
-      //TODO: Logic to check if the user can crete a docu (limitations, etc.)
       if (req.user.status !== 'active') {
         res.status(403).json({ error: 'Invalid credentials' })
         return
@@ -66,7 +66,7 @@ export class DocuController {
         $or: [{ owner: req.user._id }, { team: { $in: teamIds } }]
       }
 
-      let query: any = { ...baseQuery }
+      let query: FilterQuery<IDocu> = { ...baseQuery }
 
       if (search) {
         query.title = { $regex: search, $options: 'i' }
@@ -122,39 +122,10 @@ export class DocuController {
 
   static async getDocu(req: Request, res: Response) {
     try {
-      const docu = await Docu.findById(req.params.docuId).populate(
-        'owner',
-        'name surname'
-      )
+      const docu = req.docu
       if (!docu) {
         res.status(404).json({ error: 'Docu not found' })
         return
-      }
-      if (req.user.status !== 'active') {
-        res.status(403).json({ error: 'Invalid credentials' })
-        return
-      }
-      if (docu.team) {
-        const teamFound = await Team.findById(docu.team)
-        if (!teamFound) {
-          res.status(404).json({ error: 'Team not found' })
-          return
-        }
-        const isTeamOwner =
-          req.user._id.toString() === teamFound.owner.toString()
-        const isTeamCollaborator = teamFound.collaborators.some(
-          (collaborator) =>
-            collaborator._id.toString() === req.user._id.toString()
-        )
-        if (!isTeamOwner && !isTeamCollaborator) {
-          res.status(403).json({ error: 'Invalid credentials' })
-          return
-        }
-      } else {
-        if (docu.owner._id.toString() !== req.user._id.toString()) {
-          res.status(403).json({ error: 'Invalid credentials' })
-          return
-        }
       }
       res.status(200).json(docu)
     } catch (error) {
@@ -165,44 +136,21 @@ export class DocuController {
 
   static async updateDocu(req: Request, res: Response) {
     try {
-      const { docuId } = req.params
-      const { title, content, team } = req.body
-      const docu = await Docu.findById(docuId)
+      const docu = req.docu
       if (!docu) {
         res.status(404).json({ error: 'Docu not found' })
         return
       }
-      if (req.user.status !== 'active') {
-        res.status(403).json({ error: 'Invalid credentials' })
-        return
-      }
-      if (team) {
-        const teamFound = await Team.findById(team)
-        if (
-          !teamFound ||
-          (req.user._id.toString() !== teamFound.owner.toString() &&
-            !teamFound.collaborators.some(
-              (collaborator) =>
-                collaborator._id.toString() === req.user._id.toString()
-            ))
-        ) {
-          res.status(403).json({ error: 'Invalid credentials' })
-          return
-        }
-      } else {
-        if (docu.owner.toString() !== req.user._id.toString()) {
-          res.status(403).json({ error: 'Invalid credentials' })
-          return
-        }
-      }
+      const { title, content, team } = req.body
+
       if (docu.team && docu.team.toString() !== team) {
         await Team.findByIdAndUpdate(docu.team, {
-          $pull: { docus: docuId }
+          $pull: { docus: docu._id }
         })
       }
       if (team && (!docu.team || docu.team.toString() !== team)) {
         await Team.findByIdAndUpdate(team, {
-          $push: { docus: docuId }
+          $push: { docus: docu._id }
         })
       }
       docu.title = title
@@ -218,39 +166,17 @@ export class DocuController {
 
   static async deleteDocu(req: Request, res: Response) {
     try {
-      const { docuId } = req.params
-      const docu = await Docu.findById(docuId)
-      if (req.user.status !== 'active') {
-        res.status(403).json({ error: 'Invalid credentials' })
-        return
-      }
+      const docu = req.docu
       if (!docu) {
         res.status(404).json({ error: 'Docu not found' })
         return
       }
       if (docu.team) {
-        const teamFound = await Team.findById(docu.team)
-        if (
-          !teamFound ||
-          (req.user._id.toString() !== teamFound.owner.toString() &&
-            !teamFound.collaborators.some(
-              (collaborator) =>
-                collaborator._id.toString() === req.user._id.toString()
-            ))
-        ) {
-          res.status(403).json({ error: 'Invalid credentials' })
-          return
-        }
         await Team.findByIdAndUpdate(docu.team, {
-          $pull: { docus: docuId }
+          $pull: { docus: docu._id }
         })
-      } else {
-        if (docu.owner.toString() !== req.user._id.toString()) {
-          res.status(403).json({ error: 'Invalid credentials' })
-          return
-        }
       }
-      await Docu.findByIdAndDelete(docuId)
+      await Docu.findByIdAndDelete(docu._id)
       res.status(200).json(true)
     } catch (error) {
       console.error('Error deleting docu:', error)

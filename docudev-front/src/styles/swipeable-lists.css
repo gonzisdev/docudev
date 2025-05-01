@@ -1,0 +1,55 @@
+.team-swipeable-list,
+.teams-swipeable-list,
+.docus-swipeable-list {
+	display: flex;
+	flex-direction: column;
+
+	.swipe-action {
+		.edit-action,
+		.delete-action {
+			border-bottom: 1px solid var(--input-border-color);
+
+			.edit-icon {
+				cursor: pointer;
+				stroke: var(--primary);
+				transition: fill 0.2s ease;
+			}
+
+			.trash-icon {
+				cursor: pointer;
+
+				path {
+					fill: var(--error);
+					transition: fill 0.2s ease;
+				}
+			}
+		}
+		.edit-action {
+			background-color: var(--primary-light);
+		}
+
+		.delete-action {
+			background-color: var(--error-light);
+		}
+	}
+}
+
+.teams-swipeable-list {
+	gap: 0.5rem;
+
+	.swipe-action {
+		.edit-action,
+		.delete-action {
+			border-radius: var(--input-border-radius);
+			border-bottom: none;
+		}
+	}
+}
+
+/* Avoids selecting page content when .swiping class is applied */
+.swiping {
+	user-select: none !important;
+	-webkit-user-select: none !important;
+	-moz-user-select: none !important;
+	-ms-user-select: none !important;
+}

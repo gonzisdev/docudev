@@ -7,7 +7,7 @@ export const connectDB = async (): Promise<void> => {
     const mongoURI = process.env.MONGODB_URI
     await mongoose.connect(mongoURI)
     console.log(
-      colors.yellow.bold('MongoDB connection established successfully')
+      colors.magenta.bold('MongoDB connection established successfully')
     )
   } catch (error) {
     console.error(colors.red.bold('Error connecting DDBB:'), error)
