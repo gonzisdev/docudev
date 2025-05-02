@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { ADMIN_TEAM_LIMIT } from 'constants/limits'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Header from 'components/elements/Header/Header'
+import Container from 'components/elements/Container/Container'
 import Button from 'components/elements/Button/Button'
 import TeamFormModal from './Modals/TeamFormModal'
 import TeamDeleteModal from './Modals/TeamDeleteModal'
@@ -168,11 +169,10 @@ const Teams = () => {
 				<Loading />
 			) : (
 				<>
-					<div className='header'>
-						<Header title={t('teams.title')} />
+					<Header title={t('teams.title')}>
+						{' '}
 						<Button
 							variant='secondary'
-							className='teams-create-button'
 							onClick={openCreateModal}
 							disabled={user?.role !== 'admin' || ownedTeams == ADMIN_TEAM_LIMIT}>
 							{user?.role !== 'admin'
@@ -181,9 +181,8 @@ const Teams = () => {
 									? t('teams.create_team_disabled_limit_reached')
 									: t('teams.create_team')}
 						</Button>
-					</div>
-					<div className='container'>
-						<h2>{t('teams.subtitle')}</h2>
+					</Header>
+					<Container subtitle={t('teams.subtitle')}>
 						{user?.role !== 'admin' && (
 							<Warning
 								title={t('teams.warning.warning_title')}
@@ -246,7 +245,7 @@ const Teams = () => {
 								)}
 							</div>
 						</div>
-					</div>
+					</Container>
 				</>
 			)}
 			<TeamFormModal

@@ -7,6 +7,7 @@ import useDocu from 'hooks/useDocu'
 import useTeam from 'hooks/useTeam'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Header from 'components/elements/Header/Header'
+import Container from 'components/elements/Container/Container'
 import Loading from 'components/elements/Loading/Loading'
 import Button from 'components/elements/Button/Button'
 import DeleteDocuModal from '../Modals/DeleteDocuModal'
@@ -64,13 +65,10 @@ const Docu = () => {
 				<Loading />
 			) : (
 				<>
-					<div className='header'>
-						<Header title={docu?.title} />
+					<Header title={docu?.title}>
+						{' '}
 						<div className='docu-header-actions'>
-							<Button
-								variant='secondary'
-								className='docu-create-button'
-								onClick={() => navigate(`${EDIT_DOCU_URL}/${docuId}`)}>
+							<Button variant='secondary' onClick={() => navigate(`${EDIT_DOCU_URL}/${docuId}`)}>
 								{t('docus.update_docu')}
 							</Button>
 							<Button
@@ -82,9 +80,8 @@ const Docu = () => {
 								{t('docus.delete_docu')}
 							</Button>
 						</div>
-					</div>
-
-					<div className='container'>
+					</Header>
+					<Container>
 						{docu && (
 							<div className='docu-details'>
 								<div className='docu-details-info'>
@@ -115,7 +112,7 @@ const Docu = () => {
 								<BlockNoteView editor={editor} editable={false} ref={editorRef} />
 							</div>
 						)}
-					</div>
+					</Container>
 				</>
 			)}
 			<DeleteDocuModal

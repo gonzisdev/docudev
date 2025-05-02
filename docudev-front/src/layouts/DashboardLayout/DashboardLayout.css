@@ -88,6 +88,7 @@
 				margin-right: 0.9375rem;
 				font-size: 1.25rem;
 				flex-shrink: 0;
+				position: relative;
 
 				svg {
 					path {
@@ -96,6 +97,16 @@
 					circle {
 						fill: var(--primary-dark);
 					}
+				}
+
+				.notification-badge {
+					position: absolute;
+					top: -2px;
+					right: 2px;
+					height: 0.5rem;
+					width: 0.5rem;
+					background: var(--warning);
+					border-radius: 100%;
 				}
 			}
 

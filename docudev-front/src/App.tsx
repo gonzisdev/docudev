@@ -11,6 +11,7 @@ import {
 	HOME_URL,
 	LOGIN_URL,
 	MANAGEMENT_URL,
+	NOTIFICATIONS_URL,
 	RECOVER_PASSWORD_URL,
 	REGISTER_URL,
 	SETTINGS_URL,
@@ -28,8 +29,9 @@ import DocuEditor from 'components/Docus/DocuEditor/DocuEditor'
 import Teams from './components/Teams/Teams'
 import Team from 'components/Teams/Team/Team'
 import Events from './components/Events/Events'
-import { Toaster } from 'sonner'
+import Notifications from 'components/Notifications/Notifications'
 import { Settings } from 'components/Settings/Settings'
+import { Toaster } from 'sonner'
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 	const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
@@ -71,7 +73,6 @@ export const App = () => {
 						</ProtectedRoute>
 					}>
 					<Route path={HOME_URL} element={<Home />} />
-					<Route path={SETTINGS_URL} element={<Settings />} />
 					{/* Docus routes */}
 					<Route path={`${DOCU_URL}/:docuId`} element={<Docu />} />
 					<Route path={DOCUS_URL} element={<Docus />} />
@@ -80,8 +81,12 @@ export const App = () => {
 					{/* Teams routes */}
 					<Route path={TEAMS_URL} element={<Teams />} />
 					<Route path={`${TEAM_URL}/:teamId`} element={<Team />} />
-
+					{/* Team management routes */}
 					<Route path={MANAGEMENT_URL} element={<Events />} />
+					{/* Notification routes */}
+					<Route path={NOTIFICATIONS_URL} element={<Notifications />} />
+
+					<Route path={SETTINGS_URL} element={<Settings />} />
 				</Route>
 
 				{/* //TODO: */}

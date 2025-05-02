@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { body } from 'express-validator'
 import { TeamController } from '../controllers/TeamController'
 import { handleInputErrors } from '../middleware/validation'
-import { authenticate } from '../middleware/auth'
+import { authenticate, validateUserStatus } from '../middleware/auth'
 import { canAccessTeam, isTeamOwnerAdmin } from '../middleware/team'
 import { limiter } from '../config/limiter'
 
@@ -33,13 +33,20 @@ router.post(
     .withMessage('Team description cannot exceed 120 characters')
     .trim(),
   authenticate,
+  validateUserStatus,
   handleInputErrors,
   TeamController.createTeam
 )
 
 router.get('/', authenticate, TeamController.getTeams)
 
-router.get('/:teamId', authenticate, canAccessTeam, TeamController.getTeam)
+router.get(
+  '/:teamId',
+  authenticate,
+  validateUserStatus,
+  canAccessTeam,
+  TeamController.getTeam
+)
 
 router.patch(
   '/:teamId',
@@ -64,16 +71,18 @@ router.patch(
     .withMessage('Team description cannot exceed 120 characters')
     .trim(),
   authenticate,
-  handleInputErrors,
+  validateUserStatus,
   isTeamOwnerAdmin,
+  handleInputErrors,
   TeamController.updateTeam
 )
 
 router.delete(
   '/:teamId',
   authenticate,
-  handleInputErrors,
+  validateUserStatus,
   isTeamOwnerAdmin,
+  handleInputErrors,
   TeamController.deleteTeam
 )
 

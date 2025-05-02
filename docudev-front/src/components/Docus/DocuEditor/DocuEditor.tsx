@@ -30,6 +30,7 @@ import { findTeamName } from 'utils/team'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/shadcn/style.css'
 import './DocuEditor.css'
+import Container from 'components/elements/Container/Container'
 
 const DocuEditor = () => {
 	const { t, i18n } = useTranslation()
@@ -210,19 +211,17 @@ const DocuEditor = () => {
 				<Loading />
 			) : (
 				<>
-					<div className='header'>
-						<Header
-							title={
-								docuId ? (
-									<>
-										{t('update_docu.title')}:{' '}
-										<span className='docu-editor-header-title'>{docu?.title}</span>
-									</>
-								) : (
-									t('create_docu.title')
-								)
-							}
-						/>
+					<Header
+						title={
+							docuId ? (
+								<>
+									{t('update_docu.title')}:{' '}
+									<span className='docu-editor-header-title'>{docu?.title}</span>
+								</>
+							) : (
+								t('create_docu.title')
+							)
+						}>
 						<div className='docu-editor-header-actions'>
 							<Button variant='primary' onClick={openModal}>
 								{t('docus.save_docu')}
@@ -233,8 +232,8 @@ const DocuEditor = () => {
 								</Button>
 							)}
 						</div>
-					</div>
-					<div className='container'>
+					</Header>
+					<Container>
 						{docu ? (
 							<div className='docu-editor-details'>
 								<div className='docu-editor-details-info'>
@@ -272,7 +271,7 @@ const DocuEditor = () => {
 						<div className='docu-editor-editor'>
 							<BlockNoteView editor={editor} ref={editorRef} />
 						</div>
-					</div>
+					</Container>
 				</>
 			)}
 			<DocuFormModal

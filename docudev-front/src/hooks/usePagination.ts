@@ -2,11 +2,11 @@ import { useState } from 'react'
 
 interface Props<T> {
 	data: T[] | null | undefined
-	itemsPerPage: number
+	itemsPerPage?: number
 	initialPage?: number
 }
 
-const usePagination = <T>({ data, itemsPerPage, initialPage = 0 }: Props<T>) => {
+const usePagination = <T>({ data, itemsPerPage = 10, initialPage = 0 }: Props<T>) => {
 	const [currentPage, setCurrentPage] = useState(initialPage)
 
 	const pageCount = data ? Math.ceil(data.length / itemsPerPage) : 0

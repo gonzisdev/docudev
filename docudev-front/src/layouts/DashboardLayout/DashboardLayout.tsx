@@ -1,13 +1,13 @@
-import { TEAMS_URL, MANAGEMENT_URL, DOCUS_URL, HOME_URL } from 'constants/routes'
-import { useTranslation } from 'react-i18next'
 import { Link, useLocation } from 'react-router-dom'
-import { DocsIcon, Logo, ManagementIcon } from 'assets/svgs'
-import DropdownMyAccount from 'components/elements/DropdownMyAccount/DropdownMyAccount'
-import { GroupIcon, HomeIcon } from 'assets/svgs'
+import { TEAMS_URL, MANAGEMENT_URL, DOCUS_URL, HOME_URL, NOTIFICATIONS_URL } from 'constants/routes'
+import { useTranslation } from 'react-i18next'
 import { useAuthStore } from 'stores/authStore'
 import { useSidebarStore } from 'stores/sidebarStore'
 import { useUser } from 'hooks/useUser'
+import DropdownMyAccount from 'components/elements/DropdownMyAccount/DropdownMyAccount'
+import { GroupIcon, HomeIcon, BellIcon, DocsIcon, Logo, ManagementIcon } from 'assets/svgs'
 import './DashboardLayout.css'
+import useNotifications from 'hooks/useNotifications'
 
 interface Props {
 	children: React.ReactNode
@@ -19,7 +19,12 @@ const DashboardLayout = ({ children }: Props) => {
 	const pathname = location.pathname
 	const { user, logout } = useAuthStore()
 	const { collapsed, toggleSidebar } = useSidebarStore()
+
+	const { notifications } = useNotifications()
+	const pendingCount = notifications?.filter((n) => n.status === 'pending').length || 0
+
 	useUser()
+
 	const routes = [
 		{
 			icon: <HomeIcon />,
@@ -40,6 +45,16 @@ const DashboardLayout = ({ children }: Props) => {
 			icon: <ManagementIcon />,
 			label: t('common.management'),
 			routeLink: MANAGEMENT_URL
+		},
+		{
+			icon: (
+				<>
+					<BellIcon />
+					{pendingCount > 0 && <span className='notification-badge'></span>}
+				</>
+			),
+			label: t('common.notifications'),
+			routeLink: NOTIFICATIONS_URL
 		}
 	]
 

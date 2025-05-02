@@ -18,3 +18,5 @@ export const TEAMS_URL = '/teams'
 export const TEAM_URL = '/team'
 
 export const MANAGEMENT_URL = '/management'
+
+export const NOTIFICATIONS_URL = '/notifications'

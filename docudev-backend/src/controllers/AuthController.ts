@@ -47,6 +47,7 @@ export class AuthController {
         const token = generateJWT(req.user._id.toString())
         req.user.token = token
       }
+      req.user.status = 'active'
       await req.user.save()
       const userResponse = await User.findById(req.user._id)
         .select('-password -code ')

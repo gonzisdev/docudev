@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { body } from 'express-validator'
 import { DocuController } from '../controllers/DocuController'
 import { handleInputErrors } from '../middleware/validation'
-import { authenticate } from '../middleware/auth'
+import { authenticate, validateUserStatus } from '../middleware/auth'
 import { canAccessDocu } from '../middleware/docu'
 import { limiter } from '../config/limiter'
 
@@ -24,13 +24,20 @@ router.post(
     .trim(),
   body('content').notEmpty().withMessage('Docu content is required'),
   authenticate,
+  validateUserStatus,
   handleInputErrors,
   DocuController.createDocu
 )
 
 router.get('/', authenticate, DocuController.getDocus)
 
-router.get('/:docuId', authenticate, canAccessDocu, DocuController.getDocu)
+router.get(
+  '/:docuId',
+  authenticate,
+  validateUserStatus,
+  canAccessDocu,
+  DocuController.getDocu
+)
 
 router.put(
   '/update-docu/:docuId',
@@ -46,6 +53,7 @@ router.put(
     .trim(),
   body('content').notEmpty().withMessage('Docu content is required'),
   authenticate,
+  validateUserStatus,
   canAccessDocu,
   handleInputErrors,
   DocuController.updateDocu
@@ -54,6 +62,7 @@ router.put(
 router.delete(
   '/delete-docu/:docuId',
   authenticate,
+  validateUserStatus,
   canAccessDocu,
   DocuController.deleteDocu
 )

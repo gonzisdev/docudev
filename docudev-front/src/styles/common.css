@@ -4,19 +4,3 @@
 	--input-border-radius: 0.625rem;
 	--input-border-color: var(--neutral-neutral10);
 }
-
-.header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.container {
-	display: flex;
-	flex-direction: column;
-	gap: 2rem;
-
-	h2 {
-		margin: 1rem 0;
-	}
-}

@@ -12,7 +12,8 @@
 		"home": "Inicio",
 		"docus": "Mis docus",
 		"teams": "Equipos",
-		"management": "Gestión de equipos"
+		"management": "Gestión de equipos",
+		"notifications": "Notificaciones"
 	},
 	"pagination": {
 		"previous": "Anterior",
@@ -249,7 +250,18 @@
 	"team": {
 		"collaborators": "Colaboradores",
 		"no_docus": "No hay docus en este equipo",
-		"no_collaborators": "Este equipo no tiene colaboradores"
+		"no_collaborators": "Este equipo no tiene colaboradores",
+		"invite": "Invitar a colaborador",
+		"create_docu": "Crear docu",
+		"email": "Correo electrónico",
+		"email_placeholder": "email@email.com",
+		"send_invite": "Enviar invitación",
+		"validations": {
+			"email": {
+				"required": "Introduce tu correo electrónico",
+				"invalid": "La dirección de correo electrónico no es válida"
+			}
+		}
 	},
 	"docus": {
 		"title": "Mis docus",
@@ -327,5 +339,23 @@
 		"connected": "Conectado",
 		"disconnected": "Desconectado",
 		"active_users": "Usuarios activos"
+	},
+	"notifications": {
+		"title": "Notificaciones",
+		"subtitle": "Gestiona tus notificaciones y mantente al tanto de las novedades",
+		"no_notifications": "No tienes notificaciones",
+		"toast": {
+			"success_title": "¡Invitación enviada!",
+			"success_description": "La invitación se ha enviado correctamente",
+			"error_title": "Error al enviar la invitación",
+			"error_description": "No se ha podido enviar la invitación al email proporcionado"
+		},
+		"team_invite_text": "<user>{{user}}</user> te ha invitado al equipo <team>{{team}}</team>",
+		"invite_accepted_text": "<user>{{user}}</user> se ha unido al equipo <team>{{team}}</team>",
+		"mark_as_read": "Marcar como leída",
+		"accept": "Aceptar",
+		"reject": "Rechazar",
+		"accepted": "Aceptada",
+		"rejected": "Rechazada"
 	}
 }

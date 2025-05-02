@@ -64,7 +64,7 @@
 	}
 
 	&.link {
-		color: var(--neutral-grey-05);
+		color: var(--text-light);
 		background: none;
 		border: none;
 

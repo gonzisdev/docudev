@@ -8,6 +8,7 @@ import useDocus from 'hooks/useDocus'
 import useDocu from 'hooks/useDocu'
 import Button from 'components/elements/Button/Button'
 import Header from 'components/elements/Header/Header'
+import Container from 'components/elements/Container/Container'
 import Loading from 'components/elements/Loading/Loading'
 import Card from 'components/elements/Card/Card'
 import DocuCard from './DocuCard/DocuCard'
@@ -130,20 +131,17 @@ const Docus = () => {
 				<Loading />
 			) : (
 				<>
-					<div className='header'>
-						<Header title={t('docus.title')} />
+					<Header title={t('docus.title')}>
+						{' '}
 						<Button
 							variant='secondary'
-							className='docus-create-button'
 							onClick={() => navigate(CREATE_DOCU_URL)}
 							//TODO: disabled={DOCS USER LIMIT}
 						>
 							{t('docus.create_docu')}
 						</Button>
-					</div>
-
-					<div className='container'>
-						<h2>{t('docus.subtitle')}</h2>
+					</Header>
+					<Container subtitle={t('docus.subtitle')}>
 						<div className='docus-filters'>
 							<Input
 								id='search-input'
@@ -206,7 +204,6 @@ const Docus = () => {
 										</SwipeableListItem>
 									))}
 								</SwipeableList>
-
 								<Pagination
 									pageCount={pagination.pages}
 									currentPage={pagination.page - 1}
@@ -216,7 +213,7 @@ const Docus = () => {
 						) : (
 							<Card empty>{t('docus.no_docus')}</Card>
 						)}
-					</div>
+					</Container>
 				</>
 			)}
 			<DeleteDocuModal

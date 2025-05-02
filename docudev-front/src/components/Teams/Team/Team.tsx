@@ -2,11 +2,13 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { CREATE_DOCU_URL, EDIT_DOCU_URL, TEAMS_URL } from 'constants/routes'
+import { useAuthStore } from 'stores/authStore'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import useTeam from 'hooks/useTeam'
 import useDocu from 'hooks/useDocu'
 import Button from 'components/elements/Button/Button'
 import Header from 'components/elements/Header/Header'
+import Container from 'components/elements/Container/Container'
 import Loading from 'components/elements/Loading/Loading'
 import Card from 'components/elements/Card/Card'
 import DocuCard from 'components/Docus/DocuCard/DocuCard'
@@ -29,11 +31,13 @@ import {
 import 'react-swipeable-list/dist/styles.css'
 import UserPlaceholder from 'assets/images/user-placeholder.jpg'
 import './Team.css'
+import TeamInviteCollaboratorModal from '../Modals/TeamInviteCollaboratorModal'
 
 const Team = () => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 	const { teamId } = useParams()
+	const { user } = useAuthStore()
 	const {
 		team,
 		isLoadingTeam,
@@ -47,6 +51,7 @@ const Team = () => {
 
 	const [isSwiping, setIsSwiping] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+	const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
 	const [docuToDelete, setDocuToDelete] = useState<string | undefined>(undefined)
 	const [inputSearchValue, setInputSearchValue] = useState(searchTerm)
 
@@ -119,27 +124,34 @@ const Team = () => {
 	}, [debouncedSearch])
 
 	if (errorTeam) return <Navigate to={TEAMS_URL} />
-
+	console.log(team)
 	return (
 		<DashboardLayout>
 			{isLoadingTeamDocus || isLoadingTeam ? (
 				<Loading />
 			) : (
 				<>
-					<div className='header'>
-						<Header title={team?.name} />
-						<Button
-							variant='secondary'
-							className='team-create-button'
-							onClick={() => navigate(CREATE_DOCU_URL)}
-							//TODO: disabled={DOCS USER LIMIT}
-						>
-							{t('docus.create_docu')}
-						</Button>
-					</div>
-
-					<div className='container'>
-						<h2>{team?.description}</h2>
+					<Header title={team?.name}>
+						<div className='team-header-actions'>
+							{team?.owner === user?._id && (
+								<Button
+									variant='link'
+									onClick={() => setIsInviteModalOpen(true)}
+									//TODO: disabled={COLLABORATORS LIMIT}
+								>
+									{t('team.invite')}
+								</Button>
+							)}
+							<Button
+								variant='secondary'
+								onClick={() => navigate(CREATE_DOCU_URL)}
+								//TODO: disabled={DOCS USER LIMIT}
+							>
+								{t('team.create_docu')}
+							</Button>
+						</div>
+					</Header>
+					<Container subtitle={team?.description}>
 						<div className='team-info'>
 							<div className='team-members-layout'>
 								<div className='owner-container'>
@@ -262,7 +274,7 @@ const Team = () => {
 						) : (
 							<Card empty>{t('team.no_docus')}</Card>
 						)}
-					</div>
+					</Container>
 				</>
 			)}
 			<DeleteDocuModal
@@ -270,6 +282,11 @@ const Team = () => {
 				toggleVisibility={closeDeleteModal}
 				onConfirm={handleDeleteDocu}
 				isLoading={isDeletingDocu}
+			/>
+			<TeamInviteCollaboratorModal
+				isVisible={isInviteModalOpen}
+				toggleVisibility={() => setIsInviteModalOpen(!isInviteModalOpen)}
+				teamId={teamId}
 			/>
 		</DashboardLayout>
 	)

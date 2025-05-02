@@ -6,8 +6,9 @@ import path from 'path'
 import http from 'http'
 import { connectDB } from './config/db'
 import authRouter from './routes/authRouter'
-import teamRouter from './routes/teamRouter'
 import docuRouter from './routes/docuRouter'
+import teamRouter from './routes/teamRouter'
+import notificationRouter from './routes/notificationRouter'
 import { corsConfig, publicCorsConfig } from './config/cors'
 import cors from 'cors'
 
@@ -26,7 +27,8 @@ app.use(morgan('dev'))
 app.use(express.json())
 
 app.use('/api/auth', authRouter)
-app.use('/api/teams', teamRouter)
 app.use('/api/docus', docuRouter)
+app.use('/api/teams', teamRouter)
+app.use('/api/notifications', notificationRouter)
 
 export default server

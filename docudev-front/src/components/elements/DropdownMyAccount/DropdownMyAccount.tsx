@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SETTINGS_URL } from 'constants/routes'
-import { CaretDownIcon, CloseSessionIcon, Settings, Star } from 'assets/svgs'
+import { CaretDownIcon, CloseSessionIcon, SettingsIcon, StarIcon } from 'assets/svgs'
 import { User } from 'models/Auth'
 import { useTranslation } from 'react-i18next'
 import { useAuthStore } from 'stores/authStore'
@@ -72,11 +72,11 @@ const DropdownMyAccount = ({ user, logout }: Props) => {
 			{isDropdownOpen && (
 				<div className='dropdown-my-account-options'>
 					<div className='option' onClick={handleUpdatePlan}>
-						<Star width='20px' height='20px' />
+						<StarIcon width='20px' height='20px' />
 						<span>{t('general.update_plan')}</span>
 					</div>
 					<div className='option' onClick={() => navigate(SETTINGS_URL)}>
-						<Settings width='20px' height='20px' />
+						<SettingsIcon width='20px' height='20px' />
 						<span>{t('general.settings')}</span>
 					</div>
 					<div className='option' onClick={() => logout()}>

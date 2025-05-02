@@ -1,0 +1,89 @@
+.notifications-list {
+	display: flex;
+	flex-direction: column;
+
+	.notification-card {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background-color: var(--background);
+		border-bottom: 1px solid var(--input-border-color);
+		border-radius: 0;
+		padding: 1rem;
+		cursor: pointer;
+		transition:
+			background-color 0.2s ease,
+			opacity 0.2s;
+
+		opacity: 1;
+		position: relative;
+
+		&:hover {
+			background-color: var(--primary-light);
+		}
+
+		&.read {
+			background-color: var(--neutral-neutral00);
+			cursor: default;
+
+			.notification-card-content {
+				opacity: 0.6;
+			}
+		}
+
+		.notification-delete {
+			display: block;
+			position: absolute;
+			right: 0.5rem;
+			background: transparent;
+			border: none;
+			color: var(--neutral-neutral20);
+			font-size: 1.5rem;
+			font-weight: bold;
+			cursor: pointer;
+			z-index: 99999;
+
+			transition: color 0.2s ease;
+
+			&:hover {
+				color: var(--error);
+			}
+		}
+
+		.notification-card-content {
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+			flex: 1;
+			overflow: hidden;
+
+			.notification-title {
+				font-weight: 500;
+				color: var(--primary);
+			}
+
+			.notification-status {
+				font-size: 0.9rem;
+				color: var(--neutral-neutral20);
+				margin-top: 0.2rem;
+
+				&.error {
+					color: var(--error);
+				}
+			}
+
+			.notification-actions {
+				display: flex;
+				gap: 0.75rem;
+				margin-top: 0.5rem;
+			}
+
+			.notification-user {
+				color: var(--warning-light);
+			}
+			.notification-team {
+				color: var(--warning);
+			}
+		}
+	}
+}

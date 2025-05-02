@@ -14,5 +14,11 @@ export const endpoints = {
 	docus: 'docus',
 	createDocu: 'docus/create-docu',
 	updateDocu: 'docus/update-docu',
-	deleteDocu: 'docus/delete-docu'
+	deleteDocu: 'docus/delete-docu',
+
+	notifications: 'notifications',
+	sendInvite: 'notifications/invite',
+	respondInvite: 'notifications/respond',
+	markAsRead: 'notifications/read',
+	deleteNotification: 'notifications/delete'
 }
