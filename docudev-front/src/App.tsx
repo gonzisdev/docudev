@@ -10,7 +10,7 @@ import {
 	FORGOT_PASSWORD_URL,
 	HOME_URL,
 	LOGIN_URL,
-	MANAGEMENT_URL,
+	TEAM_MANAGEMENT_URL,
 	NOTIFICATIONS_URL,
 	RECOVER_PASSWORD_URL,
 	REGISTER_URL,
@@ -28,7 +28,7 @@ import Docu from 'components/Docus/Docu/Docu'
 import DocuEditor from 'components/Docus/DocuEditor/DocuEditor'
 import Teams from './components/Teams/Teams'
 import Team from 'components/Teams/Team/Team'
-import Events from './components/Events/Events'
+import TeamManagement from './components/TeamManagement/TeamManagement'
 import Notifications from 'components/Notifications/Notifications'
 import { Settings } from 'components/Settings/Settings'
 import { Toaster } from 'sonner'
@@ -82,7 +82,7 @@ export const App = () => {
 					<Route path={TEAMS_URL} element={<Teams />} />
 					<Route path={`${TEAM_URL}/:teamId`} element={<Team />} />
 					{/* Team management routes */}
-					<Route path={MANAGEMENT_URL} element={<Events />} />
+					<Route path={TEAM_MANAGEMENT_URL} element={<TeamManagement />} />
 					{/* Notification routes */}
 					<Route path={NOTIFICATIONS_URL} element={<Notifications />} />
 

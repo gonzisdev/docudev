@@ -8,6 +8,7 @@ import {
 	createTeamService,
 	deleteTeamService,
 	getTeamService,
+	leaveTeamService,
 	updateTeamService
 } from 'services/team'
 import { toast } from 'sonner'
@@ -76,20 +77,19 @@ const useTeam = ({ teamId, params }: Props) => {
 			queryClient.invalidateQueries({
 				queryKey: [teamsQueryKey]
 			})
-			toast.success(t('teams.toast.success_title'), {
-				description: t('teams.toast.success_description')
+			toast.success(t('team.toast.success_title'), {
+				description: t('team.toast.success_description')
 			})
 		},
 		onError: () => {
-			toast.error(t('teams.toast.error_title'), {
-				description: t('teams.toast.error_description')
+			toast.error(t('team.toast.error_title'), {
+				description: t('team.toast.error_description')
 			})
 		}
 	})
 
 	const { mutateAsync: updateTeam, isPending: isUpdatingTeam } = useMutation({
-		mutationFn: ({ teamId, data }: { teamId: Team['_id']; data: TeamFormPayload }) =>
-			updateTeamService(teamId, data),
+		mutationFn: teamId ? (data: TeamFormPayload) => updateTeamService(teamId, data) : undefined,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: [teamsQueryKey]
@@ -97,19 +97,39 @@ const useTeam = ({ teamId, params }: Props) => {
 			queryClient.invalidateQueries({
 				queryKey: [teamQueryKey, teamId]
 			})
-			toast.success(t('teams.toast.success_update_title'), {
-				description: t('teams.toast.success_update_description')
+			toast.success(t('team.toast.success_update_title'), {
+				description: t('team.toast.success_update_description')
 			})
 		},
 		onError: () => {
-			toast.error(t('teams.toast.error_update_title'), {
-				description: t('teams.toast.error_update_description')
+			toast.error(t('team.toast.error_update_title'), {
+				description: t('team.toast.error_update_description')
+			})
+		}
+	})
+
+	const { mutateAsync: leaveTeam, isPending: isLeavingTeam } = useMutation({
+		mutationFn: teamId ? () => leaveTeamService(teamId) : undefined,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [teamsQueryKey]
+			})
+			queryClient.invalidateQueries({
+				queryKey: [teamQueryKey, teamId]
+			})
+			toast.success(t('team.toast.success_leave_team_title'), {
+				description: t('teams.toast.success_leave_team_description')
+			})
+		},
+		onError: () => {
+			toast.error(t('team.toast.error_leave_team_title'), {
+				description: t('team.toast.error_leave_team_description')
 			})
 		}
 	})
 
 	const { mutateAsync: deleteTeam, isPending: isDeletingTeam } = useMutation({
-		mutationFn: ({ teamId }: { teamId: Team['_id'] }) => deleteTeamService(teamId),
+		mutationFn: teamId ? () => deleteTeamService(teamId) : undefined,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: [teamsQueryKey]
@@ -117,13 +137,13 @@ const useTeam = ({ teamId, params }: Props) => {
 			queryClient.invalidateQueries({
 				queryKey: [teamQueryKey, teamId]
 			})
-			toast.success(t('teams.toast.success_delete_title'), {
-				description: t('teams.toast.success_delete_description')
+			toast.success(t('team.toast.success_delete_title'), {
+				description: t('team.toast.success_delete_description')
 			})
 		},
 		onError: () => {
-			toast.error(t('teams.toast.error_delete_title'), {
-				description: t('teams.toast.error_delete_description')
+			toast.error(t('team.toast.error_delete_title'), {
+				description: t('team.toast.error_delete_description')
 			})
 		}
 	})
@@ -136,6 +156,8 @@ const useTeam = ({ teamId, params }: Props) => {
 		isCreatingTeam,
 		updateTeam,
 		isUpdatingTeam,
+		leaveTeam,
+		isLeavingTeam,
 		deleteTeam,
 		isDeletingTeam,
 		teamDocus: teamDocus?.data || [],

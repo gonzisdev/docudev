@@ -18,14 +18,20 @@ export const getTeamService = async (teamId: Team['_id']) => {
 }
 
 export const updateTeamService = async (teamId: Team['_id'], data: TeamFormPayload) => {
-	return await customFetch<boolean>(`${endpoints.teams}/${teamId}`, {
+	return await customFetch<boolean>(`${endpoints.updateTeam}/${teamId}`, {
 		method: 'PATCH',
 		bodyReq: data
 	})
 }
 
+export const leaveTeamService = async (teamId: Team['_id']) => {
+	return await customFetch<boolean>(`${endpoints.leaveTeam}/${teamId}`, {
+		method: 'PATCH'
+	})
+}
+
 export const deleteTeamService = async (teamId: Team['_id']) => {
-	return await customFetch<boolean>(`${endpoints.teams}/${teamId}`, {
+	return await customFetch<boolean>(`${endpoints.deleteTeam}/${teamId}`, {
 		method: 'DELETE'
 	})
 }

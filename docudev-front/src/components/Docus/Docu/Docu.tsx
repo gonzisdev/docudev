@@ -41,7 +41,7 @@ const Docu = () => {
 
 	const handleDeleteDocu = async () => {
 		if (docuId) {
-			await deleteDocu({ docuId })
+			await deleteDocu()
 			closeDeleteModal()
 			navigate(DOCUS_URL)
 		}

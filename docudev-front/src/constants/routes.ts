@@ -7,8 +7,6 @@ export const CHANGE_PASSWORD_URL = '/change-password'
 
 export const HOME_URL = '/home'
 
-export const SETTINGS_URL = '/settings'
-
 export const DOCU_URL = '/docu'
 export const DOCUS_URL = '/docus'
 export const CREATE_DOCU_URL = '/new-docu'
@@ -17,6 +15,8 @@ export const EDIT_DOCU_URL = '/edit-docu'
 export const TEAMS_URL = '/teams'
 export const TEAM_URL = '/team'
 
-export const MANAGEMENT_URL = '/management'
+export const TEAM_MANAGEMENT_URL = '/management'
 
 export const NOTIFICATIONS_URL = '/notifications'
+
+export const SETTINGS_URL = '/settings'

@@ -38,9 +38,7 @@ const Teams = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isEditing, setIsEditing] = useState(false)
 	const [selectedTeamId, setSelectedTeamId] = useState<Team['_id'] | undefined>(undefined)
-
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-	const [teamToDelete, setTeamToDelete] = useState<Team['_id'] | undefined>(undefined)
 
 	const [isSwiping, setIsSwiping] = useState(false)
 
@@ -81,7 +79,7 @@ const Teams = () => {
 
 	const handleSubmit = async (data: TeamFormPayload) => {
 		if (isEditing && selectedTeamId) {
-			await updateTeam({ teamId: selectedTeamId, data })
+			await updateTeam(data)
 		} else {
 			await createTeam(data)
 		}
@@ -111,18 +109,18 @@ const Teams = () => {
 	}
 
 	const openDeleteModal = (teamId: string) => {
-		setTeamToDelete(teamId)
+		setSelectedTeamId(teamId)
 		setIsDeleteModalOpen(true)
 	}
 
 	const closeDeleteModal = () => {
-		setTeamToDelete(undefined)
+		setSelectedTeamId(undefined)
 		setIsDeleteModalOpen(false)
 	}
 
 	const handleDeleteTeam = async () => {
-		if (teamToDelete) {
-			await deleteTeam({ teamId: teamToDelete })
+		if (selectedTeamId) {
+			await deleteTeam()
 			closeDeleteModal()
 		}
 	}

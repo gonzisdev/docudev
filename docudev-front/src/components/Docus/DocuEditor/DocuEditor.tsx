@@ -174,9 +174,8 @@ const DocuEditor = () => {
 	const handleSubmit = async (data: any) => {
 		const editorContent = JSON.stringify(editor.document)
 		const docuData = { ...data, content: editorContent }
-
 		if (docuId) {
-			await updateDocu({ docuId, data: docuData })
+			await updateDocu(docuData)
 			navigate(`${DOCU_URL}/${docuId}`)
 		} else {
 			await createDocu(docuData)
@@ -187,7 +186,7 @@ const DocuEditor = () => {
 
 	const handleDeleteDocu = async () => {
 		if (docuId) {
-			await deleteDocu({ docuId })
+			await deleteDocu()
 			setIsDeleteModalOpen(false)
 			navigate(DOCUS_URL)
 		}

@@ -1,5 +1,11 @@
 import { Link, useLocation } from 'react-router-dom'
-import { TEAMS_URL, MANAGEMENT_URL, DOCUS_URL, HOME_URL, NOTIFICATIONS_URL } from 'constants/routes'
+import {
+	TEAMS_URL,
+	TEAM_MANAGEMENT_URL,
+	DOCUS_URL,
+	HOME_URL,
+	NOTIFICATIONS_URL
+} from 'constants/routes'
 import { useTranslation } from 'react-i18next'
 import { useAuthStore } from 'stores/authStore'
 import { useSidebarStore } from 'stores/sidebarStore'
@@ -44,7 +50,7 @@ const DashboardLayout = ({ children }: Props) => {
 		{
 			icon: <ManagementIcon />,
 			label: t('common.management'),
-			routeLink: MANAGEMENT_URL
+			routeLink: TEAM_MANAGEMENT_URL
 		},
 		{
 			icon: (

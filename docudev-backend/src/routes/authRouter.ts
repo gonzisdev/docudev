@@ -47,27 +47,28 @@ router.post(
 
 router.post(
   '/login',
+  validateUserStatus,
   body('password').notEmpty().withMessage('Password is required').trim(),
   body('email').isEmail().withMessage('Email not valid').trim(),
   handleInputErrors,
-  validateUserStatus,
   AuthController.login
 )
 
 router.post(
   '/recover-password',
+  validateUserStatus,
   body('email')
     .isEmail()
     .withMessage('Email not valid')
     .normalizeEmail()
     .trim(),
   handleInputErrors,
-  validateUserStatus,
   AuthController.recoverPassword
 )
 
 router.patch(
   '/new-password',
+  validateUserStatus,
   body('password')
     .isLength({ min: 8 })
     .withMessage('Password must be at least 8 characters long')
@@ -83,13 +84,13 @@ router.patch(
     .normalizeEmail()
     .trim(),
   handleInputErrors,
-  validateUserStatus,
   AuthController.newPassword
 )
 
 router.put(
   '/update-account',
   authenticate,
+  validateUserStatus,
   upload.single('image'),
   deletePreviousImage,
   body('name')
@@ -127,7 +128,6 @@ router.put(
     .withMessage('Phone must not exceed 20 characters')
     .trim(),
   handleInputErrors,
-  validateUserStatus,
   AuthController.updateAccount
 )
 

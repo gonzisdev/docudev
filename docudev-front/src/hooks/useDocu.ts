@@ -63,8 +63,7 @@ const useDocu = ({ docuId }: Props) => {
 	})
 
 	const { mutateAsync: updateDocu, isPending: isUpdatingDocu } = useMutation({
-		mutationFn: ({ docuId, data }: { docuId: Docu['_id']; data: DocuFormPayload }) =>
-			updateDocuService(docuId, data),
+		mutationFn: docuId ? (data: DocuFormPayload) => updateDocuService(docuId, data) : undefined,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: [docuQueryKey, docuId]
@@ -90,7 +89,7 @@ const useDocu = ({ docuId }: Props) => {
 	})
 
 	const { mutateAsync: deleteDocu, isPending: isDeletingDocu } = useMutation({
-		mutationFn: ({ docuId }: { docuId: Docu['_id'] }) => deleteDocuService(docuId),
+		mutationFn: docuId ? () => deleteDocuService(docuId) : undefined,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: [docuQueryKey, docuId]

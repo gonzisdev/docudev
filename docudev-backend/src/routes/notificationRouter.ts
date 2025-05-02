@@ -18,7 +18,6 @@ router.post(
     .withMessage('Email not valid')
     .normalizeEmail()
     .trim(),
-  validateUserStatus,
   handleInputErrors,
   NotificationController.sendInvite
 )

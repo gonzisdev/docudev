@@ -15,6 +15,37 @@
 		"management": "Gestión de equipos",
 		"notifications": "Notificaciones"
 	},
+	"table": {
+		"results": "Resultados",
+		"empty_title": "Sin resultados",
+		"empty_description": "No hay información para mostrar",
+		"search_placeholder": "Buscar...",
+		"select_all": "Seleccionar todo",
+		"select_row": "Seleccionar fila",
+		"actions": "Acciones",
+		"filters": "Filtros",
+		"clear_filters": "Limpiar filtros",
+		"apply_filters": "Aplicar filtros",
+		"reset": "Restablecer",
+		"no_filters": "Sin filtros activos",
+		"sort_asc": "Orden ascendente",
+		"sort_desc": "Orden descendente",
+		"previous": "Anterior",
+		"next": "Siguiente",
+		"page": "Página",
+		"of": "de",
+		"rows_per_page": "Filas por página",
+		"showing": "Mostrando",
+		"to": "a",
+		"from": "de",
+		"selected": "seleccionado(s)",
+		"row_selection": "{{count}} seleccionado(s) de {{total}}",
+		"show_rows": "Mostrar {{count}} filas",
+		"page_info": "Página {{page}} de {{total}}",
+		"first": "Primera",
+		"last": "Última",
+		"search": "Buscar"
+	},
 	"pagination": {
 		"previous": "Anterior",
 		"next": "Siguiente"
@@ -145,12 +176,184 @@
 			"error_description": "Error al cambiar la contraseña. Por favor, verifica tus datos"
 		}
 	},
+	"teams": {
+		"title": "Equipos",
+		"subtitle": "Equipos a los que perteneces en DocuDev",
+		"my_teams_subtitle": "Equipos que has creado",
+		"collaborative_teams_subtitle": "Equipos en los que colaboras",
+		"create_team": "Crear equipo",
+		"create_team_disabled": "Actualiza tu plan para crear equipos",
+		"create_team_disabled_limit_reached": "Has alcanzado el límite de equipos",
+		"update_team": "Actualizar equipo",
+		"delete_team": "Eliminar equipo",
+		"delete_team_description": "¿Estás seguro de que quieres eliminar este equipo? Esta acción no se puede deshacer",
+		"name": "Nombre del equipo",
+		"name_placeholder": "Nombre del equipo",
+		"description": "Descripción del equipo",
+		"description_placeholder": "Descripción del equipo",
+		"no_owned_teams": "No tienes equipos creados",
+		"no_collaborative_teams": "No tienes equipos colaborativos",
+		"validations": {
+			"name": {
+				"required": "Introduce el nombre del equipo",
+				"min_length": "El nombre debe tener al menos 2 caracteres"
+			},
+			"description": {
+				"required": "Introduce la descripción del equipo",
+				"min_length": "La descripción debe tener al menos 5 caracteres",
+				"max_length": "La descripción no puede tener más de 120 caracteres"
+			}
+		},
+
+		"warning": {
+			"warning_title": "¡Actualiza tu plan para poder crear y gestionar equipos!",
+			"warning_description": "No puedes crear mas equipos o gestionarlos porque tu plan no lo permite",
+			"warning_title_limit": "¡Has alcanzado el límite de equipos!",
+			"warning_description_limit": "No puedes crear más equipos porque has alcanzado el límite de tu plan"
+		}
+	},
+	"team": {
+		"collaborators": "Colaboradores",
+		"no_docus": "No hay docus en este equipo",
+		"no_collaborators": "Este equipo no tiene colaboradores",
+		"invite": "Invitar a colaborador",
+		"leave_team": "Abandonar equipo",
+		"create_docu": "Crear docu",
+		"email": "Correo electrónico",
+		"email_placeholder": "email@email.com",
+		"send_invite": "Enviar invitación",
+		"leave_team_title": "Abandonar equipo",
+		"leave_team_description": "¿Estás seguro de que quieres abandonar este equipo? Esta acción no se puede deshacer",
+		"validations": {
+			"email": {
+				"required": "Introduce tu correo electrónico",
+				"invalid": "La dirección de correo electrónico no es válida"
+			}
+		},
+		"toast": {
+			"success_title": "¡Equipo creado!",
+			"success_description": "El equipo se ha creado correctamente",
+			"error_title": "Error al crear el equipo",
+			"error_description": "Error al crear el equipo. Vuelve a intentarlo más tarde",
+			"success_update_title": "¡Equipo actualizao!",
+			"success_update_description": "El equipo se ha actualizado correctamente",
+			"error_update_title": "Error al actualizar el equipo",
+			"error_update_description": "Error al actualizar el equipo. Vuelve a intentarlo más tarde",
+			"success_delete_title": "¡Equipo eliminado!",
+			"success_delete_description": "El equipo se ha eliminado correctamente",
+			"error_delete_title": "Error al eliminar el equipo",
+			"error_delete_description": "Error al eliminar el equipo. Vuelve a intentarlo más tarde",
+			"success_leave_team_title": "¡Equipo abandonado!",
+			"success_leave_team_description": "Has abandonado el equipo correctamente",
+			"error_leave_team_title": "Error al abandonar el equipo",
+			"error_leave_team_description": "Error al abandonar el equipo. Vuelve a intentarlo más tarde"
+		}
+	},
+	"docus": {
+		"title": "Mis docus",
+		"create_docu": "Crear docu",
+		"export_pdf": "Exportar a PDF",
+		"update_docu": "Editar docu",
+		"delete_docu": "Eliminar docu",
+		"subtitle": "Tus docus en DocuDev",
+		"save_docu": "Guardar cambios",
+		"team": "Equipo",
+		"created": "Fecha de creación",
+		"updated": "Última actualización",
+		"no_docus": "No tienes ni colaboras en ningun docu",
+		"owner": "Creador",
+		"search": "Buscar docu",
+		"filter_team": "Filtrar por equipo",
+		"filter_owner": "Filtrar por creador",
+		"sort": "Ordenar por",
+		"sort_title_asc": "Título (A-Z)",
+		"sort_title_desc": "Título (Z-A)",
+		"sort_created_asc": "Fecha de creación (ASC)",
+		"sort_created_desc": "Fecha de creación (DESC)",
+		"sort_updated_asc": "Última actualización (ASC)",
+		"sort_updated_desc": "Última actualización (DESC)",
+		"form": {
+			"title": "Nombre del docu",
+			"title_placeholder": "Nombre del docu",
+			"team": "Equipo",
+			"team_placeholder": "Selecciona un equipo",
+			"validations": {
+				"title": {
+					"required": "Introduce el nombre del docu",
+					"min_length": "El nombre debe tener al menos 2 caracteres",
+					"max_length": "El nombre no puede tener más de 50 caracteres"
+				}
+			}
+		},
+		"warning": {
+			"warning_title_save": "¡Importante!",
+			"warning_description_save": "Si no guardas el documento tus cambios se conservarán temporalmente durante 30 minutos"
+		}
+	},
+	"create_docu": {
+		"title": "Crear docu",
+		"subtitle": "Documenta tus proyectos de forma sencilla y colabora en tiempo real con tu equipo",
+		"toast": {
+			"success_title": "¡Docu creado!",
+			"success_description": "El docu se ha creado correctamente",
+			"error_title": "Error al crear el docu",
+			"error_description": "Error al crear el docu. Vuelve a intentarlo más tarde"
+		}
+	},
+	"update_docu": {
+		"title": "Editar docu",
+		"subtitle": "Perfecciona tu documentación, actualiza su contenido y comparte con tu equipo",
+		"save_docu": "Guardar cambios",
+		"toast": {
+			"success_title": "¡Docu actualizado!",
+			"success_description": "El docu se ha actualizado correctamente",
+			"error_title": "Error al actualizar el docu",
+			"error_description": "Error al actualizar el docu. Vuelve a intentarlo más tarde"
+		}
+	},
+	"delete_docu": {
+		"title": "Eliminar docu",
+		"description": "¿Estás seguro de que quieres eliminar este docu? Esta acción no se puede deshacer",
+		"toast": {
+			"success_title": "¡Docu eliminado!",
+			"success_description": "El docu se ha eliminado correctamente",
+			"error_title": "Error al eliminar el docu",
+			"error_description": "Error al eliminar el docu. Vuelve a intentarlo más tarde"
+		}
+	},
+	"team_management": {
+		"title": "Gestión de equipos",
+		"subtitle": "Gestiona tus equipos y colabora con otros usuarios"
+	},
+	"collaboration": {
+		"connected": "Conectado",
+		"disconnected": "Desconectado",
+		"active_users": "Usuarios activos"
+	},
 	"plan": {
 		"toast": {
 			"success_title": "¡Plan actualizado!",
 			"success_description": "Tu plan se ha actualizado correctamente",
 			"error_title": "Error al actualizar el plan",
 			"error_description": "Error al actualizar el plan. Por favor, verifica tus datos"
+		}
+	},
+	"notifications": {
+		"title": "Notificaciones",
+		"subtitle": "Gestiona tus notificaciones y mantente al tanto de las novedades",
+		"no_notifications": "No tienes notificaciones",
+		"team_invite_text": "<user>{{user}}</user> te ha invitado al equipo <team>{{team}}</team>",
+		"invite_accepted_text": "<user>{{user}}</user> se ha unido al equipo <team>{{team}}</team>",
+		"mark_as_read": "Marcar como leída",
+		"accept": "Aceptar",
+		"reject": "Rechazar",
+		"accepted": "Aceptada",
+		"rejected": "Rechazada",
+		"toast": {
+			"success_title": "¡Invitación enviada!",
+			"success_description": "La invitación se ha enviado correctamente",
+			"error_title": "Error al enviar la invitación",
+			"error_description": "No se ha podido enviar la invitación al email proporcionado"
 		}
 	},
 	"settings": {
@@ -197,165 +400,5 @@
 			"error_title": "Error al actualizar perfil",
 			"error_description": "Error al actualizar el perfil. Por favor, verifica tus datos"
 		}
-	},
-	"teams": {
-		"title": "Equipos",
-		"subtitle": "Equipos a los que perteneces en DocuDev",
-		"my_teams_subtitle": "Equipos que has creado",
-		"collaborative_teams_subtitle": "Equipos en los que colaboras",
-		"create_team": "Crear equipo",
-		"create_team_disabled": "Actualiza tu plan para crear equipos",
-		"create_team_disabled_limit_reached": "Has alcanzado el límite de equipos",
-		"update_team": "Actualizar equipo",
-		"delete_team": "Eliminar equipo",
-		"delete_team_description": "¿Estás seguro de que quieres eliminar este equipo? Esta acción no se puede deshacer",
-		"name": "Nombre del equipo",
-		"name_placeholder": "Nombre del equipo",
-		"description": "Descripción del equipo",
-		"description_placeholder": "Descripción del equipo",
-		"no_owned_teams": "No tienes equipos creados",
-		"no_collaborative_teams": "No tienes equipos colaborativos",
-		"validations": {
-			"name": {
-				"required": "Introduce el nombre del equipo",
-				"min_length": "El nombre debe tener al menos 2 caracteres"
-			},
-			"description": {
-				"required": "Introduce la descripción del equipo",
-				"min_length": "La descripción debe tener al menos 5 caracteres",
-				"max_length": "La descripción no puede tener más de 120 caracteres"
-			}
-		},
-		"toast": {
-			"success_title": "¡Equipo creado!",
-			"success_description": "El equipo se ha creado correctamente",
-			"error_title": "Error al crear el equipo",
-			"error_description": "Error al crear el equipo. Vuelve a intentarlo más tarde",
-			"success_update_title": "¡Equipo actualizao!",
-			"success_update_description": "El equipo se ha actualizado correctamente",
-			"error_update_title": "Error al actualizar el equipo",
-			"error_update_description": "Error al actualizar el equipo. Vuelve a intentarlo más tarde",
-			"success_delete_title": "¡Equipo eliminado!",
-			"success_delete_description": "El equipo se ha eliminado correctamente",
-			"error_delete_title": "Error al eliminar el equipo",
-			"error_delete_description": "Error al eliminar el equipo. Vuelve a intentarlo más tarde"
-		},
-		"warning": {
-			"warning_title": "¡Actualiza tu plan para poder crear y gestionar equipos!",
-			"warning_description": "No puedes crear mas equipos o gestionarlos porque tu plan no lo permite",
-			"warning_title_limit": "¡Has alcanzado el límite de equipos!",
-			"warning_description_limit": "No puedes crear más equipos porque has alcanzado el límite de tu plan"
-		}
-	},
-	"team": {
-		"collaborators": "Colaboradores",
-		"no_docus": "No hay docus en este equipo",
-		"no_collaborators": "Este equipo no tiene colaboradores",
-		"invite": "Invitar a colaborador",
-		"create_docu": "Crear docu",
-		"email": "Correo electrónico",
-		"email_placeholder": "email@email.com",
-		"send_invite": "Enviar invitación",
-		"validations": {
-			"email": {
-				"required": "Introduce tu correo electrónico",
-				"invalid": "La dirección de correo electrónico no es válida"
-			}
-		}
-	},
-	"docus": {
-		"title": "Mis docus",
-		"create_docu": "Crear docu",
-		"export_pdf": "Exportar a PDF",
-		"update_docu": "Editar docu",
-		"delete_docu": "Eliminar docu",
-		"subtitle": "Tus docus en DocuDev",
-		"save_docu": "Guardar cambios",
-		"team": "Equipo",
-		"created": "Fecha de creación",
-		"updated": "Última actualización",
-		"no_docus": "No tienes ni colaboras en ningun docu",
-		"owner": "Creador",
-		"search": "Buscar docu",
-		"filter_team": "Filtrar por equipo",
-		"filter_owner": "Filtrar por creador",
-		"sort": "Ordenar por",
-		"sort_title_asc": "Título (A-Z)",
-		"sort_title_desc": "Título (Z-A)",
-		"sort_created_asc": "Fecha de creación (ASC)",
-		"sort_created_desc": "Fecha de creación (DESC)",
-		"sort_updated_asc": "Última actualización (ASC)",
-		"sort_updated_desc": "Última actualización (DESC)",
-		"form": {
-			"title": "Nombre del docu",
-			"title_placeholder": "Nombre del docu",
-			"team": "Equipo",
-			"team_placeholder": "Selecciona un equipo",
-			"validations": {
-				"title": {
-					"required": "Introduce el nombre del docu",
-					"min_length": "El nombre debe tener al menos 2 caracteres",
-					"max_length": "El nombre no puede tener más de 50 caracteres"
-				}
-			}
-		},
-		"warning": {
-			"warning_title_save": "¡Importante!",
-			"warning_description_save": "Si no guardas el documento tus cambios se conservarán temporalmente durante 30 minutos"
-		}
-	},
-	"create_docu": {
-		"title": "Crear docu",
-		"subtitle": "Documenta tus proyectos de forma intuitiva y colabora en tiempo real con tu equipo",
-		"toast": {
-			"success_title": "¡Docu creado!",
-			"success_description": "El docu se ha creado correctamente",
-			"error_title": "Error al crear el docu",
-			"error_description": "Error al crear el docu. Vuelve a intentarlo más tarde"
-		}
-	},
-	"update_docu": {
-		"title": "Editar docu",
-		"subtitle": "Perfecciona tu documentación, actualiza su contenido y comparte con tu equipo",
-		"save_docu": "Guardar cambios",
-		"toast": {
-			"success_title": "¡Docu actualizado!",
-			"success_description": "El docu se ha actualizado correctamente",
-			"error_title": "Error al actualizar el docu",
-			"error_description": "Error al actualizar el docu. Vuelve a intentarlo más tarde"
-		}
-	},
-	"delete_docu": {
-		"title": "Eliminar docu",
-		"description": "¿Estás seguro de que quieres eliminar este docu? Esta acción no se puede deshacer",
-		"toast": {
-			"success_title": "¡Docu eliminado!",
-			"success_description": "El docu se ha eliminado correctamente",
-			"error_title": "Error al eliminar el docu",
-			"error_description": "Error al eliminar el docu. Vuelve a intentarlo más tarde"
-		}
-	},
-	"collaboration": {
-		"connected": "Conectado",
-		"disconnected": "Desconectado",
-		"active_users": "Usuarios activos"
-	},
-	"notifications": {
-		"title": "Notificaciones",
-		"subtitle": "Gestiona tus notificaciones y mantente al tanto de las novedades",
-		"no_notifications": "No tienes notificaciones",
-		"toast": {
-			"success_title": "¡Invitación enviada!",
-			"success_description": "La invitación se ha enviado correctamente",
-			"error_title": "Error al enviar la invitación",
-			"error_description": "No se ha podido enviar la invitación al email proporcionado"
-		},
-		"team_invite_text": "<user>{{user}}</user> te ha invitado al equipo <team>{{team}}</team>",
-		"invite_accepted_text": "<user>{{user}}</user> se ha unido al equipo <team>{{team}}</team>",
-		"mark_as_read": "Marcar como leída",
-		"accept": "Aceptar",
-		"reject": "Rechazar",
-		"accepted": "Aceptada",
-		"rejected": "Rechazada"
 	}
 }

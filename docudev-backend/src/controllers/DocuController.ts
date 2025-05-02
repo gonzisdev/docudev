@@ -7,10 +7,6 @@ export class DocuController {
   static async createDocu(req: Request, res: Response) {
     try {
       const { title, content, team } = req.body
-      if (req.user.status !== 'active') {
-        res.status(403).json({ error: 'Invalid credentials' })
-        return
-      }
       if (team) {
         const teamFound = await Team.findById(team)
         if (
@@ -122,11 +118,7 @@ export class DocuController {
 
   static async getDocu(req: Request, res: Response) {
     try {
-      const docu = req.docu
-      if (!docu) {
-        res.status(404).json({ error: 'Docu not found' })
-        return
-      }
+      const docu = await req.docu.populate('owner', 'name surname')
       res.status(200).json(docu)
     } catch (error) {
       console.error('Error getting docu:', error)
@@ -136,27 +128,21 @@ export class DocuController {
 
   static async updateDocu(req: Request, res: Response) {
     try {
-      const docu = req.docu
-      if (!docu) {
-        res.status(404).json({ error: 'Docu not found' })
-        return
-      }
       const { title, content, team } = req.body
-
-      if (docu.team && docu.team.toString() !== team) {
-        await Team.findByIdAndUpdate(docu.team, {
-          $pull: { docus: docu._id }
+      if (req.docu.team && req.docu.team.toString() !== team) {
+        await Team.findByIdAndUpdate(req.docu.team, {
+          $pull: { docus: req.docu._id }
         })
       }
-      if (team && (!docu.team || docu.team.toString() !== team)) {
+      if (team && (!req.docu.team || req.docu.team.toString() !== team)) {
         await Team.findByIdAndUpdate(team, {
-          $push: { docus: docu._id }
+          $push: { docus: req.docu._id }
         })
       }
-      docu.title = title
-      docu.content = content
-      docu.team = team ? team : null
-      await docu.save()
+      req.docu.title = title
+      req.docu.content = content
+      req.docu.team = team ? team : null
+      await req.docu.save()
       res.status(200).json(true)
     } catch (error) {
       console.error('Error updating docu:', error)
@@ -166,17 +152,12 @@ export class DocuController {
 
   static async deleteDocu(req: Request, res: Response) {
     try {
-      const docu = req.docu
-      if (!docu) {
-        res.status(404).json({ error: 'Docu not found' })
-        return
-      }
-      if (docu.team) {
-        await Team.findByIdAndUpdate(docu.team, {
-          $pull: { docus: docu._id }
+      if (req.docu.team) {
+        await Team.findByIdAndUpdate(req.docu.team, {
+          $pull: { docus: req.docu._id }
         })
       }
-      await Docu.findByIdAndDelete(docu._id)
+      await Docu.findByIdAndDelete(req.docu._id)
       res.status(200).json(true)
     } catch (error) {
       console.error('Error deleting docu:', error)

@@ -12,6 +12,8 @@ router.use(limiter)
 
 router.post(
   '/create-team',
+  authenticate,
+  validateUserStatus,
   body('name')
     .notEmpty()
     .withMessage('Team name is required')
@@ -32,8 +34,6 @@ router.post(
     .isLength({ max: 120 })
     .withMessage('Team description cannot exceed 120 characters')
     .trim(),
-  authenticate,
-  validateUserStatus,
   handleInputErrors,
   TeamController.createTeam
 )
@@ -49,7 +49,10 @@ router.get(
 )
 
 router.patch(
-  '/:teamId',
+  '/update-team/:teamId',
+  authenticate,
+  validateUserStatus,
+  isTeamOwnerAdmin,
   body('name')
     .notEmpty()
     .withMessage('Team name is required')
@@ -70,19 +73,23 @@ router.patch(
     .isLength({ max: 120 })
     .withMessage('Team description cannot exceed 120 characters')
     .trim(),
-  authenticate,
-  validateUserStatus,
-  isTeamOwnerAdmin,
   handleInputErrors,
   TeamController.updateTeam
 )
 
+router.patch(
+  '/leave/:teamId',
+  authenticate,
+  validateUserStatus,
+  canAccessTeam,
+  TeamController.leaveTeam
+)
+
 router.delete(
-  '/:teamId',
+  '/delete-team/:teamId',
   authenticate,
   validateUserStatus,
   isTeamOwnerAdmin,
-  handleInputErrors,
   TeamController.deleteTeam
 )
 

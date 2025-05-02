@@ -32,6 +32,7 @@ import 'react-swipeable-list/dist/styles.css'
 import UserPlaceholder from 'assets/images/user-placeholder.jpg'
 import './Team.css'
 import TeamInviteCollaboratorModal from '../Modals/TeamInviteCollaboratorModal'
+import LeaveTeamModal from '../Modals/LeaveTeamModal'
 
 const Team = () => {
 	const { t } = useTranslation()
@@ -46,6 +47,8 @@ const Team = () => {
 		pagination,
 		isLoadingTeamDocus,
 		filters: { searchTerm, setSearchTerm, ownerFilter, setOwnerFilter, sortOption, setSortOption },
+		leaveTeam,
+		isLeavingTeam,
 		handlePageChange
 	} = useTeam({ teamId })
 
@@ -53,6 +56,7 @@ const Team = () => {
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 	const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
 	const [docuToDelete, setDocuToDelete] = useState<string | undefined>(undefined)
+	const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false)
 	const [inputSearchValue, setInputSearchValue] = useState(searchTerm)
 
 	const { deleteDocu, isDeletingDocu } = useDocu(docuToDelete ? { docuId: docuToDelete } : {})
@@ -85,7 +89,7 @@ const Team = () => {
 	}
 	const handleDeleteDocu = async () => {
 		if (docuToDelete) {
-			await deleteDocu({ docuId: docuToDelete })
+			await deleteDocu()
 			closeDeleteModal()
 		}
 	}
@@ -124,7 +128,7 @@ const Team = () => {
 	}, [debouncedSearch])
 
 	if (errorTeam) return <Navigate to={TEAMS_URL} />
-	console.log(team)
+
 	return (
 		<DashboardLayout>
 			{isLoadingTeamDocus || isLoadingTeam ? (
@@ -133,13 +137,18 @@ const Team = () => {
 				<>
 					<Header title={team?.name}>
 						<div className='team-header-actions'>
-							{team?.owner === user?._id && (
+							{typeof team?.owner === 'object' && team?.owner._id === user?._id && (
 								<Button
 									variant='link'
 									onClick={() => setIsInviteModalOpen(true)}
 									//TODO: disabled={COLLABORATORS LIMIT}
 								>
 									{t('team.invite')}
+								</Button>
+							)}
+							{team?.collaborators?.some((c) => typeof c === 'object' && c._id === user?._id) && (
+								<Button variant='link' onClick={() => setIsLeaveModalOpen(true)}>
+									{t('team.leave_team')}
 								</Button>
 							)}
 							<Button
@@ -287,6 +296,12 @@ const Team = () => {
 				isVisible={isInviteModalOpen}
 				toggleVisibility={() => setIsInviteModalOpen(!isInviteModalOpen)}
 				teamId={teamId}
+			/>
+			<LeaveTeamModal
+				isVisible={isLeaveModalOpen}
+				toggleVisibility={() => setIsLeaveModalOpen(!isLeaveModalOpen)}
+				onConfirm={() => leaveTeam()}
+				isLoading={isLeavingTeam}
 			/>
 		</DashboardLayout>
 	)

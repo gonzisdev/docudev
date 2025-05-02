@@ -72,12 +72,7 @@ export class TeamController {
   static async updateTeam(req: Request, res: Response) {
     try {
       const { name, description } = req.body
-      const team = req.team
-      if (!team) {
-        res.status(404).json({ error: 'Team not found' })
-        return
-      }
-      await Team.findByIdAndUpdate(team._id, {
+      await Team.findByIdAndUpdate(req.team._id, {
         name,
         description
       })
@@ -85,6 +80,26 @@ export class TeamController {
     } catch (error) {
       console.error('Error updating team:', error)
       res.status(500).json({ error: 'Error updating team' })
+    }
+  }
+
+  static async leaveTeam(req: Request, res: Response) {
+    try {
+      if (req.team.owner.toString() === req.user._id.toString()) {
+        res.status(403).json({ error: 'Owner cannot leave the team' })
+        return
+      }
+      await Team.findByIdAndUpdate(req.team._id, {
+        $pull: { collaborators: req.user._id }
+      })
+      await Docu.updateMany(
+        { team: req.team._id },
+        { $pull: { collaborators: req.user._id } }
+      )
+      res.status(200).json(true)
+    } catch (error) {
+      console.error('Error leaving team:', error)
+      res.status(500).json({ error: 'Error leaving team' })
     }
   }
 

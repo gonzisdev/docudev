@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
 import User from '../models/User'
-import { generateJWT } from '../utils/jwt'
-import jwt from 'jsonwebtoken'
-import { sendEmail } from '../utils/email'
 import Docu from '../models/Docu'
 import Team from '../models/Team'
+import Notification from '../models/Notification'
+import jwt from 'jsonwebtoken'
+import { generateJWT } from '../utils/jwt'
+import { sendEmail } from '../utils/email'
 
 export class AuthController {
   static async createAccount(req: Request, res: Response) {
@@ -118,6 +119,8 @@ export class AuthController {
         { members: req.user._id },
         { $pull: { members: req.user._id } }
       )
+      await Notification.deleteMany({ sender: req.user._id })
+      await Notification.deleteMany({ receiver: req.user._id })
       await User.findByIdAndDelete(req.user._id)
       res.status(200).json(true)
     } catch (error) {

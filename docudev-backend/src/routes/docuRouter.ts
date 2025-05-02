@@ -12,6 +12,8 @@ router.use(limiter)
 
 router.post(
   '/create-docu',
+  authenticate,
+  validateUserStatus,
   body('title')
     .notEmpty()
     .withMessage('Docu title is required')
@@ -23,8 +25,6 @@ router.post(
     .withMessage('Docu title cannot exceed 50 characters')
     .trim(),
   body('content').notEmpty().withMessage('Docu content is required'),
-  authenticate,
-  validateUserStatus,
   handleInputErrors,
   DocuController.createDocu
 )
@@ -41,6 +41,9 @@ router.get(
 
 router.put(
   '/update-docu/:docuId',
+  authenticate,
+  validateUserStatus,
+  canAccessDocu,
   body('title')
     .notEmpty()
     .withMessage('Docu title is required')
@@ -52,9 +55,6 @@ router.put(
     .withMessage('Docu title cannot exceed 50 characters')
     .trim(),
   body('content').notEmpty().withMessage('Docu content is required'),
-  authenticate,
-  validateUserStatus,
-  canAccessDocu,
   handleInputErrors,
   DocuController.updateDocu
 )

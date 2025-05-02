@@ -10,19 +10,6 @@ interface Props {
 const CollaborationStatus = ({ isConnected, activeUsers }: Props) => {
 	const { t } = useTranslation()
 
-	const groupedUsers = activeUsers.reduce(
-		(acc, user) => {
-			const existingUser = acc.find((u) => u.name === user.name)
-			if (existingUser) {
-				existingUser.count = (existingUser.count || 1) + 1
-			} else {
-				acc.push({ ...user, count: 1 })
-			}
-			return acc
-		},
-		[] as (ActiveUser & { count?: number })[]
-	)
-
 	return (
 		<div className='collaboration-status-container'>
 			<div className='connection-status'>
@@ -38,7 +25,7 @@ const CollaborationStatus = ({ isConnected, activeUsers }: Props) => {
 				<div className='active-users-container'>
 					<span className='active-users-label'>{t('collaboration.active_users')}: </span>
 					<div className='user-avatars'>
-						{groupedUsers.map((user, index) => (
+						{activeUsers.map((user, index) => (
 							<div
 								key={index}
 								className='user-avatar'
@@ -54,7 +41,6 @@ const CollaborationStatus = ({ isConnected, activeUsers }: Props) => {
 											alt={user.name}
 											className='user-image'
 										/>
-										<div className='user-initials'>{user.name.charAt(0).toUpperCase()}</div>
 									</>
 								) : (
 									user.name.charAt(0).toUpperCase()

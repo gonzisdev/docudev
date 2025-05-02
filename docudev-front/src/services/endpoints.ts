@@ -10,6 +10,9 @@ export const endpoints = {
 
 	teams: 'teams',
 	createTeam: 'teams/create-team',
+	updateTeam: 'teams/update-team',
+	deleteTeam: 'teams/delete-team',
+	leaveTeam: 'teams/leave',
 
 	docus: 'docus',
 	createDocu: 'docus/create-docu',
