@@ -1,9 +1,10 @@
 import customFetch from './customFetch'
 import { Team, TeamFormPayload } from 'models/Team'
 import { endpoints } from './endpoints'
+import { User } from 'models/Auth'
 
 export const createTeamService = async (data: TeamFormPayload) => {
-	return await customFetch<boolean>(endpoints.createTeam, {
+	return await customFetch<Team>(endpoints.createTeam, {
 		method: 'POST',
 		bodyReq: data
 	})
@@ -27,6 +28,16 @@ export const updateTeamService = async (teamId: Team['_id'], data: TeamFormPaylo
 export const leaveTeamService = async (teamId: Team['_id']) => {
 	return await customFetch<boolean>(`${endpoints.leaveTeam}/${teamId}`, {
 		method: 'PATCH'
+	})
+}
+
+export const removeCollaboratorService = async (
+	teamId: Team['_id'],
+	collaboratorId: User['_id']
+) => {
+	return await customFetch<boolean>(`${endpoints.removeCollaborator}/${teamId}`, {
+		method: 'PATCH',
+		bodyReq: { collaboratorId }
 	})
 }
 

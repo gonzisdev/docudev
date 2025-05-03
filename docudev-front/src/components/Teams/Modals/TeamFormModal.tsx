@@ -51,7 +51,7 @@ const TeamFormModal = ({
 					/>
 					<footer>
 						<Button type='submit' variant='secondary' loading={isSubmitting} fullWidth>
-							{isEditing ? t('teams.update_team') : t('teams.create_team')}
+							{isEditing ? t('teams.save_team') : t('teams.create_team')}
 						</Button>
 					</footer>
 				</Form>

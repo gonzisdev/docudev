@@ -2,7 +2,8 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	margin-top: 2rem;
+
+	margin-top: 1.5rem;
 
 	.table-container {
 		border-radius: var(--input-border-radius);
@@ -30,6 +31,7 @@
 		padding: 0.5rem 1rem;
 
 		h3 {
+			font-size: 1rem;
 			color: var(--neutral-neutral20);
 		}
 
@@ -124,7 +126,7 @@
 		margin: 0;
 		border-collapse: separate;
 		border-spacing: 0;
-		table-layout: fixed;
+		table-layout: auto;
 		width: 100%;
 
 		td,
@@ -173,12 +175,12 @@
 			tr:first-child th {
 				top: 0;
 			}
-
+			/* 
 			th.fixed-last {
 				position: sticky;
 				right: -1px;
 				z-index: 2;
-			}
+			} */
 
 			th.sortable {
 				cursor: pointer;
@@ -208,14 +210,14 @@
 				}
 			}
 
-			td.fixed-last {
+			/* td.fixed-last {
 				&:last-child {
 					position: sticky;
 					right: -1px;
 					z-index: 1;
 					padding: 0.5rem 0;
 				}
-			}
+			} */
 
 			tr:last-child td {
 				border: none;

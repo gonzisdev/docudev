@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { teamDocusQueryKey, teamQueryKey, teamsQueryKey } from 'constants/queryKeys'
+import { User } from 'models/Auth'
 import { Team, TeamFormPayload } from 'models/Team'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getDocusService } from 'services/docu'
 import {
@@ -9,6 +10,7 @@ import {
 	deleteTeamService,
 	getTeamService,
 	leaveTeamService,
+	removeCollaboratorService,
 	updateTeamService
 } from 'services/team'
 import { toast } from 'sonner'
@@ -24,6 +26,7 @@ interface Props {
 const useTeam = ({ teamId, params }: Props) => {
 	const { t } = useTranslation()
 	const queryClient = useQueryClient()
+	const deletingTeamIdRef = useRef<string | null>(null)
 
 	const [page, setPage] = useState(params?.initialPage || 1)
 	const [searchTerm, setSearchTerm] = useState('')
@@ -37,7 +40,7 @@ const useTeam = ({ teamId, params }: Props) => {
 	} = useQuery({
 		queryKey: [teamQueryKey, teamId],
 		queryFn: () => getTeamService(teamId!),
-		enabled: !!teamId,
+		enabled: !!teamId && teamId !== deletingTeamIdRef.current,
 		refetchOnWindowFocus: 'always',
 		retry: false
 	})
@@ -128,8 +131,35 @@ const useTeam = ({ teamId, params }: Props) => {
 		}
 	})
 
+	const { mutateAsync: removeCollaborator, isPending: isRemovingCollaborator } = useMutation({
+		mutationFn: teamId
+			? (collaboratorId: User['_id']) => removeCollaboratorService(teamId, collaboratorId)
+			: undefined,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [teamsQueryKey]
+			})
+			queryClient.invalidateQueries({
+				queryKey: [teamQueryKey, teamId]
+			})
+			toast.success(t('team.toast.success_remove_collaborator_title'), {
+				description: t('team.toast.success_remove_collaborator_description')
+			})
+		},
+		onError: () => {
+			toast.error(t('team.toast.error_remove_collaborator_title'), {
+				description: t('team.toast.error_remove_collaborator_description')
+			})
+		}
+	})
+
 	const { mutateAsync: deleteTeam, isPending: isDeletingTeam } = useMutation({
-		mutationFn: teamId ? () => deleteTeamService(teamId) : undefined,
+		mutationFn: teamId
+			? () => {
+					deletingTeamIdRef.current = teamId
+					return deleteTeamService(teamId)
+				}
+			: undefined,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: [teamsQueryKey]
@@ -140,11 +170,13 @@ const useTeam = ({ teamId, params }: Props) => {
 			toast.success(t('team.toast.success_delete_title'), {
 				description: t('team.toast.success_delete_description')
 			})
+			deletingTeamIdRef.current = null
 		},
 		onError: () => {
 			toast.error(t('team.toast.error_delete_title'), {
 				description: t('team.toast.error_delete_description')
 			})
+			deletingTeamIdRef.current = null
 		}
 	})
 
@@ -158,6 +190,8 @@ const useTeam = ({ teamId, params }: Props) => {
 		isUpdatingTeam,
 		leaveTeam,
 		isLeavingTeam,
+		removeCollaborator,
+		isRemovingCollaborator,
 		deleteTeam,
 		isDeletingTeam,
 		teamDocus: teamDocus?.data || [],

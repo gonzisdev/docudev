@@ -33,6 +33,7 @@ import UserPlaceholder from 'assets/images/user-placeholder.jpg'
 import './Team.css'
 import TeamInviteCollaboratorModal from '../Modals/TeamInviteCollaboratorModal'
 import LeaveTeamModal from '../Modals/LeaveTeamModal'
+import { Docu } from 'models/Docu'
 
 const Team = () => {
 	const { t } = useTranslation()
@@ -55,7 +56,7 @@ const Team = () => {
 	const [isSwiping, setIsSwiping] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 	const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
-	const [docuToDelete, setDocuToDelete] = useState<string | undefined>(undefined)
+	const [docuToDelete, setDocuToDelete] = useState<Docu['_id'] | undefined>(undefined)
 	const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false)
 	const [inputSearchValue, setInputSearchValue] = useState(searchTerm)
 
@@ -79,7 +80,7 @@ const Team = () => {
 	const handleOwnerFilterChange = (option: string) => setOwnerFilter(option)
 	const handleSortChange = (option: string) => setSortOption(option)
 
-	const openDeleteModal = (docuId: string) => {
+	const openDeleteModal = (docuId: Docu['_id']) => {
 		setDocuToDelete(docuId)
 		setIsDeleteModalOpen(true)
 	}
@@ -94,7 +95,7 @@ const Team = () => {
 		}
 	}
 
-	const leadingActions = (docuId: string) => (
+	const leadingActions = (docuId: Docu['_id']) => (
 		<LeadingActions>
 			<SwipeAction onClick={() => navigate(`${EDIT_DOCU_URL}/${docuId}`)}>
 				<div className='swipe-action edit-action'>
@@ -104,7 +105,7 @@ const Team = () => {
 		</LeadingActions>
 	)
 
-	const trailingActions = (docuId: string) => (
+	const trailingActions = (docuId: Docu['_id']) => (
 		<TrailingActions>
 			<SwipeAction onClick={() => openDeleteModal(docuId)}>
 				<div className='swipe-action delete-action'>

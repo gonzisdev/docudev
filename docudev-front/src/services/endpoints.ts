@@ -13,6 +13,7 @@ export const endpoints = {
 	updateTeam: 'teams/update-team',
 	deleteTeam: 'teams/delete-team',
 	leaveTeam: 'teams/leave',
+	removeCollaborator: 'teams/remove-collaborator',
 
 	docus: 'docus',
 	createDocu: 'docus/create-docu',

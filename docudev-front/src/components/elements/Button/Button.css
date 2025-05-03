@@ -8,6 +8,7 @@
 	border: 0.125rem solid transparent;
 	font-weight: 500;
 	font-size: 0.875rem;
+	min-width: fit-content;
 	width: fit-content;
 	cursor: pointer;
 	color: var(--text-light);

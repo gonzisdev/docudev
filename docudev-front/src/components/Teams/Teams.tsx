@@ -37,7 +37,7 @@ const Teams = () => {
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isEditing, setIsEditing] = useState(false)
-	const [selectedTeamId, setSelectedTeamId] = useState<Team['_id'] | undefined>(undefined)
+	const [selectedTeamId, setSelectedTeamId] = useState<Team['_id']>('')
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
 	const [isSwiping, setIsSwiping] = useState(false)
@@ -88,11 +88,10 @@ const Teams = () => {
 
 	const openCreateModal = () => {
 		setIsEditing(false)
-		setSelectedTeamId(undefined)
 		setIsModalOpen(true)
 	}
 
-	const openEditModal = (teamId: string) => {
+	const openEditModal = (teamId: Team['_id']) => {
 		setIsEditing(true)
 		setSelectedTeamId(teamId)
 		setIsModalOpen(true)
@@ -100,7 +99,7 @@ const Teams = () => {
 
 	const closeModal = () => {
 		setIsModalOpen(false)
-		setSelectedTeamId(undefined)
+		setSelectedTeamId('')
 		setIsEditing(false)
 		methods.reset({
 			name: '',
@@ -108,13 +107,13 @@ const Teams = () => {
 		})
 	}
 
-	const openDeleteModal = (teamId: string) => {
+	const openDeleteModal = (teamId: Team['_id']) => {
 		setSelectedTeamId(teamId)
 		setIsDeleteModalOpen(true)
 	}
 
 	const closeDeleteModal = () => {
-		setSelectedTeamId(undefined)
+		setSelectedTeamId('')
 		setIsDeleteModalOpen(false)
 	}
 

@@ -6,7 +6,8 @@
 		"logout": "Cerrar sesión",
 		"settings": "Configuración",
 		"update_plan": "Actualizar plan",
-		"save": "Guardar"
+		"save": "Guardar",
+		"no_options": "No hay opciones disponibles"
 	},
 	"common": {
 		"home": "Inicio",
@@ -188,9 +189,10 @@
 		"create_team": "Crear equipo",
 		"create_team_disabled": "Actualiza tu plan para crear equipos",
 		"create_team_disabled_limit_reached": "Has alcanzado el límite de equipos",
-		"update_team": "Actualizar equipo",
+		"update_team": "Editar equipo",
+		"save_team": "Guardar cambios",
 		"delete_team": "Eliminar equipo",
-		"delete_team_description": "¿Estás seguro de que quieres eliminar este equipo? Esta acción no se puede deshacer",
+		"delete_team_description": "¿Estás seguro de que quieres eliminar este equipo? Al eliminar un equipo se eliminan todos los docus asociados al equipo. Esta acción no se puede deshacer",
 		"name": "Nombre del equipo",
 		"name_placeholder": "Nombre del equipo",
 		"description": "Descripción del equipo",
@@ -250,7 +252,11 @@
 			"success_leave_team_title": "¡Equipo abandonado!",
 			"success_leave_team_description": "Has abandonado el equipo correctamente",
 			"error_leave_team_title": "Error al abandonar el equipo",
-			"error_leave_team_description": "Error al abandonar el equipo. Vuelve a intentarlo más tarde"
+			"error_leave_team_description": "Error al abandonar el equipo. Vuelve a intentarlo más tarde",
+			"success_remove_collaborator_title": "¡Colaborador eliminado!",
+			"success_remove_collaborator_description": "La invitación se ha enviado correctamente",
+			"error_remove_collaborator_title": "Error al eliminar colaborador",
+			"error_remove_collaborator_ddescription": "No se ha podido eliminar el colaborador"
 		}
 	},
 	"docus": {
@@ -327,7 +333,21 @@
 	},
 	"team_management": {
 		"title": "Gestión de equipos",
-		"subtitle": "Administra los equipos de los que eres creador"
+		"subtitle": "Administra los equipos de los que eres creador",
+		"select_team_placeholder": "Selecciona un equipo",
+		"all": "Todos",
+		"active": "Activo",
+		"inactive": "Inactivo",
+		"suspended": "Suspendido",
+		"image": "Imagen",
+		"name": "Nombre",
+		"surname": "Apellidos",
+		"email": "Correo electrónico",
+		"phone": "Teléfono",
+		"status": "Estado",
+		"actions": "Acciones",
+		"update_team": "Editar equipo",
+		"delete_team": "Eliminar equipo"
 	},
 	"collaboration": {
 		"connected": "Conectado",

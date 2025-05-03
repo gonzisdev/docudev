@@ -85,6 +85,21 @@ router.patch(
   TeamController.leaveTeam
 )
 
+router.patch(
+  '/remove-collaborator/:teamId',
+  authenticate,
+  validateUserStatus,
+  isTeamOwnerAdmin,
+  body('collaboratorId')
+    .notEmpty()
+    .withMessage('Collaborator ID is required')
+    .isString()
+    .withMessage('Collaborator ID must be text')
+    .trim(),
+  handleInputErrors,
+  TeamController.removeCollaborator
+)
+
 router.delete(
   '/delete-team/:teamId',
   authenticate,

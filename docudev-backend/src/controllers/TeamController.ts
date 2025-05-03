@@ -15,12 +15,12 @@ export class TeamController {
         res.status(403).json({ error: 'Maximum number of teams (10) reached' })
         return
       }
-      await Team.create({
+      const team = await Team.create({
         name,
         description,
         owner: req.user._id
       })
-      res.status(201).json(true)
+      res.status(201).json(team)
     } catch (error) {
       console.error('Error creating team:', error)
       res.status(500).json({ error: 'Error creating team' })
@@ -100,6 +100,29 @@ export class TeamController {
     } catch (error) {
       console.error('Error leaving team:', error)
       res.status(500).json({ error: 'Error leaving team' })
+    }
+  }
+
+  static async removeCollaborator(req: Request, res: Response) {
+    try {
+      const { collaboratorId } = req.body
+      if (req.team.owner.toString() !== req.user._id.toString()) {
+        res
+          .status(403)
+          .json({ error: 'Only the owner can remove collaborators' })
+        return
+      }
+      await Team.findByIdAndUpdate(req.team._id, {
+        $pull: { collaborators: collaboratorId }
+      })
+      await Docu.updateMany(
+        { team: req.team._id },
+        { $pull: { collaborators: collaboratorId } }
+      )
+      res.status(200).json(true)
+    } catch (error) {
+      console.error('Error removing collaborator:', error)
+      res.status(500).json({ error: 'Error removing collaborator' })
     }
   }
 

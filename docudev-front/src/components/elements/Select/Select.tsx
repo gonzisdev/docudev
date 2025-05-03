@@ -9,6 +9,7 @@ import ReactSelect, {
 } from 'react-select'
 import { CaretDownIcon } from 'assets/svgs'
 import './Select.css'
+import { useTranslation } from 'react-i18next'
 
 interface Props
 	extends Omit<ReactSelectProps<Option, false, GroupBase<Option>>, 'onChange' | 'value'> {
@@ -22,6 +23,7 @@ interface Props
 	disabled?: boolean
 	isSearchable?: boolean
 	isClearable?: boolean
+	noOptionsMessage?: (obj: { inputValue: string }) => React.ReactNode
 	onChange: (value: string) => void
 	onBlur?: (e: FocusEvent<HTMLElement>) => void
 }
@@ -40,10 +42,12 @@ const Select = forwardRef<SelectInstance<Option, false>, Props>(
 			onBlur,
 			disabled,
 			isSearchable = true,
-			isClearable = false
+			isClearable = false,
+			noOptionsMessage
 		},
 		ref
 	) => {
+		const { t } = useTranslation()
 		const [menuPortalTarget, setMenuPortalTarget] = useState<HTMLElement | null>(null)
 
 		const classNames = () => {
@@ -52,6 +56,16 @@ const Select = forwardRef<SelectInstance<Option, false>, Props>(
 			if (variant === 'rounded') classes += ' rounded'
 			if (hasError) classes += ' error'
 			return classes
+		}
+
+		const handleNoOptionsMessage = (obj: { inputValue: string }) => {
+			if (typeof noOptionsMessage === 'function') {
+				return noOptionsMessage(obj)
+			}
+			if (typeof noOptionsMessage === 'string') {
+				return noOptionsMessage
+			}
+			return t('general.no_options')
 		}
 
 		useEffect(() => {
@@ -85,6 +99,7 @@ const Select = forwardRef<SelectInstance<Option, false>, Props>(
 				isClearable={isClearable}
 				menuPortalTarget={menuPortalTarget}
 				menuPosition='fixed'
+				noOptionsMessage={handleNoOptionsMessage}
 				styles={{
 					menuPortal: (base) => ({ ...base, zIndex: 9999 })
 				}}
