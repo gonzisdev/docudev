@@ -2,6 +2,7 @@ import { RowSelectionState, Table } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { CaretDoubleRightIcon, CaretRightIcon } from 'assets/svgs'
 import './Pagination.css'
+import Select from 'components/elements/Select/Select'
 
 interface Props<T> {
 	table: Table<T>
@@ -10,6 +11,10 @@ interface Props<T> {
 
 const TablePagination = <T,>({ table, rowSelection }: Props<T>) => {
 	const { t } = useTranslation()
+	const pageSizeOptions = [10, 20, 30, 40, 50].map((pageSize) => ({
+		value: String(pageSize),
+		label: t('table.show_rows', { count: pageSize })
+	}))
 
 	return (
 		<div className='pagination-container'>
@@ -19,18 +24,16 @@ const TablePagination = <T,>({ table, rowSelection }: Props<T>) => {
 					total: table.getPreFilteredRowModel().rows.length
 				})}
 			</p>
-			<select
-				className='pagination-select'
-				value={table.getState().pagination.pageSize}
-				onChange={(e) => {
-					table.setPageSize(Number(e.target.value))
-				}}>
-				{[10, 20, 30, 40, 50].map((pageSize) => (
-					<option key={pageSize} value={pageSize}>
-						{t('table.show_rows', { count: pageSize })}
-					</option>
-				))}
-			</select>
+			<Select
+				id='pagination-size'
+				value={String(table.getState().pagination.pageSize)}
+				options={pageSizeOptions}
+				onChange={(value) => table.setPageSize(Number(value))}
+				disabled={false}
+				hasError={false}
+				placeholder={t('table.show_rows', { count: table.getState().pagination.pageSize })}
+				isSearchable={false}
+			/>
 			<div className='pagination'>
 				<div className='pagination-arrows'>
 					<button

@@ -44,7 +44,11 @@
 		"page_info": "Página {{page}} de {{total}}",
 		"first": "Primera",
 		"last": "Última",
-		"search": "Buscar"
+		"search": "Buscar",
+		"min": "Mín.",
+		"max": "Máx.",
+		"start_date": "Fecha de inicio",
+		"end_date": "Fecha de fin"
 	},
 	"pagination": {
 		"previous": "Anterior",
@@ -323,7 +327,7 @@
 	},
 	"team_management": {
 		"title": "Gestión de equipos",
-		"subtitle": "Gestiona tus equipos y colabora con otros usuarios"
+		"subtitle": "Administra los equipos de los que eres creador"
 	},
 	"collaboration": {
 		"connected": "Conectado",

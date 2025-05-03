@@ -184,7 +184,6 @@ const Table = <T,>({
 					<div className='table-search-filters'>
 						<DebouncedInput
 							type='text'
-							className='table-search-input'
 							placeholder={t('table.search')}
 							value={globalFilter ?? ''}
 							onChange={(value) => setGlobalFilter(String(value))}

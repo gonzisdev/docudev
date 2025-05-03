@@ -1,94 +1,86 @@
 .pagination-container {
 	display: flex;
-	justify-content: flex-end;
-	align-items: flex-start;
-	gap: 1rem;
-	padding: 1rem 0;
+	justify-content: space-between;
+	align-items: start;
+	gap: 1.5rem;
+	padding: 0.5rem 0;
 	background: var(--background-light);
 	border-radius: 0 0 1rem 1rem;
-}
 
-.pagination {
-	display: flex;
-	flex-direction: column;
-	align-items: end;
-	gap: 0.75rem;
-
-	.pagination-arrows {
+	.pagination-rows-info {
+		margin-right: auto;
+		font-size: 0.95rem;
+		height: 2.65rem;
 		display: flex;
-		justify-content: center;
 		align-items: center;
-		gap: 0.25rem;
+		color: var(--neutral-neutral20);
 	}
 
-	.pagination-arrow-button {
-		border: 1px solid var(--primary);
-		padding: 0.65rem 0.9rem;
-		border-radius: 0.5rem;
-		background: var(--background);
-		font-size: 1rem;
-		color: var(--primary-dark);
-		cursor: pointer;
-		transition:
-			border-color 0.2s,
-			color 0.2s,
-			background 0.2s;
+	.select-container {
+		flex: 0 0 12rem;
+	}
 
-		&:hover:not(:disabled) {
-			border-color: var(--secondary);
-			color: var(--secondary);
-			background: var(--primary-light);
+	.pagination {
+		display: flex;
+		flex-direction: column;
+		align-items: end;
+		gap: 0.75rem;
 
-			svg {
-				path {
-					fill: var(--secondary);
+		.pagination-arrows {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.pagination-arrow-button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 0.0625rem solid var(--input-border-color);
+			box-sizing: border-box;
+			border-radius: var(--input-border-radius);
+			height: var(--input-height);
+			width: var(--input-height);
+			background: var(--background);
+			font-size: 1rem;
+			color: var(--primary-dark);
+			cursor: pointer;
+			transition:
+				border-color 0.2s,
+				color 0.2s,
+				background 0.2s;
+
+			&:focus,
+			&:focus-visible {
+				border-color: var(--secondary);
+				outline: none;
+			}
+
+			&:hover:not(:disabled) {
+				border-color: var(--secondary);
+				color: var(--secondary);
+				background: var(--primary-light);
+
+				svg {
+					path {
+						fill: var(--secondary);
+					}
 				}
 			}
-		}
 
-		&:disabled {
-			opacity: 0.5;
-			cursor: not-allowed;
-			background: var(--neutral-neutral05);
-			color: var(--neutral-neutral20);
-			border-color: var(--neutral-neutral10);
-		}
-
-		&.right,
-		&.left {
-			svg {
-				transform: rotate(180deg);
+			&:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+				background: var(--neutral-neutral05);
+				color: var(--neutral-neutral20);
+				border-color: var(--neutral-neutral10);
 			}
 		}
+
+		.pagination-info {
+			font-size: 0.85rem;
+			color: var(--neutral-neutral20);
+		}
 	}
-
-	.pagination-info {
-		font-size: 0.85rem;
-		color: var(--primary-dark);
-	}
-}
-
-.pagination-select {
-	outline: 1px solid var(--primary);
-	padding: 0.65rem 2rem 0.65rem 0.9rem;
-	border-radius: 0.5rem;
-	background: var(--background);
-	font-size: 0.95rem;
-	color: var(--primary-dark);
-	cursor: pointer;
-	border: none;
-	transition: outline 0.2s;
-
-	&:focus {
-		outline: 2px solid var(--secondary);
-	}
-}
-
-.pagination-rows-info {
-	margin-right: auto;
-	font-size: 0.95rem;
-	height: 2.65rem;
-	display: flex;
-	align-items: center;
-	color: var(--primary-dark);
 }

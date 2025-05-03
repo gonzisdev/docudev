@@ -2,23 +2,22 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	margin-top: 2rem;
 
 	.table-container {
-		background: var(--background-light);
-		border-radius: 1rem;
+		border-radius: var(--input-border-radius);
 		border: 1px solid var(--border-color);
 		padding: 1rem 0.5rem;
 		height: 100%;
 		overflow: hidden;
-		box-shadow: 0 2px 12px 0 rgba(52, 211, 153, 0.05);
+		background-color: var(--background);
 	}
 
 	.table-overflow-container {
 		max-height: 100%;
 		overflow: auto;
 		scroll-padding-top: 2.5rem;
-		padding-bottom: 2rem;
-
+		padding: 0.5rem 1rem;
 		&.empty-rows {
 			padding-bottom: 0;
 		}
@@ -30,50 +29,68 @@
 		align-items: center;
 		padding: 0.5rem 1rem;
 
+		h3 {
+			color: var(--neutral-neutral20);
+		}
+
 		.table-search-filters {
 			display: flex;
 			align-items: center;
 			gap: 0.5rem;
 		}
 
-		.table-search-input {
-			border: 1px solid var(--border-color);
-			border-radius: 0.625rem;
-			padding: 0.625rem;
-			font-size: 0.875rem;
-			color: var(--primary);
-			background: var(--neutral-neutral05);
-			font-weight: 400;
-			height: 2.5rem;
-			transition: border-color 0.2s;
-
-			&:focus {
-				outline: none;
-				border-color: var(--primary);
-			}
-		}
-
 		.table-filter-button {
+			flex: 0 0 var(--input-height);
+			width: var(--input-height);
+			min-width: var(--input-height);
+			max-width: var(--input-height);
+			height: var(--input-height);
 			display: grid;
 			place-items: center;
-			border: 1px solid var(--border-color);
-			border-radius: 0.625rem;
-			height: 2.5rem;
-			width: 2.5rem;
-			background: var(--neutral-neutral05);
+			border: 1px solid var(--input-border-color);
+			border-radius: var(--input-border-radius);
+			background: var(--background);
 			cursor: pointer;
 			position: relative;
-			transition: border-color 0.2s;
+			transition:
+				border-color 0.2s,
+				background 0.2s,
+				color 0.2s;
 
 			svg {
 				width: 1.25rem;
-				stroke: var(--primary-dark);
+				transition: fill 0.2s;
+			}
+
+			svg path {
+				fill: var(--primary-dark);
+				transition: fill 0.2s;
+			}
+
+			&:focus,
+			&:focus-visible {
+				border-color: var(--secondary);
+				outline: none;
+
+				svg path {
+					fill: var(--secondary);
+				}
+			}
+
+			&:hover:not(:disabled) {
+				border-color: var(--secondary);
+				background: var(--primary-light);
+
+				svg path {
+					fill: var(--secondary);
+				}
 			}
 
 			&.active {
 				border-color: var(--primary);
-				svg {
-					stroke: var(--primary);
+
+				svg path {
+					fill: var(--primary);
 				}
 			}
 
@@ -121,8 +138,7 @@
 			font-size: 0.875rem;
 			font-weight: 500;
 			color: var(--primary);
-			border-bottom: 1px solid var(--primary);
-			padding: 1rem 1.5rem 0.75rem;
+			padding: 1.5rem;
 		}
 
 		td {
@@ -202,7 +218,7 @@
 			}
 
 			tr:last-child td {
-				padding-bottom: 1.5rem;
+				border: none;
 			}
 		}
 

@@ -1,5 +1,6 @@
 .table-filter-container {
 	position: relative;
+	padding-bottom: 0.5rem;
 
 	.table-filter-button {
 		background: none;
@@ -14,41 +15,6 @@
 		&.active {
 			svg {
 				stroke: var(--primary);
-			}
-		}
-	}
-
-	.table-filter {
-		background-color: var(--neutral-neutral00);
-		border-radius: 0.625rem;
-		border: 0.0625rem solid var(--border-color);
-		padding: 0.3rem 0.625rem;
-		max-width: 12rem;
-		font-size: 0.875rem;
-		font-weight: 400;
-
-		&:focus {
-			outline: none;
-			border-color: var(--primary-dark);
-		}
-
-		&.numeric {
-			max-width: 6rem;
-		}
-
-		&::placeholder {
-			font-size: 0.875rem;
-			font-weight: 400;
-		}
-
-		&select {
-			outline: 0.0625rem solid var(--border-color);
-			border: none;
-			border-right: 0.5rem solid transparent;
-
-			&:focus {
-				outline: 0.0625rem solid var(--primary-dark);
-				border: none;
 			}
 		}
 	}
@@ -68,12 +34,13 @@
 		background: none;
 		border: none;
 		cursor: pointer;
-		font-size: 0.7rem;
-		color: var(--primary-dark);
+		font-size: 0.75rem;
+		color: var(--primary);
 		width: fit-content;
+		transition: all 0.2s ease;
 
 		&:hover {
-			text-decoration: underline;
+			color: var(--secondary);
 		}
 	}
 

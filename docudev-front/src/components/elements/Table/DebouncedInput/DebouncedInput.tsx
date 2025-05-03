@@ -1,15 +1,24 @@
-import { InputHTMLAttributes, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import Input from 'components/elements/Input/Input'
+import { InputType } from 'models/Common'
 
-const DebouncedInput = ({
-	value: initialValue,
-	onChange,
-	debounce = 500,
-	...props
-}: {
+interface DebouncedInputProps {
+	id?: string
 	value: string | number
 	onChange: (value: string | number) => void
 	debounce?: number
-} & Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'>) => {
+	type?: InputType
+	placeholder?: string
+}
+
+const DebouncedInput = ({
+	id = `debounced-input-${Math.random().toString(36).substring(2, 9)}`,
+	value: initialValue,
+	onChange,
+	debounce = 500,
+	type = 'text',
+	placeholder
+}: DebouncedInputProps) => {
 	const [value, setValue] = useState(initialValue)
 
 	useEffect(() => {
@@ -25,13 +34,12 @@ const DebouncedInput = ({
 	}, [value])
 
 	return (
-		<input
-			{...props}
-			value={value}
-			onClick={(e) => e.stopPropagation()}
-			onChange={(e) => {
-				setValue(e.target.value)
-			}}
+		<Input
+			id={id}
+			type={type}
+			value={String(value)}
+			placeholder={placeholder}
+			onChange={(e) => setValue(e.target.value)}
 		/>
 	)
 }

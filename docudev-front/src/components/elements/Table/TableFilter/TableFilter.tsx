@@ -1,7 +1,9 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Column } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import DebouncedInput from 'components/elements/Table/DebouncedInput/DebouncedInput'
+import Select from 'components/elements/Select/Select'
+import DateInput from 'components/elements/DateInput/DateInput'
 import './TableFilter.css'
 
 interface Props<T> {
@@ -16,12 +18,21 @@ const TableFilter = <T,>({ column }: Props<T>) => {
 
 	const [startDate, setStartDate] = useState('')
 	const [endDate, setEndDate] = useState('')
+	const [resetKey, setResetKey] = useState(0)
 	const filterRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		if (!columnFilterValue) {
+			setStartDate('')
+			setEndDate('')
+		}
+	}, [columnFilterValue])
 
 	const resetFilter = () => {
 		column.setFilterValue(undefined)
 		setStartDate('')
 		setEndDate('')
+		setResetKey((prev) => prev + 1)
 	}
 
 	return (
@@ -30,8 +41,9 @@ const TableFilter = <T,>({ column }: Props<T>) => {
 				{filterType === 'range' ? (
 					<div className='table-filter-range'>
 						<DebouncedInput
+							key={`min-${column.id}-${resetKey}`}
+							id={`min-${column.id}`}
 							type='number'
-							className='table-filter numeric'
 							value={(columnFilterValue as [number, number])?.[0] ?? ''}
 							onChange={(value) =>
 								column.setFilterValue((old: [number, number]) => [value, old?.[1]])
@@ -39,8 +51,9 @@ const TableFilter = <T,>({ column }: Props<T>) => {
 							placeholder={t('table.min')}
 						/>
 						<DebouncedInput
+							key={`max-${column.id}-${resetKey}`}
+							id={`max-${column.id}`}
 							type='number'
-							className='table-filter numeric'
 							value={(columnFilterValue as [number, number])?.[1] ?? ''}
 							onChange={(value) =>
 								column.setFilterValue((old: [number, number]) => [old?.[0], value])
@@ -49,49 +62,51 @@ const TableFilter = <T,>({ column }: Props<T>) => {
 						/>
 					</div>
 				) : filterType === 'select' ? (
-					<select
-						className='table-filter'
-						onChange={(e) => column.setFilterValue(e.target.value)}
-						value={columnFilterValue?.toString()}>
-						{filterOptions?.map((option) => (
-							<option key={option.value} value={option.value}>
-								{option.label}
-							</option>
-						))}
-					</select>
+					<Select
+						key={`select-${column.id}-${resetKey}`}
+						id={`select-${column.id}`}
+						value={columnFilterValue?.toString() || ''}
+						options={filterOptions || []}
+						onChange={(value) => column.setFilterValue(value)}
+						placeholder={t('table.select')}
+						isSearchable={false}
+					/>
 				) : filterType === 'date' ? (
 					<div className='table-filter-range'>
-						<input
+						<DateInput
+							key={`start-date-${column.id}-${resetKey}`}
+							id={`start-date-${column.id}`}
 							type='date'
-							className='table-filter'
-							value={startDate ? startDate : ''}
-							onChange={(e) => {
-								const { value } = e.target
-								const startDateValue = new Date(value)
+							value={startDate}
+							onChange={(date) => {
+								setStartDate(date)
+								const startDateValue = date ? new Date(date) : undefined
 								const endDateValue = endDate ? new Date(endDate) : undefined
 								column.setFilterValue([startDateValue, endDateValue])
-								setStartDate(value)
 							}}
+							placeholderText={t('table.start_date')}
 						/>
-						<input
+						<DateInput
+							key={`end-date-${column.id}-${resetKey}`}
+							id={`end-date-${column.id}`}
 							type='date'
-							className='table-filter'
-							value={endDate ? endDate : ''}
-							onChange={(e) => {
-								const { value } = e.target
+							value={endDate}
+							onChange={(date) => {
+								setEndDate(date)
 								const startDateValue = startDate ? new Date(startDate) : undefined
-								const endDateValue = new Date(value)
+								const endDateValue = date ? new Date(date) : undefined
 								column.setFilterValue([startDateValue, endDateValue])
-								setEndDate(value)
 							}}
+							placeholderText={t('table.end_date')}
 						/>
 					</div>
 				) : (
 					<DebouncedInput
-						className='table-filter'
+						key={`filter-${column.id}-${resetKey}`}
+						id={`filter-${column.id}`}
 						type='text'
 						value={(columnFilterValue ?? '') as string}
-						onChange={column.setFilterValue}
+						onChange={(value) => column.setFilterValue(value)}
 						placeholder={`${t('table.search')}...`}
 					/>
 				)}

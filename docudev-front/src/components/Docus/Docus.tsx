@@ -87,7 +87,7 @@ const Docus = () => {
 	}
 	const handleDeleteDocu = async () => {
 		if (docuToDelete) {
-			await deleteDocu({ docuId: docuToDelete })
+			await deleteDocu()
 			closeDeleteModal()
 		}
 	}
