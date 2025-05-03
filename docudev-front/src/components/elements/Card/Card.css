@@ -5,7 +5,7 @@
 	width: 100%;
 	color: var(--text-light);
 	background-color: var(--background-light);
-	border-radius: 1rem;
+	border-radius: var(--input-border-radius);
 
 	&.center-content {
 		display: flex;
@@ -16,7 +16,7 @@
 
 	&.empty-state {
 		background-color: var(--primary-light);
-		border-radius: 1rem;
+		border-radius: var(--input-border-radius);
 		display: flex;
 		align-items: center;
 		justify-content: center;
