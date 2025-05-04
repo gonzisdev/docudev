@@ -49,7 +49,8 @@
 		"min": "Mín.",
 		"max": "Máx.",
 		"start_date": "Fecha de inicio",
-		"end_date": "Fecha de fin"
+		"end_date": "Fecha de fin",
+		"remove_collaborators": "Eliminar colaboradores"
 	},
 	"pagination": {
 		"previous": "Anterior",
@@ -230,6 +231,8 @@
 		"send_invite": "Enviar invitación",
 		"leave_team_title": "Abandonar equipo",
 		"leave_team_description": "¿Estás seguro de que quieres abandonar este equipo? Esta acción no se puede deshacer",
+		"remove_collaborator_title": "Eliminar colaborador/es",
+		"remove_collaborator_description": "¿Estás seguro de que quieres eliminar a este colaborador o colaboradores? Esta acción no se puede deshacer",
 		"validations": {
 			"email": {
 				"required": "Introduce tu correo electrónico",
@@ -256,7 +259,11 @@
 			"success_remove_collaborator_title": "¡Colaborador eliminado!",
 			"success_remove_collaborator_description": "La invitación se ha enviado correctamente",
 			"error_remove_collaborator_title": "Error al eliminar colaborador",
-			"error_remove_collaborator_ddescription": "No se ha podido eliminar el colaborador"
+			"error_remove_collaborator_ddescription": "No se ha podido eliminar el colaborador",
+			"success_remove_multiple_collaborators_title": "¡Colaboradores eliminados!",
+			"success_remove_multiple_collaborators_description": "Los colaboradores han sido eliminados correctamente",
+			"error_remove_multiple_collaborators_title": "Error al eliminar colaboradores",
+			"error_remove_multiple_collaborators_description": "Ha ocurrido un error al intentar eliminar los colaboradores. Por favor, inténtalo de nuevo."
 		}
 	},
 	"docus": {
@@ -273,6 +280,7 @@
 		"no_docus": "No tienes ni colaboras en ningun docu",
 		"owner": "Creador",
 		"search": "Buscar docu",
+		"resize_editor_hint": "Haz clic para restablecer el tamaño o arrastra para redimensionar",
 		"filter_team": "Filtrar por equipo",
 		"filter_owner": "Filtrar por creador",
 		"sort": "Ordenar por",

@@ -16,6 +16,9 @@ import Pagination from 'components/elements/Pagination/Pagination'
 import Input from 'components/elements/Input/Input'
 import Select from 'components/elements/Select/Select'
 import DeleteDocuModal from 'components/Docus/Modals/DeleteDocuModal'
+import TeamInviteCollaboratorModal from '../Modals/TeamInviteCollaboratorModal'
+import TeamLeaveModal from '../Modals/TeamLeaveModal'
+import { Docu } from 'models/Docu'
 import { EditIcon, TrashIcon } from 'assets/svgs'
 import { formatDateWithTime } from 'utils/dates'
 import { getSortOptions, getUniqueOwners } from 'utils/filters'
@@ -31,9 +34,6 @@ import {
 import 'react-swipeable-list/dist/styles.css'
 import UserPlaceholder from 'assets/images/user-placeholder.jpg'
 import './Team.css'
-import TeamInviteCollaboratorModal from '../Modals/TeamInviteCollaboratorModal'
-import LeaveTeamModal from '../Modals/LeaveTeamModal'
-import { Docu } from 'models/Docu'
 
 const Team = () => {
 	const { t } = useTranslation()
@@ -271,7 +271,7 @@ const Team = () => {
 											trailingActions={trailingActions(docu._id)}
 											onSwipeStart={() => setIsSwiping(true)}
 											onSwipeEnd={() => setIsSwiping(false)}>
-											<DocuCard docu={docu} teamName={team?.name} />
+											<DocuCard docu={docu} />
 										</SwipeableListItem>
 									))}
 								</SwipeableList>
@@ -298,7 +298,7 @@ const Team = () => {
 				toggleVisibility={() => setIsInviteModalOpen(!isInviteModalOpen)}
 				teamId={teamId}
 			/>
-			<LeaveTeamModal
+			<TeamLeaveModal
 				isVisible={isLeaveModalOpen}
 				toggleVisibility={() => setIsLeaveModalOpen(!isLeaveModalOpen)}
 				onConfirm={() => leaveTeam()}

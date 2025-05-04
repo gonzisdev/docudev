@@ -8,6 +8,7 @@ import useTeam from 'hooks/useTeam'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Header from 'components/elements/Header/Header'
 import Container from 'components/elements/Container/Container'
+import ResizableEditor from 'components/elements/ResizableEditor/ResizableEditor'
 import Loading from 'components/elements/Loading/Loading'
 import Button from 'components/elements/Button/Button'
 import DeleteDocuModal from '../Modals/DeleteDocuModal'
@@ -25,8 +26,11 @@ const Docu = () => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 	const editorRef = useRef(null)
+
 	const { docu, isLoadingDocu, errorDocu, deleteDocu, isDeletingDocu } = useDocu({ docuId })
-	const { team, isLoadingTeam } = useTeam({ teamId: docu?.team })
+	const { team, isLoadingTeam } = useTeam({
+		teamId: docu?.team ? (typeof docu.team === 'object' ? docu.team._id : docu.team) : undefined
+	})
 
 	const [initialContent, setInitialContent] = useState<PartialBlock[] | undefined>(undefined)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -108,9 +112,9 @@ const Docu = () => {
 							</div>
 						)}
 						{docu?.content && (
-							<div className='docu-editor'>
-								<BlockNoteView editor={editor} editable={false} ref={editorRef} />
-							</div>
+							<ResizableEditor editorRef={editorRef}>
+								<BlockNoteView editor={editor} editable={false} />
+							</ResizableEditor>
 						)}
 					</Container>
 				</>

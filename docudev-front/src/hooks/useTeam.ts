@@ -11,6 +11,7 @@ import {
 	getTeamService,
 	leaveTeamService,
 	removeCollaboratorService,
+	removeCollaboratorsService,
 	updateTeamService
 } from 'services/team'
 import { toast } from 'sonner'
@@ -153,6 +154,28 @@ const useTeam = ({ teamId, params }: Props) => {
 		}
 	})
 
+	const { mutateAsync: removeCollaborators, isPending: isRemovingCollaborators } = useMutation({
+		mutationFn: teamId
+			? (collaborators: User['_id'][]) => removeCollaboratorsService(teamId, collaborators)
+			: undefined,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [teamsQueryKey]
+			})
+			queryClient.invalidateQueries({
+				queryKey: [teamQueryKey, teamId]
+			})
+			toast.success(t('team.toast.success_remove_multiple_collaborators_title'), {
+				description: t('team.toast.success_remove_multiple_collaborators_description')
+			})
+		},
+		onError: () => {
+			toast.error(t('team.toast.error_remove_multiple_collaborators_title'), {
+				description: t('team.toast.error_remove_multiple_collaborators_description')
+			})
+		}
+	})
+
 	const { mutateAsync: deleteTeam, isPending: isDeletingTeam } = useMutation({
 		mutationFn: teamId
 			? () => {
@@ -192,6 +215,8 @@ const useTeam = ({ teamId, params }: Props) => {
 		isLeavingTeam,
 		removeCollaborator,
 		isRemovingCollaborator,
+		removeCollaborators,
+		isRemovingCollaborators,
 		deleteTeam,
 		isDeletingTeam,
 		teamDocus: teamDocus?.data || [],

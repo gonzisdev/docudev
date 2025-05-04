@@ -38,37 +38,3 @@
 		}
 	}
 }
-
-.docu-editor-editor {
-	height: calc(100vh - 6.3rem);
-	background-color: var(--white);
-	overflow: auto;
-
-	.bn-toolbar [role='combobox'] {
-		display: flex;
-		gap: 1rem;
-		width: fit-content;
-	}
-
-	.bn-block-content {
-		padding: 1rem;
-		select {
-			font-size: 0.95rem;
-			border-radius: 4px;
-			background-color: var(--background-light);
-			color: var(--white);
-			border: 1px solid var(--border-color);
-			appearance: menulist;
-
-			&:focus,
-			&:hover {
-				opacity: 1;
-			}
-
-			option {
-				background-color: var(--background-light);
-				color: var(--white);
-			}
-		}
-	}
-}

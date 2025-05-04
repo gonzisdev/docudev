@@ -14,6 +14,7 @@ export const endpoints = {
 	deleteTeam: 'teams/delete-team',
 	leaveTeam: 'teams/leave',
 	removeCollaborator: 'teams/remove-collaborator',
+	removeCollaborators: 'teams/remove-collaborators',
 
 	docus: 'docus',
 	createDocu: 'docus/create-docu',

@@ -11,6 +11,8 @@ import useDocu from 'hooks/useDocu'
 import { useAuthStore } from 'stores/authStore'
 import { getRandomColor } from 'utils/collaboration'
 import Header from 'components/elements/Header/Header'
+import Container from 'components/elements/Container/Container'
+import ResizableEditor from 'components/elements/ResizableEditor/ResizableEditor'
 import Button from 'components/elements/Button/Button'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Loading from 'components/elements/Loading/Loading'
@@ -26,11 +28,9 @@ import * as Y from 'yjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { formatDateWithTime } from 'utils/dates'
-import { findTeamName } from 'utils/team'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/shadcn/style.css'
 import './DocuEditor.css'
-import Container from 'components/elements/Container/Container'
 
 const DocuEditor = () => {
 	const { t, i18n } = useTranslation()
@@ -242,8 +242,11 @@ const DocuEditor = () => {
 										</span>
 										{docu.team && (
 											<span>
-												<span>{t('docus.team')}:</span>{' '}
-												<span className='team-tag'>{findTeamName(teams!, docu.team)}</span>
+												<span>{t('docus.team')}:</span>
+												<span className='team-tag'>
+													{' '}
+													{typeof docu.team === 'object' ? docu.team.name : ''}
+												</span>
 											</span>
 										)}
 									</div>
@@ -266,10 +269,9 @@ const DocuEditor = () => {
 						) : (
 							<h2>{t('create_docu.subtitle')}</h2>
 						)}
-
-						<div className='docu-editor-editor'>
+						<ResizableEditor editorRef={editorRef}>
 							<BlockNoteView editor={editor} ref={editorRef} />
-						</div>
+						</ResizableEditor>
 					</Container>
 				</>
 			)}

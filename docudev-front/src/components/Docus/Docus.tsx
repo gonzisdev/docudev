@@ -200,7 +200,7 @@ const Docus = () => {
 											trailingActions={trailingActions(docu._id)}
 											onSwipeStart={() => setIsSwiping(true)}
 											onSwipeEnd={() => setIsSwiping(false)}>
-											<DocuCard docu={docu} teams={teams} />
+											<DocuCard docu={docu} />
 										</SwipeableListItem>
 									))}
 								</SwipeableList>

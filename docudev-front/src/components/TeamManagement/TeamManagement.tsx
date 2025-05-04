@@ -21,6 +21,7 @@ import Warning from 'components/elements/Warning/Warning'
 import TeamFormModal from 'components/Teams/Modals/TeamFormModal'
 import TeamDeleteModal from 'components/Teams/Modals/TeamDeleteModal'
 import TeamInviteCollaboratorModal from 'components/Teams/Modals/TeamInviteCollaboratorModal'
+import TeamRemoveCollaboratorModal from 'components/Teams/Modals/TeamRemoveCollaboratorModal'
 import { createColumnHelper } from '@tanstack/react-table'
 import { TrashIcon } from 'assets/svgs'
 import UserPlaceholder from 'assets/images/user-placeholder.jpg'
@@ -39,6 +40,11 @@ const TeamManagement = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 	const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
+	const [isRemoveCollaboratorModalOpen, setIsRemoveCollaboratorModalOpen] = useState(false)
+	const [selectedCollaboratorIds, setSelectedCollaboratorIds] = useState<
+		User['_id'] | User['_id'][]
+	>('')
+	const [tableKey, setTableKey] = useState(0)
 
 	const { user } = useAuthStore()
 
@@ -53,7 +59,9 @@ const TeamManagement = () => {
 		deleteTeam,
 		isDeletingTeam,
 		removeCollaborator,
-		isRemovingCollaborator
+		isRemovingCollaborator,
+		removeCollaborators,
+		isRemovingCollaborators
 	} = useTeam({ teamId: selectedTeamId })
 
 	const ownedTeams = teams?.filter((team) => team.owner === user?._id).length || 0
@@ -127,6 +135,19 @@ const TeamManagement = () => {
 
 	const handleTeamChange = (value: Team['_id']) => setSelectedTeamId(value)
 
+	const handleRemoveCollaborator = async () => {
+		if (selectedCollaboratorIds) {
+			if (Array.isArray(selectedCollaboratorIds)) {
+				await removeCollaborators(selectedCollaboratorIds as User['_id'][])
+				setTableKey((prevKey) => prevKey + 1)
+			} else {
+				await removeCollaborator(selectedCollaboratorIds as User['_id'])
+			}
+			setSelectedCollaboratorIds('')
+			setIsRemoveCollaboratorModalOpen(false)
+		}
+	}
+
 	const columnHelper = createColumnHelper<User>()
 
 	const columns = [
@@ -184,7 +205,11 @@ const TeamManagement = () => {
 			cell: (info) => {
 				return (
 					<div className='table-actions'>
-						<TableActionLayout onClick={() => removeCollaborator(info.row.original._id)}>
+						<TableActionLayout
+							onClick={() => {
+								setSelectedCollaboratorIds(info.row.original._id)
+								setIsRemoveCollaboratorModalOpen(true)
+							}}>
 							<TrashIcon className='delete-icon' />
 						</TableActionLayout>
 					</div>
@@ -287,11 +312,15 @@ const TeamManagement = () => {
 						? null
 						: ownedTeams > 0 && (
 								<Table
+									key={tableKey}
 									data={collaborators}
 									columns={columns}
-									isLoading={isLoadingTeam || isRemovingCollaborator}
+									isLoading={isLoadingTeam || isRemovingCollaborator || isRemovingCollaborators}
+									setIsRemoveCollaboratorModalOpen={setIsRemoveCollaboratorModalOpen}
 									enableRowSelection
-									onChangeRowSelection={(rows) => console.log(rows.map((row) => row.original))}
+									onChangeRowSelection={(rows) =>
+										setSelectedCollaboratorIds(rows.map((row) => row.original._id))
+									}
 								/>
 							)}
 				</>
@@ -315,6 +344,12 @@ const TeamManagement = () => {
 				isVisible={isInviteModalOpen}
 				toggleVisibility={() => setIsInviteModalOpen(!isInviteModalOpen)}
 				teamId={selectedTeamId}
+			/>
+			<TeamRemoveCollaboratorModal
+				isVisible={isRemoveCollaboratorModalOpen}
+				toggleVisibility={() => setIsRemoveCollaboratorModalOpen(false)}
+				onConfirm={handleRemoveCollaborator}
+				isLoading={isRemovingCollaborators}
 			/>
 		</DashboardLayout>
 	)

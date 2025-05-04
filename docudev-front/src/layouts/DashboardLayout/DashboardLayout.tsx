@@ -95,6 +95,7 @@ const DashboardLayout = ({ children }: Props) => {
 			</aside>
 			<main className='dashboard-content'>
 				<section className='content-children'>{children}</section>
+				<footer className='footer'>&copy;{new Date().getFullYear()} DocuDev</footer>
 			</main>
 		</div>
 	)

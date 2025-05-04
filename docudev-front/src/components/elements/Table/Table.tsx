@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import {
 	ColumnDef,
 	createColumnHelper,
@@ -30,6 +30,7 @@ import Pagination from 'components/elements/Table/Pagination/Pagination'
 import TableSelectionCheckbox from 'components/elements/Table/TableSelectionCheckbox/TableSelectionCheckbox'
 import Loading from 'components/elements/Loading/Loading'
 import './Table.css'
+import Button from '../Button/Button'
 
 declare module '@tanstack/react-table' {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -63,6 +64,7 @@ interface Props<T> {
 	isLoading?: boolean
 	enableRowSelection?: boolean
 	onChangeRowSelection?: (selectedRows: Row<T>[]) => void
+	setIsRemoveCollaboratorModalOpen: Dispatch<SetStateAction<boolean>>
 }
 
 const Table = <T,>({
@@ -70,7 +72,8 @@ const Table = <T,>({
 	columns,
 	isLoading = false,
 	enableRowSelection = false,
-	onChangeRowSelection
+	onChangeRowSelection,
+	setIsRemoveCollaboratorModalOpen
 }: Props<T>) => {
 	const { t } = useTranslation()
 
@@ -117,6 +120,8 @@ const Table = <T,>({
 	const filtersActiveCount = table
 		.getState()
 		.columnFilters.filter((filter) => filter.id !== 'globalFilter').length
+
+	const hasSelectedRows = Object.keys(rowSelection).length > 0
 
 	const addSelectionColumn = (columns: ColumnDefType<T>[]) => {
 		const columnHelper = createColumnHelper<T>()
@@ -182,6 +187,13 @@ const Table = <T,>({
 				<header className='table-header'>
 					<h3>{`${t('table.results')} (${table.getRowCount()})`}</h3>
 					<div className='table-search-filters'>
+						{hasSelectedRows && (
+							<Button
+								className='table-action-button danger'
+								onClick={() => setIsRemoveCollaboratorModalOpen(true)}>
+								{t('table.remove_collaborators')}
+							</Button>
+						)}
 						<DebouncedInput
 							type='text'
 							placeholder={t('table.search')}

@@ -100,6 +100,20 @@ router.patch(
   TeamController.removeCollaborator
 )
 
+router.patch(
+  '/remove-collaborators/:teamId',
+  authenticate,
+  validateUserStatus,
+  isTeamOwnerAdmin,
+  body('collaborators')
+    .notEmpty()
+    .withMessage('Collaborators array is required')
+    .isArray()
+    .withMessage('Collaborators must be an array'),
+  handleInputErrors,
+  TeamController.removeMultipleCollaborators
+)
+
 router.delete(
   '/delete-team/:teamId',
   authenticate,

@@ -126,6 +126,29 @@ export class TeamController {
     }
   }
 
+  static async removeMultipleCollaborators(req: Request, res: Response) {
+    try {
+      const { collaborators } = req.body
+      if (req.team.owner.toString() !== req.user._id.toString()) {
+        res
+          .status(403)
+          .json({ error: 'Only the owner can remove collaborators' })
+        return
+      }
+      await Team.findByIdAndUpdate(req.team._id, {
+        $pull: { collaborators: { $in: collaborators } }
+      })
+      await Docu.updateMany(
+        { team: req.team._id },
+        { $pull: { collaborators: { $in: collaborators } } }
+      )
+      res.status(200).json(true)
+    } catch (error) {
+      console.error('Error removing multiple collaborators:', error)
+      res.status(500).json({ error: 'Error removing multiple collaborators' })
+    }
+  }
+
   static async deleteTeam(req: Request, res: Response) {
     try {
       const team = req.team

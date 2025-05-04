@@ -41,6 +41,16 @@ export const removeCollaboratorService = async (
 	})
 }
 
+export const removeCollaboratorsService = async (
+	teamId: Team['_id'],
+	collaborators: User['_id'][]
+) => {
+	return await customFetch<boolean>(`${endpoints.removeCollaborators}/${teamId}`, {
+		method: 'PATCH',
+		bodyReq: { collaborators }
+	})
+}
+
 export const deleteTeamService = async (teamId: Team['_id']) => {
 	return await customFetch<boolean>(`${endpoints.deleteTeam}/${teamId}`, {
 		method: 'DELETE'

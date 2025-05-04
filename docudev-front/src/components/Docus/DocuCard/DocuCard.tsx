@@ -2,20 +2,16 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { DOCU_URL } from 'constants/routes'
 import { Docu } from 'models/Docu'
-import { Team } from 'models/Team'
 import Card from 'components/elements/Card/Card'
 import { formatDateWithTime } from 'utils/dates'
-import { findTeamName } from 'utils/team'
 import { TwoArrowsIcon } from 'assets/svgs'
 import './DocuCard.css'
 
 interface Props {
 	docu: Docu
-	teams?: Team[]
-	teamName?: Team['name']
 }
 
-const DocuCard = ({ docu, teams, teamName }: Props) => {
+const DocuCard = ({ docu }: Props) => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 
@@ -35,7 +31,7 @@ const DocuCard = ({ docu, teams, teamName }: Props) => {
 								<span>
 									<span>{t('docus.team')}:</span>{' '}
 									<span className='team-tag'>
-										{teamName ? teamName : teams ? findTeamName(teams, docu.team) : ''}
+										{typeof docu.team === 'object' && docu.team.name}
 									</span>
 								</span>
 							)}
