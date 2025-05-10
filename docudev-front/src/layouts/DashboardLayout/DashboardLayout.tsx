@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
 	TEAMS_URL,
 	TEAM_MANAGEMENT_URL,
@@ -21,6 +21,7 @@ interface Props {
 
 const DashboardLayout = ({ children }: Props) => {
 	const { t } = useTranslation()
+	const navigate = useNavigate()
 	const location = useLocation()
 	const pathname = location.pathname
 	const { user, logout } = useAuthStore()
@@ -75,7 +76,7 @@ const DashboardLayout = ({ children }: Props) => {
 		<div className='dashboard-layout'>
 			<aside className={`dashboard-sidebar ${collapsed ? 'collapsed' : ''}`}>
 				<header className='dashboard-sidebar-header'>
-					<Logo className='dashboard-sidebar-logo' />
+					<Logo className='dashboard-sidebar-logo' onClick={() => navigate(HOME_URL)} />
 				</header>
 				<nav className='dashboard-nav'>
 					{routes.map((route, i) => (
