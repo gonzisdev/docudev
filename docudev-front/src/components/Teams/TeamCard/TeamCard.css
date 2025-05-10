@@ -21,7 +21,7 @@
 			font-weight: 500;
 
 			&:hover {
-				color: var(--secondary);
+				color: var(--secondary) !important;
 			}
 		}
 

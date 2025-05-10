@@ -244,6 +244,12 @@ const DocuEditor = () => {
 											<span>
 												<span>{t('docus.team')}:</span>
 												<span
+													onClick={() =>
+														typeof docu.team === 'object' &&
+														'_id' in docu.team &&
+														navigate(`${TEAM_URL}/${docu.team._id}`)
+													}
+													className='docu-editor-team-name'
 													style={{
 														color: typeof docu.team === 'object' ? docu.team.color : undefined
 													}}>

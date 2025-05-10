@@ -147,7 +147,7 @@
 			font-size: 0.85rem;
 			background: var(--background);
 			color: var(--text-label);
-			padding: 0.7rem 1.5rem;
+			padding: 1rem 1.5rem;
 			border-bottom: 1px solid var(--input-border-color);
 			transition: background 0.2s;
 		}

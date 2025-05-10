@@ -1,0 +1,74 @@
+.list-card {
+	flex: 1;
+	overflow-y: auto;
+
+	& .list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+
+		& .list-item {
+			cursor: pointer;
+			border-bottom: 1px solid var(--input-border-color);
+			padding: 0.75rem 0;
+
+			&:last-child {
+				border-bottom: none;
+			}
+
+			&:hover {
+				background-color: var(--primary-light);
+			}
+
+			& .list-card-content {
+				display: flex;
+				flex-direction: column;
+				gap: 0.25rem;
+				padding: 0 0.5rem;
+
+				& .list-card-name {
+					cursor: pointer;
+					transition: color 0.2s ease;
+
+					&:hover {
+						color: var(--secondary);
+					}
+				}
+
+				& .list-card-details {
+					margin-top: 0.5rem;
+					color: var(--neutral-neutral20);
+					font-size: 0.8rem;
+
+					& .list-card-info {
+						display: flex;
+						gap: 1rem;
+						width: 100%;
+						justify-content: space-between;
+
+						& .list-card-left,
+						& .list-card-right {
+							display: flex;
+							flex-direction: column;
+							gap: 0.25rem;
+						}
+
+						& .list-card-left {
+							> span {
+								color: var(--warning-light);
+							}
+
+							.team-name {
+								transition: opacity 0.2s ease;
+
+								&:hover {
+									opacity: 0.7;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

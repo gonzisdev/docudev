@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { DOCU_URL } from 'constants/routes'
+import { DOCU_URL, TEAM_URL } from 'constants/routes'
 import { Docu } from 'models/Docu'
 import Card from 'components/elements/Card/Card'
 import { formatDateWithTime } from 'utils/dates'
@@ -31,6 +31,12 @@ const DocuCard = ({ docu }: Props) => {
 								<span>
 									<span>{t('docus.team')}:</span>{' '}
 									<span
+										className='team-name'
+										onClick={() =>
+											typeof docu.team === 'object' &&
+											'_id' in docu.team &&
+											navigate(`${TEAM_URL}/${docu.team._id}`)
+										}
 										style={{
 											color: typeof docu.team === 'object' ? docu.team.color : undefined
 										}}>

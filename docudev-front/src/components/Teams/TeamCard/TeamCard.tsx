@@ -15,7 +15,10 @@ const TeamCard = ({ team, isAdmin }: Props) => {
 	return (
 		<Card className='team-card'>
 			<div className='team-card-content'>
-				<span className='team-card-name' onClick={() => navigate(`${TEAM_URL}/${team._id}`)}>
+				<span
+					className='team-card-name'
+					onClick={() => navigate(`${TEAM_URL}/${team._id}`)}
+					style={{ color: team.color }}>
 					{team.name}
 				</span>
 				<span className='team-card-description'>{team.description}</span>

@@ -1,0 +1,59 @@
+.recharts-rectangle.recharts-tooltip-cursor {
+	fill: var(--primary-light);
+}
+
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+	background-color: var(--neutral-neutral00) !important;
+	border: 1px solid var(--input-border-color) !important;
+	border-radius: var(--border-radius) !important;
+	color: var(--text-primary) !important;
+}
+
+.recharts-tooltip-item-list {
+	font-size: 0.8rem;
+	color: var(--neutral-neutral20) !important;
+
+	li {
+		color: var(--neutral-neutral20) !important;
+	}
+
+	.recharts-tooltip-item-separator {
+		display: none !important;
+	}
+
+	.recharts-tooltip-item-name::after {
+		content: ':';
+		margin-right: 0.25rem;
+	}
+
+	.recharts-tooltip-item-value {
+		color: var(--primary);
+	}
+}
+
+.recharts-cartesian-axis-line {
+	stroke: var(--input-border-color) !important;
+	stroke-width: 1px !important;
+}
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+	stroke: var(--input-border-color) !important;
+	stroke-width: 0.5px !important;
+	stroke-opacity: 0.5 !important;
+}
+
+.recharts-yAxis .recharts-cartesian-axis-tick-value,
+.recharts-xAxis .recharts-cartesian-axis-tick-value {
+	fill: var(--neutral-neutral20);
+	font-size: 0.8rem;
+}
+
+.recharts-cartesian-axis-tick-line {
+	stroke: var(--input-border-color) !important;
+	stroke-width: 1px !important;
+}
+
+.recharts-text.recharts-polar-angle-axis-tick-value {
+	font-size: 0.8rem;
+}

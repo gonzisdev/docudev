@@ -136,7 +136,7 @@ const Team = () => {
 				<Loading />
 			) : (
 				<>
-					<Header title={team?.name}>
+					<Header title={team?.name} color={team?.color}>
 						<div className='team-header-actions'>
 							{typeof team?.owner === 'object' && team?.owner._id === user?._id && (
 								<Button

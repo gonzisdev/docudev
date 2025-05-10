@@ -1,10 +1,9 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
-import { DOCUS_URL, EDIT_DOCU_URL } from 'constants/routes'
+import { DOCUS_URL, EDIT_DOCU_URL, TEAM_URL } from 'constants/routes'
 import { codeBlock } from 'constants/editor'
 import { useTranslation } from 'react-i18next'
 import useDocu from 'hooks/useDocu'
-import useTeam from 'hooks/useTeam'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Header from 'components/elements/Header/Header'
 import Container from 'components/elements/Container/Container'
@@ -28,9 +27,6 @@ const Docu = () => {
 	const editorRef = useRef(null)
 
 	const { docu, isLoadingDocu, errorDocu, deleteDocu, isDeletingDocu } = useDocu({ docuId })
-	const { team, isLoadingTeam } = useTeam({
-		teamId: docu?.team ? (typeof docu.team === 'object' ? docu.team._id : docu.team) : undefined
-	})
 
 	const [initialContent, setInitialContent] = useState<PartialBlock[] | undefined>(undefined)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -65,7 +61,7 @@ const Docu = () => {
 
 	return (
 		<DashboardLayout>
-			{docuId && (isLoadingDocu || isLoadingTeam) ? (
+			{docuId && isLoadingDocu ? (
 				<Loading />
 			) : (
 				<>
@@ -96,7 +92,19 @@ const Docu = () => {
 										{docu.team && (
 											<span>
 												<span>{t('docus.team')}:</span>{' '}
-												<span style={{ color: team?.color }}>{team?.name}</span>
+												<span
+													onClick={() =>
+														typeof docu.team === 'object' &&
+														'_id' in docu.team &&
+														navigate(`${TEAM_URL}/${docu.team._id}`)
+													}
+													className='docu-team-name'
+													style={{
+														color: typeof docu.team === 'object' ? docu.team.color : undefined
+													}}>
+													{' '}
+													{typeof docu.team === 'object' ? docu.team.name : ''}
+												</span>
 											</span>
 										)}
 									</div>

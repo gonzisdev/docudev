@@ -10,7 +10,7 @@ export function useStats() {
 	})
 
 	return {
-		stats,
+		stats: stats,
 		isLoadingStats
 	}
 }
