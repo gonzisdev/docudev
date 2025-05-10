@@ -26,10 +26,6 @@
 				> span {
 					color: var(--warning-light);
 				}
-
-				.team-tag {
-					color: var(--warning);
-				}
 			}
 		}
 	}

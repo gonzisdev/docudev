@@ -8,7 +8,7 @@ export interface Docu {
 	title: string
 	content?: string
 	owner: DocuOwner
-	team?: Team['_id'] | { _id: Team['_id']; name: Team['name'] }
+	team?: Team['_id'] | { _id: Team['_id']; name: Team['name']; color: Team['color'] }
 	createdAt: Date
 	updatedAt: Date
 }

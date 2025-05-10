@@ -25,5 +25,7 @@ export const endpoints = {
 	sendInvite: 'notifications/invite',
 	respondInvite: 'notifications/respond',
 	markAsRead: 'notifications/read',
-	deleteNotification: 'notifications/delete'
+	deleteNotification: 'notifications/delete',
+
+	stats: 'stats'
 }

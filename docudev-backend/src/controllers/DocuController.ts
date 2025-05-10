@@ -93,7 +93,7 @@ export class DocuController {
         sortField === 'title' ? { locale: 'es', strength: 2 } : undefined
       const docus = await Docu.find(query)
         .populate('owner', 'name surname')
-        .populate('team', 'name')
+        .populate('team', 'name color')
         .select('-content')
         .sort(sort)
         .collation(collationOptions)
@@ -121,7 +121,7 @@ export class DocuController {
     try {
       const docu = await Docu.findById(req.docu._id)
         .populate('owner', 'name surname')
-        .populate('team', 'name')
+        .populate('team', 'name color')
       res.status(200).json(docu)
     } catch (error) {
       console.error('Error getting docu:', error)

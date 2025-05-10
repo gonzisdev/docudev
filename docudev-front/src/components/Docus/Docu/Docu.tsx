@@ -96,7 +96,7 @@ const Docu = () => {
 										{docu.team && (
 											<span>
 												<span>{t('docus.team')}:</span>{' '}
-												<span className='team-tag'>{team?.name}</span>
+												<span style={{ color: team?.color }}>{team?.name}</span>
 											</span>
 										)}
 									</div>

@@ -14,7 +14,7 @@ import './Notifications.css'
 const Notifications = () => {
 	const { t } = useTranslation()
 	const { notifications, isLoadingNotifications, responseInvite, markAsRead, deleteNotification } =
-		useNotifications()
+		useNotifications({ forceRefresh: true })
 
 	const {
 		currentItems: paginatedNotifications,

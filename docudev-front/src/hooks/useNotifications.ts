@@ -15,16 +15,22 @@ import {
 } from 'services/notification'
 import { toast } from 'sonner'
 
-const useNotifications = () => {
+interface Props {
+	forceRefresh?: boolean
+}
+
+const useNotifications = ({ forceRefresh }: Props) => {
 	const { t } = useTranslation()
 	const queryClient = useQueryClient()
 
 	const { data: notifications, isLoading: isLoadingNotifications } = useQuery({
 		queryKey: [notificationsQueryKey],
 		queryFn: getNotificationsService,
-		staleTime: 5 * 60 * 1000, // 5 minutes
+		staleTime: forceRefresh ? 0 : 5 * 60 * 1000,
 		refetchInterval: 5 * 60 * 1000, // 5 minutes
-		refetchOnWindowFocus: 'always'
+		refetchOnWindowFocus: 'always',
+		enabled: true,
+		refetchOnMount: forceRefresh ? 'always' : true
 	})
 
 	const { mutateAsync: sendInvite, isPending: isSendingInvite } = useMutation({

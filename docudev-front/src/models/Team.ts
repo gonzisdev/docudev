@@ -7,8 +7,9 @@ export interface Team {
 	description: string
 	collaborators: User[]
 	docus: string[]
+	color: string
 	createdAt: string
 	updatedAt: string
 }
 
-export type TeamFormPayload = Pick<Team, 'name' | 'description'>
+export type TeamFormPayload = Pick<Team, 'name' | 'description' | 'color'>

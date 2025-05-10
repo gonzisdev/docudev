@@ -1,15 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { TEAM_URL } from 'constants/routes'
+import { Team } from 'models/Team'
 import Card from 'components/elements/Card/Card'
 import { TwoArrowsIcon } from 'assets/svgs'
 import './TeamCard.css'
 
 interface Props {
-	team: {
-		_id: string
-		name: string
-		description: string
-	}
+	team: Team
 	isAdmin?: boolean
 }
 

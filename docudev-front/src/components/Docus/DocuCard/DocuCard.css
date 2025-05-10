@@ -49,9 +49,6 @@
 			gap: 0.25rem;
 
 			span {
-				.team-tag {
-					color: var(--warning);
-				}
 				> span {
 					color: var(--warning-light);
 				}

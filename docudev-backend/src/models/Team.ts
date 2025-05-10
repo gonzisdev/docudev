@@ -27,6 +27,10 @@ const TeamSchema: Schema = new Schema(
       ref: 'User',
       required: true
     },
+    color: {
+      type: String,
+      required: true
+    },
     collaborators: [
       {
         type: Schema.Types.ObjectId,

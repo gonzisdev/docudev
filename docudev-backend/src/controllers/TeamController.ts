@@ -5,7 +5,7 @@ import Docu from '../models/Docu'
 export class TeamController {
   static async createTeam(req: Request, res: Response) {
     try {
-      const { name, description } = req.body
+      const { name, description, color } = req.body
       if (req.user.role !== 'admin' || req.user.status !== 'active') {
         res.status(403).json({ error: 'Invalid credentials' })
         return
@@ -18,6 +18,7 @@ export class TeamController {
       const team = await Team.create({
         name,
         description,
+        color,
         owner: req.user._id
       })
       res.status(201).json(team)
@@ -71,10 +72,11 @@ export class TeamController {
 
   static async updateTeam(req: Request, res: Response) {
     try {
-      const { name, description } = req.body
+      const { name, description, color } = req.body
       await Team.findByIdAndUpdate(req.team._id, {
         name,
-        description
+        description,
+        color
       })
       res.status(200).json(true)
     } catch (error) {

@@ -18,7 +18,7 @@ interface Props {
 
 const TeamInviteCollaboratorModal = ({ isVisible, toggleVisibility, teamId }: Props) => {
 	const { t } = useTranslation()
-	const { sendInvite, isSendingInvite } = useNotifications()
+	const { sendInvite, isSendingInvite } = useNotifications({})
 
 	const validationSchema = z.object({
 		email: z

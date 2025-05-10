@@ -66,13 +66,19 @@ const Teams = () => {
 			.string()
 			.min(1, t('teams.validations.description.required'))
 			.min(5, t('teams.validations.description.min_length'))
-			.max(120, t('teams.validations.description.max_length'))
+			.max(120, t('teams.validations.description.max_length')),
+		color: z
+			.string()
+			.min(1, t('teams.validations.color.required'))
+			.regex(/^#[0-9A-F]{6}$/i, t('teams.validations.color.invalid'))
+			.max(7, t('teams.validations.color.max_length'))
 	})
 
 	const methods = useForm<TeamFormPayload>({
 		defaultValues: {
 			name: '',
-			description: ''
+			description: '',
+			color: ''
 		},
 		resolver: zodResolver(validationSchema)
 	})
@@ -103,7 +109,8 @@ const Teams = () => {
 		setIsEditing(false)
 		methods.reset({
 			name: '',
-			description: ''
+			description: '',
+			color: ''
 		})
 	}
 
@@ -155,7 +162,8 @@ const Teams = () => {
 		if (isEditing && team) {
 			methods.reset({
 				name: team.name,
-				description: team.description
+				description: team.description,
+				color: team.color
 			})
 		}
 	}, [team, isEditing])

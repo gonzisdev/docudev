@@ -34,6 +34,16 @@ router.post(
     .isLength({ max: 120 })
     .withMessage('Team description cannot exceed 120 characters')
     .trim(),
+  body('color')
+    .notEmpty()
+    .withMessage('Team color is required')
+    .isString()
+    .withMessage('Team color must be text')
+    .isLength({ min: 7 })
+    .withMessage('Team color must be a valid hex color code')
+    .isLength({ max: 7 })
+    .withMessage('Team color must be a valid hex color code')
+    .trim(),
   handleInputErrors,
   TeamController.createTeam
 )

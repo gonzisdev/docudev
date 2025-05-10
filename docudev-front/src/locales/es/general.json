@@ -182,6 +182,38 @@
 			"error_description": "Error al cambiar la contraseña. Por favor, verifica tus datos"
 		}
 	},
+	"home": {
+		"welcome": "Bienvenido",
+		"generalStats": "Estadísticas generales",
+		"teams": "Equipos",
+		"documents": "Documentos",
+		"ownedDocuments": "Documentos propios",
+		"teamDocuments": "Documentos de equipo",
+		"teamsWithMostMembers": "Equipos con más miembros",
+		"teamsWithMostDocus": "Equipos con más documentos",
+		"lastUpdatedDocus": "Últimos documentos actualizados",
+		"lastCreatedDocus": "Últimos documentos creados",
+		"mostActiveUsers": "Usuarios más activos",
+		"members": "Miembros",
+		"noData": "No hay datos disponibles",
+		"recentActivity": "Actividad reciente",
+		"viewAll": "Ver todo",
+		"statistics": "Estadísticas",
+		"dashboard": "Panel de control",
+		"summary": "Resumen",
+		"collaborations": "Colaboraciones",
+		"activity": "Actividad",
+		"createdOn": "Creado el",
+		"updatedOn": "Actualizado el",
+		"viewDocument": "Ver documento",
+		"teamMembers": "Miembros del equipo",
+		"documentsByTeam": "Documentos por equipo",
+		"documentsByUser": "Documentos por usuario",
+		"activeTeams": "Equipos activos",
+		"noTeams": "No perteneces a ningún equipo",
+		"noDocuments": "No tienes documentos",
+		"createYourFirst": "Crea tu primer documento"
+	},
 	"teams": {
 		"title": "Equipos",
 		"subtitle": "Equipos a los que perteneces en DocuDev",
@@ -198,6 +230,7 @@
 		"name_placeholder": "Nombre del equipo",
 		"description": "Descripción del equipo",
 		"description_placeholder": "Descripción del equipo",
+		"color": "Color del equipo",
 		"no_owned_teams": "No tienes equipos creados",
 		"no_collaborative_teams": "No tienes equipos colaborativos",
 		"validations": {
@@ -209,6 +242,11 @@
 				"required": "Introduce la descripción del equipo",
 				"min_length": "La descripción debe tener al menos 5 caracteres",
 				"max_length": "La descripción no puede tener más de 120 caracteres"
+			},
+			"color": {
+				"required": "Selecciona un color para el equipo",
+				"invalid": "El color seleccionado no es válido",
+				"max_length": "El color no puede tener más de 7 caracteres"
 			}
 		},
 

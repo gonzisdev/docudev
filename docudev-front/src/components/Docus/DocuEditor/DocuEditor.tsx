@@ -243,7 +243,10 @@ const DocuEditor = () => {
 										{docu.team && (
 											<span>
 												<span>{t('docus.team')}:</span>
-												<span className='team-tag'>
+												<span
+													style={{
+														color: typeof docu.team === 'object' ? docu.team.color : undefined
+													}}>
 													{' '}
 													{typeof docu.team === 'object' ? docu.team.name : ''}
 												</span>

@@ -26,7 +26,7 @@ const DashboardLayout = ({ children }: Props) => {
 	const { user, logout } = useAuthStore()
 	const { collapsed, toggleSidebar } = useSidebarStore()
 
-	const { notifications } = useNotifications()
+	const { notifications } = useNotifications({})
 	const pendingCount = notifications?.filter((n) => n.status === 'pending').length || 0
 
 	useUser()
