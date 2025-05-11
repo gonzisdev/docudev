@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from 'stores/authStore'
+import { DOCUMENTATION_URL } from 'constants/routes'
 import { useStats } from 'hooks/useStats'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Card from 'components/elements/Card/Card'
@@ -11,9 +13,11 @@ import TeamDocusChart from './Charts/TeamDocusChart'
 import ActiveUsersChart from './Charts/ActiveUsersChart'
 import ListCard from './ListCard/ListCard'
 import './Home.css'
+import Button from 'components/elements/Button/Button'
 
 const Home = () => {
 	const { t } = useTranslation()
+	const navigate = useNavigate()
 	const { user } = useAuthStore()
 	const { stats, isLoadingStats } = useStats()
 
@@ -23,7 +27,11 @@ const Home = () => {
 				<Loading />
 			) : (
 				<>
-					<Header title={`${t('home.welcome')}, ${user?.name}`} />
+					<Header title={`${t('home.welcome')}, ${user?.name}`}>
+						<Button variant='link' onClick={() => navigate(DOCUMENTATION_URL)}>
+							→ {t('home.documentation')}
+						</Button>
+					</Header>
 					<Container>
 						<div className='home-stats'>
 							<div className='stats-row'>

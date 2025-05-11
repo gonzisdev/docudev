@@ -34,3 +34,8 @@ export interface DocusParams {
 	sortField?: string
 	sortDirection?: string
 }
+
+export interface GroupedDocus {
+	withTeam: Record<string, Docu[]>
+	withoutTeam: Docu[]
+}

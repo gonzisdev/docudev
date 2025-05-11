@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import mongoose from 'mongoose'
 import Team, { ITeam } from '../models/Team'
 
 declare global {
@@ -15,6 +16,14 @@ export const canAccessTeam = async (
   next: NextFunction
 ) => {
   const { teamId } = req.params
+  if (!teamId) {
+    res.status(400).json({ error: 'Team ID is required' })
+    return
+  }
+  if (!mongoose.Types.ObjectId.isValid(teamId)) {
+    res.status(400).json({ error: 'Invalid Team ID format' })
+    return
+  }
   const team = await Team.findById(teamId)
   if (!team) {
     res.status(404).json({ error: 'Team not found' })

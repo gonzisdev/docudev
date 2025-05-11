@@ -1,0 +1,335 @@
+.documentation-layout {
+	display: grid;
+	grid-template-columns: 20rem 1fr;
+	min-height: 100dvh;
+	transition: grid-template-columns 0.3s ease;
+	background-color: var(--background-light);
+
+	.documentation-sidebar {
+		background-color: var(--neutral-neutral00);
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		padding: 1.25rem 0;
+		height: 100%;
+		border-right: 1px solid var(--border-color);
+		position: relative;
+		transition: width 0.3s ease;
+		width: 20rem;
+
+		&.collapsed {
+			width: 5rem;
+		}
+
+		.documentation-sidebar-header {
+			display: grid;
+			padding: 0 2.5rem;
+			transition: padding 0.3s ease;
+
+			.documentation-sidebar-logo {
+				justify-self: center;
+				cursor: pointer;
+				width: 6rem;
+				height: 6rem;
+				transition:
+					width 0.3s ease,
+					height 0.3s ease;
+			}
+
+			.documentation-sidebar-logo path {
+				fill: var(--secondary);
+			}
+		}
+
+		&.collapsed .documentation-sidebar-header {
+			padding: 0 0.5rem;
+
+			.documentation-sidebar-logo {
+				width: 4rem;
+				height: 4rem;
+			}
+		}
+
+		.sidebar-content {
+			flex: 1;
+			overflow-y: auto;
+			display: flex;
+			flex-direction: column;
+			padding: 0 1.25rem;
+			transition: padding 0.3s ease;
+
+			.sidebar-search {
+				margin-bottom: 1rem;
+				transition: opacity 0.2s ease;
+
+				&.collapsed {
+					opacity: 0;
+					height: 0;
+					margin: 0;
+					padding: 0;
+					overflow: hidden;
+				}
+
+				.search-input-container {
+					position: relative;
+					display: flex;
+					align-items: center;
+				}
+
+				.search-input-container input {
+					width: 100%;
+					padding-right: 2rem;
+				}
+
+				.search-input-container .select__indicator {
+					position: absolute;
+					right: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					transition: color 150ms;
+					color: hsl(0, 0%, 80%);
+					padding: 0.5rem;
+					box-sizing: border-box;
+					cursor: pointer;
+				}
+
+				.search-input-container .select__clear-indicator {
+					padding: 0.5rem 1rem 0.5rem 0;
+				}
+
+				.search-input-container .select__clear-indicator:hover {
+					color: var(--primary);
+				}
+
+				.search-input-container .css-tj5bde-Svg {
+					color: inherit;
+				}
+			}
+		}
+
+		&.collapsed .sidebar-content {
+			padding: 0 0.5rem;
+		}
+
+		.documentation-nav {
+			display: flex;
+			flex-direction: column;
+			gap: 1.25rem;
+
+			.nav-section {
+				margin-bottom: 1rem;
+			}
+
+			.nav-section-title {
+				font-weight: 500;
+				margin-bottom: 1rem;
+				color: var(--text-light);
+				padding-bottom: 0.5rem;
+				transition: opacity 0.2s ease;
+
+				&.collapsed {
+					opacity: 0;
+					height: 0;
+					margin: 0;
+					padding: 0;
+				}
+			}
+
+			.team-list {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+
+				.team-item {
+					margin-bottom: 0.5rem;
+				}
+			}
+
+			.team-header {
+				display: flex;
+				align-items: center;
+				padding: 0.5rem;
+				border-radius: var(--input-border-radius);
+				cursor: pointer;
+				transition: background-color 0.2s ease;
+				border-left: 3px solid transparent;
+
+				&:hover {
+					background-color: var(--hover-color);
+				}
+
+				&.expanded {
+					background-color: var(--primary-light);
+				}
+
+				.team-expand-icon {
+					display: inline-flex;
+					align-items: center;
+					margin-right: 0.5rem;
+					width: 1rem;
+					height: 1rem;
+
+					svg {
+						transition: transform 0.2s ease;
+
+						path {
+							stroke: var(--white);
+							transition: all 0.2s ease;
+						}
+
+						&.collapsed {
+							transform: rotate(-90deg);
+						}
+					}
+				}
+
+				.team-name {
+					flex: 1;
+					font-weight: 500;
+					transition:
+						opacity 0.2s ease,
+						width 0.2s ease;
+
+					&.collapsed {
+						opacity: 0;
+						width: 0;
+						overflow: hidden;
+					}
+				}
+
+				.team-docs-count {
+					background-color: var(--primary-light);
+					color: var(--primary);
+					border-radius: 50%;
+					width: 1.5rem;
+					height: 1.5rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 0.75rem;
+					font-weight: 600;
+				}
+			}
+
+			.no-team-header {
+				border-left: 3px solid var(--neutral-neutral20);
+
+				.team-name {
+					color: var(--text-light);
+				}
+			}
+
+			.docu-list {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+				padding-left: 1.5rem;
+				margin-top: 0.25rem;
+
+				.docu-item {
+					padding: 0.5rem 1rem;
+					border-radius: var(--input-border-radius);
+					color: var(--text-light);
+					cursor: pointer;
+					transition: background-color 0.2s ease;
+					font-size: 0.8rem;
+					margin-bottom: 0.25rem;
+
+					&:hover {
+						background-color: var(--primary-light);
+					}
+
+					&.active {
+						background-color: var(--primary-light);
+						color: var(--primary);
+					}
+
+					mark {
+						background-color: var(--secondary);
+					}
+				}
+
+				.no-docs-message {
+					padding: 0.5rem;
+					color: var(--neutral-neutral20);
+					font-size: 0.8rem;
+				}
+			}
+
+			.no-search-results {
+				padding: 1rem;
+				text-align: center;
+				color: var(--neutral-neutral20);
+				font-size: 0.8rem;
+			}
+		}
+
+		.documentation-sidebar-footer {
+			margin-top: auto;
+			margin-bottom: 0;
+			padding: 1.25rem 1.25rem 0;
+			transition:
+				padding 0.3s ease,
+				opacity 0.3s ease;
+		}
+
+		&.collapsed .documentation-sidebar-footer {
+			padding: 1.25rem 0.5rem 0;
+		}
+
+		.sidebar-toggle {
+			position: absolute;
+			right: -0.325rem;
+			top: 0;
+			width: 0.6rem;
+			height: 100%;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 1000;
+			transition: all 0.2s ease;
+
+			&:hover {
+				background-color: var(--primary-light);
+
+				.dashboard-sidebar {
+					border: 1px solid var(--primary);
+				}
+			}
+		}
+	}
+
+	.documentation-content {
+		display: flex;
+		flex-direction: column;
+		background-color: var(--background-light);
+		max-height: 100dvh;
+
+		.content-children {
+			overflow-y: auto;
+			flex: 1;
+			height: 100%;
+			padding: 2rem 2.8rem;
+		}
+
+		.footer {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 0.25rem 0;
+			color: var(--neutral-neutral20);
+			font-size: 0.75rem;
+		}
+	}
+}
+
+.sidebar-toggle:hover + .documentation-sidebar,
+.documentation-sidebar:has(.sidebar-toggle:hover) {
+	border-right: 1px solid var(--primary);
+}
+
+.documentation-layout .documentation-sidebar.collapsed + .documentation-content {
+	margin-left: -15rem;
+}

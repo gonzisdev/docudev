@@ -10,10 +10,10 @@ import { useTranslation } from 'react-i18next'
 import { useAuthStore } from 'stores/authStore'
 import { useSidebarStore } from 'stores/sidebarStore'
 import { useUser } from 'hooks/useUser'
+import useNotifications from 'hooks/useNotifications'
 import DropdownMyAccount from 'components/elements/DropdownMyAccount/DropdownMyAccount'
 import { GroupIcon, HomeIcon, BellIcon, DocsIcon, Logo, ManagementIcon } from 'assets/svgs'
 import './DashboardLayout.css'
-import useNotifications from 'hooks/useNotifications'
 
 interface Props {
 	children: React.ReactNode

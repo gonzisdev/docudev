@@ -194,10 +194,15 @@ const DocuEditor = () => {
 
 	useEffect(() => {
 		if (docu) {
+			const teamValue = docu.team
+				? typeof docu.team === 'object' && '_id' in docu.team
+					? docu.team._id
+					: docu.team
+				: ''
 			methods.reset({
 				title: docu.title || '',
 				content: docu.content || '',
-				team: docu.team
+				team: teamValue
 			})
 		}
 	}, [])
@@ -278,6 +283,7 @@ const DocuEditor = () => {
 						) : (
 							<h2>{t('create_docu.subtitle')}</h2>
 						)}
+
 						<ResizableEditor editorRef={editorRef}>
 							<BlockNoteView editor={editor} ref={editorRef} />
 						</ResizableEditor>

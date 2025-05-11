@@ -16,13 +16,15 @@ import {
 	REGISTER_URL,
 	SETTINGS_URL,
 	TEAM_URL,
-	TEAMS_URL
+	TEAMS_URL,
+	DOCUMENTATION_URL
 } from './constants/routes'
 import Login from './components/Login/Login'
 import Register from './components/Register/Register'
 import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import RecoverPassword from './components/RecoverPassword/RecoverPassword'
 import Home from './components/Home/Home'
+import Documentation from 'components/Documentation/Documentation'
 import Docus from './components/Docus/Docus'
 import Docu from 'components/Docus/Docu/Docu'
 import DocuEditor from 'components/Docus/DocuEditor/DocuEditor'
@@ -73,6 +75,9 @@ export const App = () => {
 						</ProtectedRoute>
 					}>
 					<Route path={HOME_URL} element={<Home />} />
+					{/* Documentation */}
+					<Route path={DOCUMENTATION_URL} element={<Documentation />} />
+					<Route path={`${DOCUMENTATION_URL}/:docuId`} element={<Documentation />} />
 					{/* Docus routes */}
 					<Route path={`${DOCU_URL}/:docuId`} element={<Docu />} />
 					<Route path={DOCUS_URL} element={<Docus />} />

@@ -1,0 +1,66 @@
+.documentation-header-actions {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+}
+
+.docu-details {
+	margin-top: 1rem;
+	margin-bottom: 2rem;
+
+	.docu-details-info {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		width: 100%;
+
+		.docu-details-left,
+		.docu-details-right {
+			display: flex;
+			flex-direction: column;
+			gap: 0.25rem;
+			font-size: 0.9rem;
+
+			span {
+				color: var(--neutral-neutral20);
+
+				> span {
+					color: var(--warning-light);
+				}
+
+				.docu-team-name {
+					cursor: pointer;
+					transition: opacity 0.2s ease;
+
+					&:hover {
+						opacity: 0.7;
+					}
+				}
+			}
+		}
+	}
+}
+
+.empty-content {
+	color: var(--neutral-neutral20);
+	font-style: italic;
+	text-align: center;
+	padding: 2rem 0;
+}
+
+.welcome-message {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: calc(100% - 7.5rem);
+	color: var(--text-light);
+
+	h2 {
+		margin-bottom: 1rem;
+	}
+
+	p {
+		color: var(--neutral-neutral20);
+	}
+}

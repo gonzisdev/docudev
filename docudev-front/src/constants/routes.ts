@@ -6,6 +6,7 @@ export const RECOVER_PASSWORD_URL = '/recover-password'
 export const CHANGE_PASSWORD_URL = '/change-password'
 
 export const HOME_URL = '/home'
+export const DOCUMENTATION_URL = '/documentation'
 
 export const DOCU_URL = '/docu'
 export const DOCUS_URL = '/docus'

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import mongoose from 'mongoose'
 import Docu, { IDocu } from '../models/Docu'
 import Team from '../models/Team'
 
@@ -18,6 +19,10 @@ export const canAccessDocu = async (
   const docuId = req.params.docuId || req.body.docuId
   if (!docuId) {
     res.status(400).json({ error: 'Docu ID is required' })
+    return
+  }
+  if (!mongoose.Types.ObjectId.isValid(docuId)) {
+    res.status(400).json({ error: 'Invalid document ID format' })
     return
   }
   const docu = await Docu.findById(docuId)

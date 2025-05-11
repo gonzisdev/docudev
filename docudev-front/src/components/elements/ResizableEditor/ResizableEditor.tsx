@@ -1,15 +1,19 @@
 import { useState, useRef, useEffect } from 'react'
-import './ResizableEditor.css'
 import { useTranslation } from 'react-i18next'
+import './ResizableEditor.css'
 
 interface Props {
 	children: React.ReactNode
-	editorRef: React.RefObject<HTMLDivElement | null>
+	editorRef?: React.RefObject<HTMLDivElement | null>
+	resize?: boolean
+	className?: string
 }
 
-const ResizableEditor = ({ children, editorRef }: Props) => {
+const ResizableEditor = ({ children, editorRef, resize = true, className = '' }: Props) => {
 	const { t } = useTranslation()
 	const editorContainerRef = useRef<HTMLDivElement>(null)
+	const defaultEditorRef = useRef<HTMLDivElement>(null)
+	const finalEditorRef = editorRef || defaultEditorRef
 
 	const [editorSize, setEditorSize] = useState({ width: '100%' })
 	const [isResizing, setIsResizing] = useState(false)
@@ -59,20 +63,24 @@ const ResizableEditor = ({ children, editorRef }: Props) => {
 	}, [isResizing])
 
 	return (
-		<div className='editor-container' ref={editorContainerRef}>
-			<div
-				className='docu-editor'
-				ref={editorRef}
-				style={{
-					width: editorSize.width
-				}}>
-				{children}
+		<div className={`editor-wrapper ${className}`}>
+			<div className='editor-container' ref={editorContainerRef}>
+				<div
+					className='docu-editor'
+					ref={finalEditorRef}
+					style={{
+						width: editorSize.width
+					}}>
+					{children}
+				</div>
+				{resize && (
+					<div
+						className='resize-handle'
+						onClick={resetEditorSize}
+						onMouseDown={startResize}
+						title={t('docus.resize_editor_hint')}></div>
+				)}
 			</div>
-			<div
-				className='resize-handle'
-				onClick={resetEditorSize}
-				onMouseDown={startResize}
-				title={t('docus.resize_editor_hint')}></div>
 		</div>
 	)
 }

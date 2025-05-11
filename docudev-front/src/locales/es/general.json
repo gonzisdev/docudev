@@ -196,7 +196,26 @@
 		"last_created_docus": "Últimos docus creados",
 		"most_active_users": "Usuarios más activos",
 		"members": "Miembros",
-		"no_data": "No hay datos disponibles"
+		"no_data": "No hay datos disponibles",
+		"documentation": "Ir a mi documentación"
+	},
+
+	"documentation": {
+		"title": "Documentación",
+		"teams": "Equipos",
+		"no_team_docs": "Sin equipo",
+		"no_documents": "No hay documentos en este equipo",
+		"no_documents_without_team": "No hay documentos sin equipo",
+		"search_placeholder": "Buscar docus...",
+		"by": "Por",
+		"created": "Creado",
+		"updated": "Actualizado",
+		"no_content": "Este documento no tiene contenido",
+		"document_not_found": "Documento no encontrado",
+		"welcome_title": "Bienvenido a tu documentación",
+		"welcome_message": "Selecciona un documento del panel izquierdo para comenzar",
+		"home": "Volver a la página de inicio",
+		"no_search_results": "No se encontraron resultados para tu búsqueda"
 	},
 	"teams": {
 		"title": "Equipos",
