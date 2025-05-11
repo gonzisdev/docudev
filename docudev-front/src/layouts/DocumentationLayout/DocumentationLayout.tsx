@@ -61,7 +61,7 @@ const DocumentationLayout = ({
 		return <>{parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : part))}</>
 	}
 
-	const handleToggleTeam = (teamId: string) => {
+	const handleToggleTeam = (teamId: Team['_id']) => {
 		const newState = !expandedTeamsFiltered[teamId]
 		setExpandedTeamsFiltered((prev) => ({
 			...prev,
@@ -81,35 +81,33 @@ const DocumentationLayout = ({
 		logout()
 		localStorage.clear()
 	}
-
 	useEffect(() => {
 		if (!searchTerm.trim()) {
 			setFilteredDocus(docus)
+
+			// Al limpiar la búsqueda, restaura el estado anterior pero mantén
+			// abierto el equipo del documento activo
+			const restoredExpandedTeams = { ...expandedTeams }
+
+			// Si hay un documento activo, asegúrate de que su equipo esté expandido
 			if (activeDocuId) {
-				let activeDocuTeamId = null
 				Object.entries(docus.withTeam).forEach(([teamId, teamDocs]) => {
 					if (teamDocs.some((doc) => doc._id === activeDocuId)) {
-						activeDocuTeamId = teamId
+						restoredExpandedTeams[teamId] = true
 					}
 				})
-				if (activeDocuTeamId) {
-					setExpandedTeamsFiltered({
-						...expandedTeams,
-						[activeDocuTeamId]: true
-					})
-				} else {
-					setExpandedTeamsFiltered(expandedTeams)
-				}
-			} else {
-				setExpandedTeamsFiltered(expandedTeams)
 			}
+
+			setExpandedTeamsFiltered(restoredExpandedTeams)
 			return
 		}
+
 		const term = searchTerm.toLowerCase().trim()
 		const filtered: GroupedDocus = { withTeam: {}, withoutTeam: [] }
 		filtered.withoutTeam = docus.withoutTeam.filter((docu) =>
 			docu.title.toLowerCase().includes(term)
 		)
+
 		Object.keys(docus.withTeam).forEach((teamId) => {
 			const teamDocs = docus.withTeam[teamId].filter((docu) =>
 				docu.title.toLowerCase().includes(term)
@@ -119,12 +117,16 @@ const DocumentationLayout = ({
 				filtered.withTeam[teamId] = teamDocs
 			}
 		})
-		const newExpandedTeams = { ...expandedTeams }
+
+		// Durante la búsqueda, expande todos los equipos con resultados
+		const searchExpandedTeams = { ...expandedTeams }
+
+		// Expande todos los equipos que tienen resultados en la búsqueda
 		Object.keys(filtered.withTeam).forEach((teamId) => {
-			if (filtered.withTeam[teamId].length > 0) {
-				newExpandedTeams[teamId] = true
-			}
+			searchExpandedTeams[teamId] = true
 		})
+
+		// Si el documento activo no está en los resultados de búsqueda, agrégalo
 		if (activeDocuId) {
 			Object.entries(docus.withTeam).forEach(([teamId, teamDocs]) => {
 				if (teamDocs.some((doc) => doc._id === activeDocuId)) {
@@ -132,7 +134,7 @@ const DocumentationLayout = ({
 						const activeDoc = teamDocs.find((doc) => doc._id === activeDocuId)
 						if (activeDoc) {
 							filtered.withTeam[teamId] = [activeDoc]
-							newExpandedTeams[teamId] = true
+							searchExpandedTeams[teamId] = true
 						}
 					}
 				}
@@ -140,7 +142,7 @@ const DocumentationLayout = ({
 		}
 
 		setFilteredDocus(filtered)
-		setExpandedTeamsFiltered(newExpandedTeams)
+		setExpandedTeamsFiltered(searchExpandedTeams)
 	}, [searchTerm, docus, expandedTeams, activeDocuId])
 
 	return (

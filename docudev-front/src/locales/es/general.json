@@ -201,7 +201,7 @@
 	},
 
 	"documentation": {
-		"title": "Documentación",
+		"title": "Mi documentación",
 		"teams": "Equipos",
 		"no_team_docs": "Sin equipo",
 		"no_documents": "No hay documentos en este equipo",
@@ -321,7 +321,6 @@
 		"no_docus": "No tienes ni colaboras en ningun docu",
 		"owner": "Creador",
 		"search": "Buscar docu",
-		"resize_editor_hint": "Haz clic para restablecer el tamaño o arrastra para redimensionar",
 		"filter_team": "Filtrar por equipo",
 		"filter_owner": "Filtrar por creador",
 		"sort": "Ordenar por",

@@ -187,9 +187,6 @@
 				.team-name {
 					flex: 1;
 					font-weight: 500;
-					text-overflow: ellipsis;
-					white-space: nowrap;
-					overflow: hidden;
 					transition:
 						opacity 0.2s ease,
 						width 0.2s ease;
@@ -236,9 +233,6 @@
 					color: var(--text-light);
 					cursor: pointer;
 					transition: background-color 0.2s ease;
-					text-overflow: ellipsis;
-					white-space: nowrap;
-					overflow: hidden;
 					font-size: 0.8rem;
 					margin-bottom: 0.25rem;
 
@@ -317,7 +311,7 @@
 			overflow-y: auto;
 			flex: 1;
 			height: 100%;
-			padding: 2rem 2.8rem;
+			padding: 2rem 2.8rem 0 2.8rem;
 		}
 
 		.footer {

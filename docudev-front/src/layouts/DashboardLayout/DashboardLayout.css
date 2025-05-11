@@ -179,7 +179,7 @@
 			overflow-y: auto;
 			flex: 1;
 			height: 100%;
-			padding: 2rem 2.8rem;
+			padding: 2rem 2.8rem 0 2.8rem;
 		}
 
 		.footer {

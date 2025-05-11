@@ -6,6 +6,10 @@
 	font: inherit;
 }
 
+html {
+	overflow: hidden;
+}
+
 img,
 video,
 svg {

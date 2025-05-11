@@ -120,7 +120,7 @@ const Docu = () => {
 							</div>
 						)}
 						{docu?.content && (
-							<ResizableEditor editorRef={editorRef} resize={false}>
+							<ResizableEditor editorRef={editorRef}>
 								<BlockNoteView editor={editor} editable={false} />
 							</ResizableEditor>
 						)}
