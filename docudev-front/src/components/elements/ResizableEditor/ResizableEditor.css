@@ -1,5 +1,6 @@
 .editor-wrapper {
 	max-width: 790px;
+	min-width: 790px;
 	margin: 0 auto;
 	padding: 1rem;
 

@@ -61,7 +61,6 @@ const Documentation = () => {
 	useEffect(() => {
 		if (teams && docus) {
 			const grouped: GroupedDocus = { withTeam: {}, withoutTeam: [] }
-
 			teams.forEach((team) => {
 				grouped.withTeam[team._id] = []
 			})
@@ -76,14 +75,12 @@ const Documentation = () => {
 					grouped.withoutTeam.push(docu)
 				}
 			})
-
 			setGroupedDocus(grouped)
 			const autoExpanded: Record<string, boolean> = {}
 			teams.forEach((team) => {
 				const teamDocs = grouped.withTeam[team._id] || []
 				autoExpanded[team._id] = teamDocs.length > 0 && teamDocs.length <= 3
 			})
-
 			setExpandedTeams((prev) => ({ ...prev, ...autoExpanded }))
 		}
 	}, [teams, docus])
@@ -140,7 +137,6 @@ const Documentation = () => {
 							</Button>
 						</div>
 					</Header>
-
 					{activeDocuId ? (
 						docu ? (
 							<>
@@ -178,7 +174,6 @@ const Documentation = () => {
 										</div>
 									</div>
 								</div>
-
 								{docu.content ? (
 									<ResizableEditor editorRef={editorRef} resize={false}>
 										<BlockNoteView editor={editor} editable={false} />

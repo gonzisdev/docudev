@@ -181,12 +181,10 @@ const DocumentationLayout = ({
 								)}
 							</div>
 						</div>
-
 						<nav className='documentation-nav'>
 							{!hasSearchResults && searchTerm && (
 								<div className='no-search-results'>{t('documentation.no_search_results')}</div>
 							)}
-
 							{(Object.keys(filteredDocus.withTeam).length > 0 || !searchTerm) && (
 								<div className='nav-section'>
 									<h3 className={`nav-section-title ${collapsed ? 'collapsed' : ''}`}>
@@ -195,11 +193,7 @@ const DocumentationLayout = ({
 									<ul className='team-list'>
 										{teams &&
 											teams.map((team) => {
-												// Ocultar equipos sin resultados durante la búsqueda
-												if (searchTerm && !filteredDocus.withTeam[team._id]) {
-													return null
-												}
-
+												if (searchTerm && !filteredDocus.withTeam[team._id]) return null
 												return (
 													<li key={team._id} className='team-item'>
 														<div
@@ -247,7 +241,6 @@ const DocumentationLayout = ({
 									</ul>
 								</div>
 							)}
-
 							{(filteredDocus.withoutTeam.length > 0 || !searchTerm) && (
 								<div className='nav-section'>
 									<div
