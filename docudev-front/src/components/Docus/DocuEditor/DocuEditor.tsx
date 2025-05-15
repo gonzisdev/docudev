@@ -76,10 +76,7 @@ const DocuEditor = () => {
 						username: `${user.name} ${user.surname}`,
 						avatarUrl: user?.image
 							? `${import.meta.env.VITE_API_URL}/uploads/${user.image}`
-							: UserPlaceholder,
-						avatarStyle: {
-							borderRadius: '100%'
-						}
+							: UserPlaceholder
 					}
 				}
 				const activeUser = activeUsers.find((u) => u.id === id)
@@ -91,6 +88,11 @@ const DocuEditor = () => {
 							? `${import.meta.env.VITE_API_URL}/uploads/${activeUser.image}`
 							: UserPlaceholder
 					}
+				}
+				return {
+					id,
+					username: '',
+					avatarUrl: UserPlaceholder
 				}
 			})
 		)
