@@ -27,7 +27,7 @@ const useDocus = (params?: Props) => {
 
 	const queryParams = {
 		page,
-		limit: params?.limit || 10,
+		limit: params?.limit !== undefined ? params.limit : 10,
 		search: searchTerm,
 		teamId: teamFilter || undefined,
 		ownerId: ownerFilter || undefined,

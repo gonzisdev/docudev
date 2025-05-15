@@ -1,6 +1,6 @@
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useState, useEffect, useMemo } from 'react'
 import { Team } from 'models/Team'
 import { Docu, GroupedDocus } from 'models/Docu'
 import { useAuthStore } from 'stores/authStore'
@@ -21,7 +21,6 @@ interface Props {
 	handleDocuClick: (docu: Docu) => void
 	activeDocuId: Docu['_id'] | null
 	isLoading: boolean
-	noTeamExpanded: boolean
 	toggleNoTeamExpanded: () => void
 }
 
@@ -34,18 +33,19 @@ const DocumentationLayout = ({
 	handleDocuClick,
 	activeDocuId,
 	isLoading,
-	noTeamExpanded,
 	toggleNoTeamExpanded
 }: Props) => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 	const { user, logout } = useAuthStore()
 	const { collapsed, toggleSidebar } = useDocSidebarStore()
+	const navRef = useRef<HTMLDivElement>(null)
+
 	const [searchTerm, setSearchTerm] = useState('')
 	const [filteredDocus, setFilteredDocus] = useState<GroupedDocus>(docus)
 	const [expandedTeamsFiltered, setExpandedTeamsFiltered] =
 		useState<typeof expandedTeams>(expandedTeams)
-	const [noTeamExpandedFiltered, setNoTeamExpandedFiltered] = useState(noTeamExpanded)
+	const [noTeamExpandedFiltered, setNoTeamExpandedFiltered] = useState(false)
 
 	useUser()
 
@@ -85,6 +85,26 @@ const DocumentationLayout = ({
 		logout()
 		localStorage.clear()
 	}
+
+	useEffect(() => {
+		const nav = navRef.current
+		if (!nav) return
+		const checkScroll = () => {
+			if (nav.scrollHeight > nav.clientHeight) {
+				nav.classList.add('has-scroll')
+			} else {
+				nav.classList.remove('has-scroll')
+			}
+		}
+		checkScroll()
+		const observer = new MutationObserver(checkScroll)
+		observer.observe(nav, { childList: true, subtree: true })
+		window.addEventListener('resize', checkScroll)
+		return () => {
+			observer.disconnect()
+			window.removeEventListener('resize', checkScroll)
+		}
+	}, [filteredDocus])
 
 	useEffect(() => {
 		const term = searchTerm.toLowerCase().trim()
@@ -146,7 +166,7 @@ const DocumentationLayout = ({
 								)}
 							</div>
 						</div>
-						<nav className='documentation-nav'>
+						<nav className='documentation-nav' ref={navRef}>
 							{!hasSearchResults && searchTerm && (
 								<div className='no-search-results'>{t('documentation.no_search_results')}</div>
 							)}

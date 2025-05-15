@@ -46,7 +46,8 @@ export class DocuController {
         return
       }
       const page = parseInt(req.query.page as string) || 1
-      const limit = parseInt(req.query.limit as string) || 10
+      let limit = parseInt(req.query.limit as string)
+      if (isNaN(limit)) limit = 10
       const search = req.query.search as string
       const teamId = req.query.teamId as string
       const ownerId = req.query.ownerId as string
@@ -91,15 +92,19 @@ export class DocuController {
       }
       const collationOptions =
         sortField === 'title' ? { locale: 'es', strength: 2 } : undefined
-      const docus = await Docu.find(query)
+      let queryBuilder = Docu.find(query)
         .populate('owner', 'name surname')
         .populate('team', 'name color')
         .select('-content')
         .sort(sort)
         .collation(collationOptions)
         .skip(skip)
-        .limit(limit)
-        .exec()
+
+      if (limit > 0) {
+        queryBuilder = queryBuilder.limit(limit)
+      }
+
+      const docus = await queryBuilder.exec()
       const total = await Docu.countDocuments(query)
 
       res.status(200).json({

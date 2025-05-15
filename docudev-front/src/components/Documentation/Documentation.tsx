@@ -31,7 +31,7 @@ interface GroupedDocus {
 const Documentation = () => {
 	const { t } = useTranslation()
 	const { teams, isLoadingTeams } = useTeams()
-	const { docus, isLoadingDocus } = useDocus({ limit: Infinity })
+	const { docus, isLoadingDocus } = useDocus({ limit: 0 })
 	const navigate = useNavigate()
 	const { docuId } = useParams<{ docuId: string }>()
 	const editorRef = useRef(null)
@@ -116,7 +116,6 @@ const Documentation = () => {
 			handleDocuClick={handleDocuClick}
 			activeDocuId={activeDocuId}
 			isLoading={isLoading}
-			noTeamExpanded={noTeamExpanded}
 			toggleNoTeamExpanded={() => setNoTeamExpanded(!noTeamExpanded)}>
 			{activeDocuId && isLoadingDocu ? (
 				<Loading />
