@@ -38,5 +38,13 @@
 				}
 			}
 		}
+
+		.bn-thread-comment img {
+			border-radius: 50% !important;
+			border: 2px solid var(--primary);
+			object-fit: cover;
+			width: 2rem !important;
+			height: 2rem !important;
+		}
 	}
 }
