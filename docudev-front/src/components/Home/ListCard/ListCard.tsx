@@ -4,15 +4,17 @@ import { Docu } from 'models/Docu'
 import { DOCU_URL } from 'constants/routes'
 import Card from 'components/elements/Card/Card'
 import { formatDateWithTime } from 'utils/dates'
+import { EyeIcon } from 'assets/svgs'
 import './ListCard.css'
 
 interface Props {
 	title: string
 	docus?: Docu[]
-	dateField: 'createdAt' | 'updatedAt'
+	dateField: 'createdAt' | 'updatedAt' | 'views'
+	showViews?: boolean
 }
 
-const ListCard = ({ title, docus = [], dateField }: Props) => {
+const ListCard = ({ title, docus = [], dateField, showViews = false }: Props) => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 
@@ -41,9 +43,18 @@ const ListCard = ({ title, docus = [], dateField }: Props) => {
 											)}
 										</div>
 										<div className='list-card-right'>
-											<span className='date-info'>
-												{formatDateWithTime(new Date(docu[dateField]))}
-											</span>
+											{showViews ? (
+												<span
+													className='views-info'
+													style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+													<EyeIcon width={16} height={16} />
+													<span>{docu.views}</span>
+												</span>
+											) : (
+												<span className='date-info'>
+													{formatDateWithTime(new Date(docu[dateField]))}
+												</span>
+											)}
 										</div>
 									</div>
 								</div>

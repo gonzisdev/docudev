@@ -1,8 +1,6 @@
 import { Request, Response } from 'express'
 import Team from '../models/Team'
 import Docu from '../models/Docu'
-import User from '../models/User'
-import mongoose from 'mongoose'
 
 export class StatsController {
   static async getUserStats(req: Request, res: Response) {
@@ -56,22 +54,6 @@ export class StatsController {
         }
       ])
 
-      const lastUpdatedDocus = await Docu.find({
-        $or: [{ owner: req.user._id }, { team: { $in: teamIds } }]
-      })
-        .select('title updatedAt team')
-        .populate('team', 'name color')
-        .sort({ updatedAt: -1 })
-        .limit(5)
-
-      const lastCreatedDocus = await Docu.find({
-        $or: [{ owner: req.user._id }, { team: { $in: teamIds } }]
-      })
-        .select('title createdAt team')
-        .populate('team', 'name color')
-        .sort({ createdAt: -1 })
-        .limit(5)
-
       const mostActiveUsers = await Docu.aggregate([
         {
           $match: {
@@ -108,6 +90,30 @@ export class StatsController {
         }
       ])
 
+      const lastUpdatedDocus = await Docu.find({
+        $or: [{ owner: req.user._id }, { team: { $in: teamIds } }]
+      })
+        .select('title updatedAt team')
+        .populate('team', 'name color')
+        .sort({ updatedAt: -1 })
+        .limit(5)
+
+      const lastCreatedDocus = await Docu.find({
+        $or: [{ owner: req.user._id }, { team: { $in: teamIds } }]
+      })
+        .select('title createdAt team')
+        .populate('team', 'name color')
+        .sort({ createdAt: -1 })
+        .limit(5)
+
+      const mostViewedDocus = await Docu.find({
+        $or: [{ owner: req.user._id }, { team: { $in: teamIds } }]
+      })
+        .select('title views team')
+        .populate('team', 'name color')
+        .sort({ views: -1 })
+        .limit(5)
+
       const totalTeams = teamIds.length
       const totalDocus = await Docu.countDocuments({
         $or: [{ owner: req.user._id }, { team: { $in: teamIds } }]
@@ -121,6 +127,7 @@ export class StatsController {
         lastUpdatedDocus,
         lastCreatedDocus,
         mostActiveUsers,
+        mostViewedDocus,
         generalStats: {
           totalTeams,
           totalDocus,

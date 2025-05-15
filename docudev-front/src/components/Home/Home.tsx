@@ -73,6 +73,12 @@ const Home = () => {
 									docus={stats?.lastUpdatedDocus}
 									dateField='updatedAt'
 								/>
+								<ListCard
+									title={t('home.most_viewed_docus')}
+									docus={stats?.mostViewedDocus}
+									dateField='views'
+									showViews
+								/>
 							</div>
 						</div>
 					</Container>

@@ -51,6 +51,16 @@
 							display: flex;
 							flex-direction: column;
 							gap: 0.25rem;
+
+							.views-info {
+								svg {
+									width: 1rem;
+									height: 1rem;
+									path {
+										fill: var(--neutral-neutral20);
+									}
+								}
+							}
 						}
 
 						& .list-card-left {
