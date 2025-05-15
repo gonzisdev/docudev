@@ -62,6 +62,14 @@
 				}
 			}
 		}
+
+		.docu-card-right {
+			span {
+				display: flex;
+				justify-content: space-between;
+				gap: 0.15rem;
+			}
+		}
 	}
 
 	.docu-card-swipe-hint {

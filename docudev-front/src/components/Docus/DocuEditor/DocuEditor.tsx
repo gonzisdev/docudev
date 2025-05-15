@@ -28,6 +28,7 @@ import * as Y from 'yjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { formatDateWithTime } from 'utils/dates'
+import { EyeIcon } from 'assets/svgs'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/shadcn/style.css'
 import './DocuEditor.css'
@@ -271,6 +272,10 @@ const DocuEditor = () => {
 										<span>
 											<span>{t('docus.updated')}:</span> {formatDateWithTime(docu.updatedAt)}
 										</span>
+										<div className='docu-editor-details-views'>
+											<EyeIcon width={18} height={18} />
+											<span>{docu.views}</span>
+										</div>
 									</div>
 								</div>
 								{docuId && (

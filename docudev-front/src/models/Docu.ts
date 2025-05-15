@@ -9,6 +9,7 @@ export interface Docu {
 	content?: string
 	owner: DocuOwner
 	team?: Team['_id'] | { _id: Team['_id']; name: Team['name']; color: Team['color'] }
+	views: number
 	createdAt: Date
 	updatedAt: Date
 }

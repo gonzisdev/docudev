@@ -10,6 +10,14 @@
 
 	&:focus-within {
 		border-color: var(--secondary);
+
+		.input-icon {
+			svg {
+				path {
+					fill: var(--secondary);
+				}
+			}
+		}
 	}
 
 	&.error {
@@ -64,26 +72,20 @@
 		align-items: center;
 		padding: 0;
 
+		svg {
+			width: 1.5rem;
+			height: 1.5rem;
+			path {
+				fill: var(--input-border-color);
+			}
+		}
+
 		&.left {
 			padding-left: var(--input-padding);
 		}
 
 		&.right {
 			padding-right: var(--input-padding);
-		}
-	}
-
-	.input-icon-left {
-		margin-top: 0;
-		position: absolute;
-		right: 0;
-		top: 50%;
-		transform: translateY(-50%);
-
-		svg {
-			path {
-				fill: var(--input-border-color);
-			}
 		}
 	}
 }

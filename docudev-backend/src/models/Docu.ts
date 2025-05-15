@@ -5,6 +5,7 @@ export interface IDocu extends Document {
   content: string
   owner: mongoose.Types.ObjectId
   team: mongoose.Types.ObjectId
+  views: number
   createdAt: Date
   updatedAt: Date
 }
@@ -28,6 +29,10 @@ const DocuSchema: Schema = new Schema(
     team: {
       type: Schema.Types.ObjectId,
       ref: 'Team'
+    },
+    views: {
+      type: Number,
+      default: 0
     }
   },
   {

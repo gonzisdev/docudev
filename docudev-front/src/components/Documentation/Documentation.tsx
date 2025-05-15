@@ -18,6 +18,7 @@ import { PartialBlock } from '@blocknote/core'
 import { BlockNoteView } from '@blocknote/shadcn'
 import { exportToPdf } from 'utils/pdf'
 import { formatDateWithTime } from 'utils/dates'
+import { EyeIcon } from 'assets/svgs'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/shadcn/style.css'
 import './Documentation.css'
@@ -140,9 +141,9 @@ const Documentation = () => {
 					{activeDocuId ? (
 						docu ? (
 							<>
-								<div className='docu-details'>
-									<div className='docu-details-info'>
-										<div className='docu-details-left'>
+								<div className='documentation-details'>
+									<div className='documentation-details-info'>
+										<div className='documentation-details-left'>
 											<span>
 												<span>{t('docus.owner')}:</span> {docu.owner?.name} {docu.owner?.surname}
 											</span>
@@ -155,7 +156,7 @@ const Documentation = () => {
 															'_id' in docu.team &&
 															navigate(`${TEAM_URL}/${docu.team._id}`)
 														}
-														className='docu-team-name'
+														className='documentation-team-name'
 														style={{
 															color: typeof docu.team === 'object' ? docu.team.color : undefined
 														}}>
@@ -164,13 +165,17 @@ const Documentation = () => {
 												</span>
 											)}
 										</div>
-										<div className='docu-details-right'>
+										<div className='documentation-details-right'>
 											<span>
 												<span>{t('docus.created')}:</span> {formatDateWithTime(docu.createdAt)}
 											</span>
 											<span>
 												<span>{t('docus.updated')}:</span> {formatDateWithTime(docu.updatedAt)}
 											</span>
+											<div className='documentation-details-views'>
+												<EyeIcon width={18} height={18} />
+												<span>{docu.views}</span>
+											</div>
 										</div>
 									</div>
 								</div>

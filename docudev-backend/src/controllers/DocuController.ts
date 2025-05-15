@@ -119,10 +119,18 @@ export class DocuController {
 
   static async getDocu(req: Request, res: Response) {
     try {
-      const docu = await Docu.findById(req.docu._id)
+      await Docu.findById(req.docu._id)
         .populate('owner', 'name surname')
         .populate('team', 'name color')
-      res.status(200).json(docu)
+      await Docu.updateOne(
+        { _id: req.docu._id },
+        { $inc: { views: 1 } },
+        { timestamps: false }
+      )
+      const updatedDocu = await Docu.findById(req.docu._id)
+        .populate('owner', 'name surname')
+        .populate('team', 'name color')
+      res.status(200).json(updatedDocu)
     } catch (error) {
       console.error('Error getting docu:', error)
       res.status(500).json({ error: 'Error getting docu' })

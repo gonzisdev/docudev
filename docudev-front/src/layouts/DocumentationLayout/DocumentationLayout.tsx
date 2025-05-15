@@ -9,7 +9,7 @@ import { useUser } from 'hooks/useUser'
 import DropdownMyAccount from 'components/elements/DropdownMyAccount/DropdownMyAccount'
 import Loading from 'components/elements/Loading/Loading'
 import Input from 'components/elements/Input/Input'
-import { Logo, CaretDownIcon } from 'assets/svgs'
+import { Logo, CaretDownIcon, MagnifyingGlassIcon } from 'assets/svgs'
 import './DocumentationLayout.css'
 
 interface Props {
@@ -125,6 +125,7 @@ const DocumentationLayout = ({
 									type='text'
 									placeholder={t('documentation.search_placeholder')}
 									value={searchTerm}
+									leftIcon={<MagnifyingGlassIcon width={18} height={18} />}
 								/>
 								{searchTerm && (
 									<div

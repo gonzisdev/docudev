@@ -20,6 +20,26 @@
 			gap: 0.25rem;
 			font-size: 0.9rem;
 
+			.docu-details-views {
+				display: flex;
+				align-items: center;
+				gap: 0.25rem;
+				justify-content: flex-end;
+
+				> span {
+					color: var(--neutral-neutral20);
+					font-size: 0.8rem;
+				}
+
+				> svg {
+					width: 1rem;
+					height: 1rem;
+					path {
+						fill: var(--neutral-neutral20);
+					}
+				}
+			}
+
 			span {
 				color: var(--neutral-neutral20);
 
@@ -35,6 +55,14 @@
 						opacity: 0.7;
 					}
 				}
+			}
+		}
+
+		.docu-details-right {
+			span {
+				display: flex;
+				justify-content: space-between;
+				gap: 0.2rem;
 			}
 		}
 	}

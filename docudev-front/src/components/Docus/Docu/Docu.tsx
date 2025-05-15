@@ -16,6 +16,7 @@ import { PartialBlock } from '@blocknote/core'
 import { BlockNoteView } from '@blocknote/shadcn'
 import { exportToPdf } from 'utils/pdf'
 import { formatDateWithTime } from 'utils/dates'
+import { EyeIcon } from 'assets/svgs'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/shadcn/style.css'
 import './Docu.css'
@@ -66,7 +67,6 @@ const Docu = () => {
 			) : (
 				<>
 					<Header title={docu?.title}>
-						{' '}
 						<div className='docu-header-actions'>
 							<Button variant='secondary' onClick={() => navigate(`${EDIT_DOCU_URL}/${docuId}`)}>
 								{t('docus.update_docu')}
@@ -115,6 +115,10 @@ const Docu = () => {
 										<span>
 											<span>{t('docus.updated')}:</span> {formatDateWithTime(docu.updatedAt)}
 										</span>
+										<div className='docu-details-views'>
+											<EyeIcon width={18} height={18} />
+											<span>{docu.views}</span>
+										</div>
 									</div>
 								</div>
 							</div>
