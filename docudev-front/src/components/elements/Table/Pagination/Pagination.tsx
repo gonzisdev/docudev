@@ -17,7 +17,7 @@ const TablePagination = <T,>({ table, rowSelection }: Props<T>) => {
 	}))
 
 	return (
-		<div className='pagination-container'>
+		<div className='pagination-container-table'>
 			<p className='pagination-rows-info'>
 				{t('table.row_selection', {
 					count: Object.keys(rowSelection).length,

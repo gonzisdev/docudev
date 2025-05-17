@@ -93,7 +93,7 @@ export class DocuController {
       const collationOptions =
         sortField === 'title' ? { locale: 'es', strength: 2 } : undefined
       let queryBuilder = Docu.find(query)
-        .populate('owner', 'name surname')
+        .populate('owner', 'name surname image')
         .populate('team', 'name color')
         .select('-content')
         .sort(sort)
@@ -124,18 +124,22 @@ export class DocuController {
 
   static async getDocu(req: Request, res: Response) {
     try {
-      await Docu.findById(req.docu._id)
-        .populate('owner', 'name surname')
-        .populate('team', 'name color')
       await Docu.updateOne(
         { _id: req.docu._id },
         { $inc: { views: 1 } },
         { timestamps: false }
       )
-      const updatedDocu = await Docu.findById(req.docu._id)
-        .populate('owner', 'name surname')
-        .populate('team', 'name color')
-      res.status(200).json(updatedDocu)
+      const docu = await Docu.findById(req.docu._id)
+        .populate('owner', 'name surname image')
+        .populate({
+          path: 'team',
+          select: 'name color owner collaborators',
+          populate: [
+            { path: 'owner', select: 'name surname image' },
+            { path: 'collaborators', select: 'name surname image' }
+          ]
+        })
+      res.status(200).json(docu)
     } catch (error) {
       console.error('Error getting docu:', error)
       res.status(500).json({ error: 'Error getting docu' })

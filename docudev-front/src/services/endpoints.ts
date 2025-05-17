@@ -27,5 +27,7 @@ export const endpoints = {
 	markAsRead: 'notifications/read',
 	deleteNotification: 'notifications/delete',
 
-	stats: 'stats'
+	stats: 'stats',
+
+	comments: 'comments'
 }

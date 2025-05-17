@@ -187,9 +187,9 @@
 		"general_stats": "Estadísticas generales",
 		"teams": "Equipos",
 		"team": "Equipo",
-		"documents": "Docus",
+		"documents": "Docus en total",
 		"owned_documents": "Docus propios",
-		"team_documents": "Docus de equipo",
+		"team_documents": "Docus en equipos",
 		"teams_with_most_members": "Equipos con más miembros",
 		"teams_with_most_docus": "Equipos con más docus",
 		"most_active_users": "Usuarios más activos",
@@ -402,6 +402,13 @@
 		"connected": "Conectado",
 		"disconnected": "Desconectado",
 		"active_users": "Usuarios activos"
+	},
+	"comments": {
+		"title": "Comentarios",
+		"placeholder": "Escribe un comentario... Usa @ para mencionar usuarios",
+		"send": "Enviar",
+		"sending": "Enviando...",
+		"none": "No hay comentarios todavía"
 	},
 	"plan": {
 		"toast": {

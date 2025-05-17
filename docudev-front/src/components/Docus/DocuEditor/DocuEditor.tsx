@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import { useNavigate, useParams, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { DOCU_URL, DOCUS_URL, TEAM_URL } from 'constants/routes'
 import { codeBlock } from 'constants/editor'
-import { DocuFormPayload } from 'models/Docu'
+import { DocuFormPayload, TeamMember } from 'models/Docu'
 import { ActiveUser } from 'models/Collaboration'
 import useTeams from 'hooks/useTeams'
 import useDocu from 'hooks/useDocu'
@@ -12,13 +12,14 @@ import { useAuthStore } from 'stores/authStore'
 import { getRandomColor } from 'utils/collaboration'
 import Header from 'components/elements/Header/Header'
 import Container from 'components/elements/Container/Container'
-import ResizableEditor from 'components/elements/ResizableEditor/ResizableEditor'
+import Editor from 'components/elements/Editor/Editor'
 import Button from 'components/elements/Button/Button'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Loading from 'components/elements/Loading/Loading'
 import DocuFormModal from '../Modals/DocuFormModal'
 import DeleteDocuModal from '../Modals/DeleteDocuModal'
 import CollaborationStatus from './CollaborationStatus/CollaborationStatus'
+import CommentsPanel from '../CommentsPanel/CommentsPanel'
 import { BlockNoteView } from '@blocknote/shadcn'
 import { useBlockNote } from '@blocknote/react'
 import { WebsocketProvider } from 'y-websocket'
@@ -54,7 +55,7 @@ const DocuEditor = () => {
 		id: user?._id,
 		name: `${user?.name} ${user?.surname}`,
 		color: getRandomColor(),
-		image: user?.image
+		image: user!.image
 	}))
 
 	const {
@@ -200,6 +201,33 @@ const DocuEditor = () => {
 		}
 	}
 
+	const teamUsers = useMemo(() => {
+		if (!docu?.team || typeof docu.team !== 'object') return []
+		const users: TeamMember[] = []
+		const owner = docu.team.owner
+		if (owner && typeof owner === 'object') {
+			users.push({
+				_id: owner._id,
+				name: owner.name,
+				surname: owner.surname,
+				image: owner.image
+			})
+		}
+		if (Array.isArray(docu.team.collaborators)) {
+			docu.team.collaborators.forEach((collab) => {
+				if (collab && typeof collab === 'object') {
+					users.push({
+						_id: collab._id,
+						name: collab.name,
+						surname: collab.surname,
+						image: collab.image
+					})
+				}
+			})
+		}
+		return users.filter((user, index, self) => index === self.findIndex((u) => u._id === user._id))
+	}, [docu?.team])
+
 	useEffect(() => {
 		if (docu) {
 			const teamValue = docu.team
@@ -295,10 +323,24 @@ const DocuEditor = () => {
 						) : (
 							<h2>{t('create_docu.subtitle')}</h2>
 						)}
-
-						<ResizableEditor editorRef={editorRef}>
+						<Editor
+							editorRef={editorRef}
+							commentsPanel={
+								docuId && (
+									<CommentsPanel
+										docuId={docuId}
+										teamUsers={teamUsers}
+										currentUser={{
+											_id: user!._id,
+											name: user!.name,
+											surname: user!.surname,
+											image: user!.image
+										}}
+									/>
+								)
+							}>
 							<BlockNoteView editor={editor} ref={editorRef} />
-						</ResizableEditor>
+						</Editor>
 					</Container>
 				</>
 			)}

@@ -10,6 +10,7 @@ import docuRouter from './routes/docuRouter'
 import teamRouter from './routes/teamRouter'
 import notificationRouter from './routes/notificationRouter'
 import statsRouter from './routes/statsRouter'
+import commentRouter from './routes/commentRouter'
 import { corsConfig, publicCorsConfig } from './config/cors'
 import cors from 'cors'
 
@@ -32,5 +33,6 @@ app.use('/api/docus', docuRouter)
 app.use('/api/teams', teamRouter)
 app.use('/api/notifications', notificationRouter)
 app.use('/api/stats', statsRouter)
+app.use('/api/comments', commentRouter)
 
 export default server

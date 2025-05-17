@@ -1,0 +1,55 @@
+.mentions-input-container {
+	border: 0.0625rem solid var(--input-border-color);
+	border-radius: var(--input-border-radius);
+	background-color: var(--background);
+	width: 100%;
+	position: relative;
+
+	&.focused {
+		border-color: var(--secondary);
+	}
+
+	&.error {
+		border-color: var(--error);
+	}
+
+	&.readonly {
+		background: var(--background-light);
+	}
+
+	.mentions-input {
+		padding: var(--input-padding, 0.5rem 0.75rem);
+		min-height: 2.5rem;
+		width: 100%;
+		font-size: 0.875rem;
+		font-family: inherit;
+		font-weight: 400;
+		color: var(--text);
+		outline: none;
+		overflow-wrap: break-word;
+		word-break: break-word;
+		white-space: pre-wrap;
+		line-height: 2;
+
+		&:empty::before {
+			content: attr(data-placeholder);
+			color: var(--neutral-neutral10, #9ca3af);
+			pointer-events: none;
+		}
+
+		.mention {
+			display: inline;
+			background-color: var(--primary-light);
+			color: var(--primary);
+			padding: 0.25rem 0.5rem;
+			border-radius: 1rem;
+			margin: 0 0.1875rem;
+			font-size: 0.875rem;
+			line-height: 2;
+			vertical-align: middle;
+			white-space: nowrap;
+			user-select: all;
+			cursor: pointer;
+		}
+	}
+}

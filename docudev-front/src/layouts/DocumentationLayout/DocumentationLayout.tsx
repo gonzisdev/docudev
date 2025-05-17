@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { HOME_URL } from 'constants/routes'
 import { Team } from 'models/Team'
 import { Docu, GroupedDocus } from 'models/Docu'
 import { useAuthStore } from 'stores/authStore'
@@ -131,7 +132,7 @@ const DocumentationLayout = ({
 		<div className='documentation-layout'>
 			<aside className={`documentation-sidebar ${collapsed ? 'collapsed' : ''}`}>
 				<header className='documentation-sidebar-header'>
-					<Logo className='documentation-sidebar-logo' onClick={() => navigate('/')} />
+					<Logo className='documentation-sidebar-logo' onClick={() => navigate(HOME_URL)} />
 				</header>
 				{isLoading ? (
 					<Loading />

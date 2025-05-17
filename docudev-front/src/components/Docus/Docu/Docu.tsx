@@ -7,7 +7,7 @@ import useDocu from 'hooks/useDocu'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Header from 'components/elements/Header/Header'
 import Container from 'components/elements/Container/Container'
-import ResizableEditor from 'components/elements/ResizableEditor/ResizableEditor'
+import Editor from 'components/elements/Editor/Editor'
 import Loading from 'components/elements/Loading/Loading'
 import Button from 'components/elements/Button/Button'
 import DeleteDocuModal from '../Modals/DeleteDocuModal'
@@ -124,9 +124,9 @@ const Docu = () => {
 							</div>
 						)}
 						{docu?.content && (
-							<ResizableEditor editorRef={editorRef}>
+							<Editor editorRef={editorRef}>
 								<BlockNoteView editor={editor} editable={false} />
-							</ResizableEditor>
+							</Editor>
 						)}
 					</Container>
 				</>

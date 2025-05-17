@@ -12,7 +12,7 @@ import Header from 'components/elements/Header/Header'
 import Loading from 'components/elements/Loading/Loading'
 import Card from 'components/elements/Card/Card'
 import Button from 'components/elements/Button/Button'
-import ResizableEditor from 'components/elements/ResizableEditor/ResizableEditor'
+import Editor from 'components/elements/Editor/Editor'
 import { useCreateBlockNote } from '@blocknote/react'
 import { PartialBlock } from '@blocknote/core'
 import { BlockNoteView } from '@blocknote/shadcn'
@@ -179,9 +179,9 @@ const Documentation = () => {
 									</div>
 								</div>
 								{docu.content ? (
-									<ResizableEditor editorRef={editorRef}>
+									<Editor editorRef={editorRef}>
 										<BlockNoteView editor={editor} editable={false} />
-									</ResizableEditor>
+									</Editor>
 								) : (
 									<p className='empty-content'>{t('documentation.no_content')}</p>
 								)}
