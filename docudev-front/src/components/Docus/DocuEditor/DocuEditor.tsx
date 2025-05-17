@@ -21,7 +21,6 @@ import DeleteDocuModal from '../Modals/DeleteDocuModal'
 import CollaborationStatus from './CollaborationStatus/CollaborationStatus'
 import { BlockNoteView } from '@blocknote/shadcn'
 import { useBlockNote } from '@blocknote/react'
-import { YjsThreadStore, DefaultThreadStoreAuth } from '@blocknote/core/comments'
 import { WebsocketProvider } from 'y-websocket'
 import { es } from '@blocknote/core/locales'
 import { en } from '@blocknote/core/locales'
@@ -30,7 +29,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { formatDateWithTime } from 'utils/dates'
 import { EyeIcon } from 'assets/svgs'
-import UserPlaceholder from 'assets/images/user-placeholder.jpg'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/shadcn/style.css'
 import './DocuEditor.css'
@@ -58,45 +56,6 @@ const DocuEditor = () => {
 		color: getRandomColor(),
 		image: user?.image
 	}))
-	const [threadStore] = useState(
-		() =>
-			new YjsThreadStore(
-				user!._id,
-				doc.getMap('threads'),
-				new DefaultThreadStoreAuth(user!._id, 'editor')
-			)
-	)
-
-	const resolveUsers = async (userIds: string[]) => {
-		return Promise.resolve(
-			userIds.map((id) => {
-				if (id === user?._id) {
-					return {
-						id: user._id,
-						username: `${user.name} ${user.surname}`,
-						avatarUrl: user?.image
-							? `${import.meta.env.VITE_API_URL}/uploads/${user.image}`
-							: UserPlaceholder
-					}
-				}
-				const activeUser = activeUsers.find((u) => u.id === id)
-				if (activeUser) {
-					return {
-						id: activeUser.id,
-						username: activeUser.name,
-						avatarUrl: activeUser.image
-							? `${import.meta.env.VITE_API_URL}/uploads/${activeUser.image}`
-							: UserPlaceholder
-					}
-				}
-				return {
-					id,
-					username: '',
-					avatarUrl: UserPlaceholder
-				}
-			})
-		)
-	}
 
 	const {
 		docu,
@@ -163,7 +122,8 @@ const DocuEditor = () => {
 							user: {
 								name: localUser.name,
 								color: localUser.color,
-								...(localUser.image && { image: localUser.image })
+								...(localUser.image && { image: localUser.image }),
+								...(localUser.id && { id: localUser.id })
 							}
 						}
 					: undefined,
@@ -175,11 +135,7 @@ const DocuEditor = () => {
 				cellTextColor: true,
 				headers: true
 			},
-			codeBlock,
-			comments: {
-				threadStore
-			},
-			resolveUsers
+			codeBlock
 		},
 		[provider, docuId, localUser, editorReady]
 	)
