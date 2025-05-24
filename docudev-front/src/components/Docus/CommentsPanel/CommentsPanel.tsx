@@ -111,7 +111,6 @@ const CommentsPanel = ({ docuId, teamUsers, currentUser }: Props) => {
 				mentionId: mentionId
 			}
 		])
-
 		setShowMentions(false)
 		setCursorPosition(newCursorPosition)
 		setTimeout(() => {
@@ -138,6 +137,21 @@ const CommentsPanel = ({ docuId, teamUsers, currentUser }: Props) => {
 		}, 20)
 	}
 
+	const highlightMentions = (text: Comment['content'], mentions: Comment['mentions'] = []) => {
+		if (!text || !mentions || mentions.length === 0) return text || ''
+		let processedText = text
+		const validMentions = mentions.filter(
+			(mention): mention is TeamMember => typeof mention !== 'string' && mention !== null
+		)
+		validMentions.forEach((mention) => {
+			const mentionName = `${mention.name} ${mention.surname || ''}`.trim()
+			const escapedName = mentionName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+			const pattern = new RegExp(`(^|\\s)@(${escapedName})\\b`, 'g')
+			processedText = processedText.replace(pattern, '$1<span class="mention">@$2</span>')
+		})
+		return processedText
+	}
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		if (!comment.trim()) return
@@ -153,21 +167,6 @@ const CommentsPanel = ({ docuId, teamUsers, currentUser }: Props) => {
 		})
 		setComment('')
 		setMentionedUsers([])
-	}
-
-	const highlightMentions = (text: Comment['content'], mentions: Comment['mentions'] = []) => {
-		if (!text || !mentions || mentions.length === 0) return text || ''
-		let processedText = text
-		const validMentions = mentions.filter(
-			(mention): mention is TeamMember => typeof mention !== 'string' && mention !== null
-		)
-		validMentions.forEach((mention) => {
-			const mentionName = `${mention.name} ${mention.surname || ''}`.trim()
-			const escapedName = mentionName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-			const pattern = new RegExp(`(^|\\s)@(${escapedName})\\b`, 'g')
-			processedText = processedText.replace(pattern, '$1<span class="mention">@$2</span>')
-		})
-		return processedText
 	}
 
 	return (

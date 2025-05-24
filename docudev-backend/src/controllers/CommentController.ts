@@ -22,7 +22,6 @@ export class CommentController {
   static async createComment(req: Request, res: Response) {
     const session = await mongoose.startSession()
     session.startTransaction()
-
     try {
       const { docuId } = req.params
       const { content, mentions } = req.body
@@ -38,7 +37,6 @@ export class CommentController {
         ],
         { session }
       )
-
       if (mentions && mentions.length > 0) {
         const mentionNotifications = mentions
           .filter((userId: IUser['_id']) => userId !== req.user._id.toString())
@@ -55,14 +53,11 @@ export class CommentController {
           await Notification.insertMany(mentionNotifications, { session })
         }
       }
-
       await session.commitTransaction()
       session.endSession()
-
       const populatedComment = await Comment.findById(newComment[0]._id)
         .populate('author', 'name surname image')
         .populate('mentions', 'name surname image')
-
       res.status(201).json(populatedComment)
     } catch (error) {
       await session.abortTransaction()
