@@ -453,7 +453,7 @@
 		"image": "Imagen de perfil",
 		"save_changes": "Actualizar perfil",
 		"delete_account": "Eliminar cuenta",
-		"delete_account_description": "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer. Al eliminar tu cuenta se eliminarán todos tus datos, tus equipos y su contenido, tus docus y tus comentarios",
+		"delete_account_description": "¿Estás seguro de que quieres eliminar tu cuenta? Al eliminar tu cuenta se eliminarán todos tus datos, tus equipos y su contenido, tus docus y tus comentarios. Esta acción no se puede deshacer",
 		"validations": {
 			"email": {
 				"required": "Introduce tu correo electrónico",

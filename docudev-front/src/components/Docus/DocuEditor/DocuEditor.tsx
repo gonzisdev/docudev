@@ -170,14 +170,7 @@ const DocuEditor = () => {
 	})
 
 	const openModal = () => setIsModalOpen(true)
-	const closeModal = () => {
-		setIsModalOpen(false)
-		methods.reset({
-			title: docu?.title || '',
-			content: docu?.content || '',
-			team: docu?.team
-		})
-	}
+	const closeModal = () => setIsModalOpen(false)
 
 	const handleSubmit = async (data: any) => {
 		const editorContent = JSON.stringify(editor.document)
@@ -201,7 +194,7 @@ const DocuEditor = () => {
 	}
 
 	useEffect(() => {
-		if (docu) {
+		if (docu && !isModalOpen) {
 			const teamValue = docu.team
 				? typeof docu.team === 'object' && '_id' in docu.team
 					? docu.team._id
@@ -213,7 +206,7 @@ const DocuEditor = () => {
 				team: teamValue
 			})
 		}
-	}, [])
+	}, [docu, methods])
 
 	if (errorDocu) return <Navigate to={DOCUS_URL} />
 
