@@ -216,7 +216,9 @@
 		"welcome_title": "Bienvenido a tu documentación",
 		"welcome_message": "Selecciona un documento del panel izquierdo para comenzar",
 		"home": "Volver a la página de inicio",
-		"no_search_results": "No se encontraron resultados para tu búsqueda"
+		"no_search_results": "No se encontraron resultados para tu búsqueda",
+		"next": "Siguiente",
+		"previous": "Anterior"
 	},
 	"teams": {
 		"title": "Equipos",

@@ -69,6 +69,13 @@
 	}
 }
 
+.documentation-navigation {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 2rem;
+}
+
 .empty-content {
 	color: var(--neutral-neutral20);
 	font-style: italic;

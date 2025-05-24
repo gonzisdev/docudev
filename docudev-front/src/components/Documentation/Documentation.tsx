@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { DOCUMENTATION_URL, HOME_URL, TEAM_URL } from 'constants/routes'
@@ -103,6 +103,53 @@ const Documentation = () => {
 		navigate(`${DOCUMENTATION_URL}/${docu._id}`)
 	}
 
+	const orderedDocsForNavigation = useMemo(() => {
+		if (!teams || !groupedDocus) return []
+		const orderedDocs: Docu[] = []
+		teams.forEach((team) => {
+			const teamDocs = groupedDocus.withTeam[team._id] || []
+			if (teamDocs.length > 0) {
+				orderedDocs.push(...teamDocs)
+			}
+		})
+		if (groupedDocus.withoutTeam.length > 0) {
+			orderedDocs.push(...groupedDocus.withoutTeam)
+		}
+		return orderedDocs
+	}, [teams, groupedDocus])
+
+	const navigationInfo = useMemo(() => {
+		if (!activeDocuId || !orderedDocsForNavigation.length) return null
+		const currentIndex = orderedDocsForNavigation.findIndex((doc) => doc._id === activeDocuId)
+		if (currentIndex === -1) return null
+		return {
+			currentIndex,
+			previousDocu: currentIndex > 0 ? orderedDocsForNavigation[currentIndex - 1] : null,
+			nextDocu:
+				currentIndex < orderedDocsForNavigation.length - 1
+					? orderedDocsForNavigation[currentIndex + 1]
+					: null,
+			total: orderedDocsForNavigation.length
+		}
+	}, [activeDocuId, orderedDocsForNavigation])
+
+	const navigateToDocu = (targetDocu: Docu) => {
+		setActiveDocuId(targetDocu._id)
+		navigate(`${DOCUMENTATION_URL}/${targetDocu._id}`)
+	}
+
+	const handlePreviousDocu = () => {
+		if (navigationInfo?.previousDocu) {
+			navigateToDocu(navigationInfo.previousDocu)
+		}
+	}
+
+	const handleNextDocu = () => {
+		if (navigationInfo?.nextDocu) {
+			navigateToDocu(navigationInfo.nextDocu)
+		}
+	}
+
 	const isLoading = isLoadingTeams || isLoadingDocus
 
 	if (errorDocu) return <Navigate to={HOME_URL} />
@@ -178,6 +225,22 @@ const Documentation = () => {
 										</div>
 									</div>
 								</div>
+								{navigationInfo && (
+									<div className='documentation-navigation'>
+										<Button
+											variant='secondary'
+											disabled={!navigationInfo.previousDocu}
+											onClick={handlePreviousDocu}>
+											<span className='navigation-button-text'>{t('documentation.previous')}</span>
+										</Button>
+										<Button
+											variant='secondary'
+											disabled={!navigationInfo.nextDocu}
+											onClick={handleNextDocu}>
+											<span className='navigation-button-text'>{t('documentation.next')}</span>
+										</Button>
+									</div>
+								)}
 								{docu.content ? (
 									<Editor editorRef={editorRef}>
 										<BlockNoteView editor={editor} editable={false} />
