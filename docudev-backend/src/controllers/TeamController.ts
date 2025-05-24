@@ -1,6 +1,9 @@
 import { Request, Response } from 'express'
 import Team from '../models/Team'
 import Docu from '../models/Docu'
+import Comment from '../models/Comment'
+import Notification from '../models/Notification'
+import mongoose from 'mongoose'
 
 export class TeamController {
   static async createTeam(req: Request, res: Response) {
@@ -152,16 +155,37 @@ export class TeamController {
   }
 
   static async deleteTeam(req: Request, res: Response) {
+    const session = await mongoose.startSession()
+    session.startTransaction()
     try {
       const team = req.team
-      if (!team) {
-        res.status(404).json({ error: 'Team not found' })
-        return
+      const teamDocus = await Docu.find({ team: team._id })
+        .select('_id')
+        .session(session)
+      const docuIds = teamDocus.map((docu) => docu._id)
+      if (docuIds.length > 0) {
+        const comments = await Comment.find({ docu: { $in: docuIds } })
+          .select('_id')
+          .session(session)
+        const commentIds = comments.map((comment) => comment._id)
+        await Notification.deleteMany({ docu: { $in: docuIds } }, { session })
+        if (commentIds.length > 0) {
+          await Notification.deleteMany(
+            { comment: { $in: commentIds } },
+            { session }
+          )
+        }
+        await Comment.deleteMany({ docu: { $in: docuIds } }, { session })
+        await Docu.deleteMany({ team: team._id }, { session })
       }
-      await Team.findByIdAndDelete(team._id)
-      await Docu.deleteMany({ team: team._id })
+      await Notification.deleteMany({ team: team._id }, { session })
+      await Team.findByIdAndDelete(team._id, { session })
+      await session.commitTransaction()
+      session.endSession()
       res.status(200).json(true)
     } catch (error) {
+      await session.abortTransaction()
+      session.endSession()
       console.error('Error deleting team:', error)
       res.status(500).json({ error: 'Error deleting team' })
     }

@@ -54,6 +54,7 @@ export class NotificationController {
     const notifications = await Notification.find({ receiver: req.user._id })
       .populate('sender', 'name surname')
       .populate('team', 'name')
+      .populate('docu', 'title')
       .sort({ createdAt: -1 })
     res.status(200).json(notifications)
   }

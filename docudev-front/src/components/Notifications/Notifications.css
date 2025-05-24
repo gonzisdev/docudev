@@ -10,11 +10,9 @@
 		border-bottom: 1px solid var(--input-border-color);
 		border-radius: 0;
 		padding: 1rem;
-		cursor: pointer;
 		transition:
 			background-color 0.2s ease,
 			opacity 0.2s;
-
 		opacity: 1;
 		position: relative;
 
@@ -42,7 +40,6 @@
 			font-weight: bold;
 			cursor: pointer;
 			z-index: 99999;
-
 			transition: color 0.2s ease;
 
 			&:hover {
@@ -81,8 +78,19 @@
 			.notification-user {
 				color: var(--warning-light);
 			}
+
 			.notification-team {
 				color: var(--warning);
+			}
+
+			.notification-docu {
+				color: var(--text-light);
+				cursor: pointer;
+				transition: opacity 0.2s ease;
+
+				&:hover {
+					opacity: 0.7;
+				}
 			}
 		}
 	}

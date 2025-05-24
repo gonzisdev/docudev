@@ -11,10 +11,6 @@ import { formatDateWithTime } from 'utils/dates'
 import UserPlaceholder from 'assets/images/user-placeholder.jpg'
 import './CommentsPanel.css'
 
-interface ExtendedDivElement extends HTMLDivElement {
-	setCursorPosition?: (position: number) => void
-}
-
 interface Props {
 	docuId: Docu['_id']
 	teamUsers: TeamMember[]
@@ -23,7 +19,7 @@ interface Props {
 
 const CommentsPanel = ({ docuId, teamUsers, currentUser }: Props) => {
 	const { t } = useTranslation()
-	const textareaRef = useRef<ExtendedDivElement>(null)
+	const textareaRef = useRef<(HTMLDivElement & ((position: number) => void)) | undefined>(null)
 	const { comments, isLoadingComments, createComment, isCreatingComment, deleteComment } =
 		useComments({ docuId })
 
@@ -61,7 +57,10 @@ const CommentsPanel = ({ docuId, teamUsers, currentUser }: Props) => {
 					if (idMatch) {
 						const mentionId = `mention-${idMatch[1]}`
 						const beforeMention = prevValue.slice(0, mention.startPos)
-						const afterMention = prevValue.slice(mention.endPos)
+						const afterMentionWithPossibleSpace = prevValue.slice(mention.endPos)
+						const afterMention = afterMentionWithPossibleSpace.startsWith(' ')
+							? afterMentionWithPossibleSpace.slice(1)
+							: afterMentionWithPossibleSpace
 						setComment(beforeMention + afterMention)
 						setMentionedUsers((prev) => prev.filter((m) => m.mentionId !== mentionId))
 						return
@@ -117,34 +116,26 @@ const CommentsPanel = ({ docuId, teamUsers, currentUser }: Props) => {
 		setCursorPosition(newCursorPosition)
 		setTimeout(() => {
 			if (textareaRef.current) {
-				textareaRef.current.focus()
-				if (typeof textareaRef.current.setCursorPosition === 'function') {
-					textareaRef.current.setCursorPosition(newCursorPosition)
-				}
-			}
-			setTimeout(() => {
-				if (textareaRef.current) {
-					const mentions = textareaRef.current.querySelectorAll('.mention')
-					const lastMention = mentions[mentions.length - 1]
-					if (lastMention) {
-						const selection = window.getSelection()
-						const range = document.createRange()
-						if (lastMention.nextSibling && lastMention.nextSibling.nodeType === Node.TEXT_NODE) {
-							range.setStart(lastMention.nextSibling, 1)
-						} else {
-							range.setStartAfter(lastMention)
-							const textNode = document.createTextNode(' ')
-							lastMention.parentNode?.insertBefore(textNode, lastMention.nextSibling)
-						}
-						range.collapse(true)
-						if (selection) {
-							selection.removeAllRanges()
-							selection.addRange(range)
-						}
+				const mentions = textareaRef.current.querySelectorAll('.mention')
+				const lastMention = mentions[mentions.length - 1]
+				if (lastMention) {
+					const selection = window.getSelection()
+					const range = document.createRange()
+					if (lastMention.nextSibling && lastMention.nextSibling.nodeType === Node.TEXT_NODE) {
+						range.setStart(lastMention.nextSibling, 1)
+					} else {
+						range.setStartAfter(lastMention)
+						const textNode = document.createTextNode(' ')
+						lastMention.parentNode?.insertBefore(textNode, lastMention.nextSibling)
+					}
+					range.collapse(true)
+					if (selection) {
+						selection.removeAllRanges()
+						selection.addRange(range)
 					}
 				}
-			}, 20)
-		}, 30)
+			}
+		}, 20)
 	}
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -196,7 +187,7 @@ const CommentsPanel = ({ docuId, teamUsers, currentUser }: Props) => {
 						onDeleteMention={(mentionId) => {
 							const mentionToRemove = mentionedUsers.find((m) => m.mentionId === mentionId)
 							if (mentionToRemove) {
-								const regex = new RegExp(`@${mentionToRemove.name}\\[${mentionId}\\]`, 'g')
+								const regex = new RegExp(`@${mentionToRemove.name}\\[${mentionId}\\]\\s?`, 'g')
 								setComment(comment.replace(regex, ''))
 								setMentionedUsers((prev) => prev.filter((m) => m.mentionId !== mentionId))
 							}

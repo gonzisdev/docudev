@@ -424,6 +424,7 @@
 		"no_notifications": "No tienes notificaciones",
 		"team_invite_text": "<user>{{user}}</user> te ha invitado al equipo <team>{{team}}</team>",
 		"invite_accepted_text": "<user>{{user}}</user> se ha unido al equipo <team>{{team}}</team>",
+		"mention_text": "<user>{{user}}</user> te ha mencionado en el docu <docu>{{docu}}</docu>",
 		"mark_as_read": "Marcar como leída",
 		"accept": "Aceptar",
 		"reject": "Rechazar",

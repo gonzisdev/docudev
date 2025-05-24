@@ -1,7 +1,9 @@
 import { Request, Response } from 'express'
 import Team from '../models/Team'
 import Docu, { IDocu } from '../models/Docu'
-import { FilterQuery } from 'mongoose'
+import Comment from '../models/Comment'
+import Notification from '../models/Notification'
+import mongoose, { FilterQuery } from 'mongoose'
 
 export class DocuController {
   static async createDocu(req: Request, res: Response) {
@@ -171,15 +173,36 @@ export class DocuController {
   }
 
   static async deleteDocu(req: Request, res: Response) {
+    const session = await mongoose.startSession()
+    session.startTransaction()
     try {
-      if (req.docu.team) {
-        await Team.findByIdAndUpdate(req.docu.team, {
-          $pull: { docus: req.docu._id }
-        })
+      const docuId = req.docu._id
+      await Notification.deleteMany({ docu: docuId }, { session })
+      const comments = await Comment.find({ docu: docuId })
+        .select('_id')
+        .session(session)
+      const commentIds = comments.map((comment) => comment._id)
+      if (commentIds.length > 0) {
+        await Notification.deleteMany(
+          { comment: { $in: commentIds } },
+          { session }
+        )
       }
-      await Docu.findByIdAndDelete(req.docu._id)
+      await Comment.deleteMany({ docu: docuId }, { session })
+      if (req.docu.team) {
+        await Team.findByIdAndUpdate(
+          req.docu.team,
+          { $pull: { docus: req.docu._id } },
+          { session }
+        )
+      }
+      await Docu.findByIdAndDelete(req.docu._id, { session })
+      await session.commitTransaction()
+      session.endSession()
       res.status(200).json(true)
     } catch (error) {
+      await session.abortTransaction()
+      session.endSession()
       console.error('Error deleting docu:', error)
       res.status(500).json({ error: 'Error deleting docu' })
     }

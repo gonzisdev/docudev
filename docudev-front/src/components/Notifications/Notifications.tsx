@@ -1,4 +1,5 @@
 import { Trans, useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { Notification, NotificationInviteResponse } from 'models/Notification'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import useNotifications from 'hooks/useNotifications'
@@ -13,6 +14,7 @@ import './Notifications.css'
 
 const Notifications = () => {
 	const { t } = useTranslation()
+	const navigate = useNavigate()
 	const { notifications, isLoadingNotifications, responseInvite, markAsRead, deleteNotification } =
 		useNotifications({ forceRefresh: true })
 
@@ -24,6 +26,15 @@ const Notifications = () => {
 	} = usePagination<Notification>({
 		data: notifications
 	})
+
+	const handleDocuClick = async (notification: Notification) => {
+		if (notification.status === 'pending') {
+			await markAsRead({ notificationId: notification._id, response: 'read' })
+		}
+		if (typeof notification.docu === 'object') {
+			navigate(`/dashboard/docudev/${notification.docu._id}`)
+		}
+	}
 
 	const renderText = (notification: Notification) => {
 		if (
@@ -45,6 +56,7 @@ const Notifications = () => {
 				/>
 			)
 		}
+
 		if (
 			notification.type === 'invite-accepted' &&
 			typeof notification.sender === 'object' &&
@@ -64,22 +76,47 @@ const Notifications = () => {
 				/>
 			)
 		}
+
+		if (
+			notification.type === 'mention' &&
+			typeof notification.sender === 'object' &&
+			typeof notification.docu === 'object'
+		) {
+			return (
+				<Trans
+					i18nKey='notifications.mention_text'
+					values={{
+						user: `${notification.sender.name} ${notification.sender.surname}`,
+						docu: notification.docu.title
+					}}
+					components={{
+						user: <span className='notification-user' />,
+						docu: (
+							<span className='notification-docu' onClick={() => handleDocuClick(notification)} />
+						)
+					}}
+				/>
+			)
+		}
 		return notification.type
 	}
 
 	const handleInviteResponse = async (
 		notificationId: Notification['_id'],
 		response: NotificationInviteResponse
-	) => {
-		await responseInvite({ notificationId, response })
-	}
+	) => await responseInvite({ notificationId, response })
 
-	const handleMarkAsRead = async (notificationId: Notification['_id']) => {
+	const handleMarkAsRead = async (notificationId: Notification['_id']) =>
 		await markAsRead({ notificationId, response: 'read' })
-	}
 
-	const handleDeleteNotification = async (notificationId: Notification['_id']) => {
+	const handleDeleteNotification = async (notificationId: Notification['_id']) =>
 		await deleteNotification({ notificationId })
+
+	const isActionableNotification = (notification: Notification) => {
+		return (
+			(notification.type === 'team-invite' && notification.status === 'pending') ||
+			(notification.type === 'invite-accepted' && notification.status === 'pending')
+		)
 	}
 
 	return (
@@ -95,7 +132,9 @@ const Notifications = () => {
 								<div className='notifications-list'>
 									{paginatedNotifications.map((notification) => (
 										<div
-											className={`notification-card${notification.status !== 'pending' ? ' read' : ''}`}
+											className={`notification-card${
+												notification.status !== 'pending' ? ' read' : ''
+											}`}
 											key={notification._id}>
 											<Button
 												variant='link'
@@ -107,30 +146,29 @@ const Notifications = () => {
 												<p className='notification-title'>{renderText(notification)}</p>
 												{notification.status !== 'pending' && notification.status !== 'read' && (
 													<p
-														className={`notification-status${notification.status === 'rejected' ? ' error' : ''}`}>
+														className={`notification-status${
+															notification.status === 'rejected' ? ' error' : ''
+														}`}>
 														{t(`notifications.${notification.status}`)}
 													</p>
 												)}
-												{(notification.type === 'team-invite' &&
-													notification.status === 'pending') ||
-												(notification.type === 'invite-accepted' &&
-													notification.status === 'pending') ? (
+												{isActionableNotification(notification) ? (
 													<div className='notification-actions'>
 														{notification.type === 'team-invite' &&
 															notification.status === 'pending' && (
 																<>
 																	<Button
 																		variant='secondary'
-																		onClick={() => {
+																		onClick={() =>
 																			handleInviteResponse(notification._id, 'accepted')
-																		}}>
+																		}>
 																		{t('notifications.accept')}
 																	</Button>
 																	<Button
 																		variant='danger'
-																		onClick={() => {
+																		onClick={() =>
 																			handleInviteResponse(notification._id, 'rejected')
-																		}}>
+																		}>
 																		{t('notifications.reject')}
 																	</Button>
 																	<Button
@@ -151,7 +189,19 @@ const Notifications = () => {
 																</Button>
 															)}
 													</div>
-												) : null}
+												) : (
+													notification.type === 'mention' &&
+													notification.status === 'pending' && (
+														<div className='notification-actions'>
+															<Button
+																variant='primary'
+																className='mark-as-read'
+																onClick={() => handleMarkAsRead(notification._id)}>
+																{t('notifications.mark_as_read')}
+															</Button>
+														</div>
+													)
+												)}
 											</div>
 										</div>
 									))}

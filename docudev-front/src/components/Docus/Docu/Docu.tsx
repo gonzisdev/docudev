@@ -1,8 +1,10 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { DOCUS_URL, EDIT_DOCU_URL, TEAM_URL } from 'constants/routes'
 import { codeBlock } from 'constants/editor'
-import { useTranslation } from 'react-i18next'
+import { TeamMember } from 'models/Docu'
+import { useAuthStore } from 'stores/authStore'
 import useDocu from 'hooks/useDocu'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Header from 'components/elements/Header/Header'
@@ -10,6 +12,7 @@ import Container from 'components/elements/Container/Container'
 import Editor from 'components/elements/Editor/Editor'
 import Loading from 'components/elements/Loading/Loading'
 import Button from 'components/elements/Button/Button'
+import CommentsPanel from '../CommentsPanel/CommentsPanel'
 import DeleteDocuModal from '../Modals/DeleteDocuModal'
 import { useCreateBlockNote } from '@blocknote/react'
 import { PartialBlock } from '@blocknote/core'
@@ -26,7 +29,7 @@ const Docu = () => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 	const editorRef = useRef(null)
-
+	const { user } = useAuthStore()
 	const { docu, isLoadingDocu, errorDocu, deleteDocu, isDeletingDocu } = useDocu({ docuId })
 
 	const [initialContent, setInitialContent] = useState<PartialBlock[] | undefined>(undefined)
@@ -47,6 +50,33 @@ const Docu = () => {
 			navigate(DOCUS_URL)
 		}
 	}
+
+	const teamUsers = useMemo(() => {
+		if (!docu?.team || typeof docu.team !== 'object') return []
+		const users: TeamMember[] = []
+		const owner = docu.team.owner
+		if (owner && typeof owner === 'object') {
+			users.push({
+				_id: owner._id,
+				name: owner.name,
+				surname: owner.surname,
+				image: owner.image
+			})
+		}
+		if (Array.isArray(docu.team.collaborators)) {
+			docu.team.collaborators.forEach((collab) => {
+				if (collab && typeof collab === 'object') {
+					users.push({
+						_id: collab._id,
+						name: collab.name,
+						surname: collab.surname,
+						image: collab.image
+					})
+				}
+			})
+		}
+		return users.filter((user, index, self) => index === self.findIndex((u) => u._id === user._id))
+	}, [docu?.team])
 
 	useEffect(() => {
 		if (docu) {
@@ -124,7 +154,22 @@ const Docu = () => {
 							</div>
 						)}
 						{docu?.content && (
-							<Editor editorRef={editorRef}>
+							<Editor
+								editorRef={editorRef}
+								commentsPanel={
+									docuId && (
+										<CommentsPanel
+											docuId={docuId}
+											teamUsers={teamUsers}
+											currentUser={{
+												_id: user!._id,
+												name: user!.name,
+												surname: user!.surname,
+												image: user!.image
+											}}
+										/>
+									)
+								}>
 								<BlockNoteView editor={editor} editable={false} />
 							</Editor>
 						)}

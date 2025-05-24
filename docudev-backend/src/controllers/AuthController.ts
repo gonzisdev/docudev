@@ -2,10 +2,12 @@ import { Request, Response } from 'express'
 import User from '../models/User'
 import Docu from '../models/Docu'
 import Team from '../models/Team'
+import Comment from '../models/Comment'
 import Notification from '../models/Notification'
 import jwt from 'jsonwebtoken'
 import { generateJWT } from '../utils/jwt'
 import { sendEmail } from '../utils/email'
+import mongoose from 'mongoose'
 
 export class AuthController {
   static async createAccount(req: Request, res: Response) {
@@ -108,22 +110,45 @@ export class AuthController {
   }
 
   static async deleteAccount(req: Request, res: Response) {
+    const session = await mongoose.startSession()
+    session.startTransaction()
+
     try {
-      await Docu.deleteMany({ owner: req.user._id })
-      const ownedTeams = await Team.find({ owner: req.user._id })
-      for (const team of ownedTeams) {
-        await Docu.deleteMany({ team: team._id })
+      const userId = req.user._id
+      const ownedTeams = await Team.find({ owner: userId })
+        .select('_id')
+        .session(session)
+      const ownedTeamIds = ownedTeams.map((team) => team._id)
+      const allUserDocus = await Docu.find({
+        $or: [{ owner: userId }, { team: { $in: ownedTeamIds } }]
+      })
+        .select('_id')
+        .session(session)
+      const allDocuIds = allUserDocus.map((docu) => docu._id)
+      if (allDocuIds.length > 0) {
+        await Comment.deleteMany({ docu: { $in: allDocuIds } }, { session })
+        await Docu.deleteMany({ _id: { $in: allDocuIds } }, { session })
       }
-      await Team.deleteMany({ owner: req.user._id })
+      await Comment.deleteMany({ author: userId }, { session })
+      await Team.deleteMany({ owner: userId }, { session })
       await Team.updateMany(
-        { members: req.user._id },
-        { $pull: { members: req.user._id } }
+        { collaborators: userId },
+        { $pull: { collaborators: userId } },
+        { session }
       )
-      await Notification.deleteMany({ sender: req.user._id })
-      await Notification.deleteMany({ receiver: req.user._id })
-      await User.findByIdAndDelete(req.user._id)
+      await Notification.deleteMany(
+        {
+          $or: [{ sender: userId }, { receiver: userId }]
+        },
+        { session }
+      )
+      await User.findByIdAndDelete(userId, { session })
+      await session.commitTransaction()
+      session.endSession()
       res.status(200).json(true)
     } catch (error) {
+      await session.abortTransaction()
+      session.endSession()
       console.error('Error deleting account:', error)
       res.status(500).json({ error: 'Error deleting account' })
     }

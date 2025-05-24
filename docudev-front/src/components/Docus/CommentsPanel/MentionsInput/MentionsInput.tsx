@@ -1,9 +1,5 @@
-import React, { useState, useRef, useEffect, forwardRef } from 'react'
+import { useState, useRef, useEffect, forwardRef } from 'react'
 import './MentionsInput.css'
-
-export interface MentionsInputHandle extends HTMLDivElement {
-	setCursorPosition: (position: number) => void
-}
 
 export interface MentionUser {
 	id: string
@@ -11,17 +7,9 @@ export interface MentionUser {
 	mentionId: string
 }
 
-interface CustomChangeEvent {
-	target: {
-		value: string
-		selectionStart: number
-		selectionEnd: number
-	}
-}
-
 interface Props {
 	value: string
-	onChange: (e: CustomChangeEvent) => void
+	onChange: (e: { target: { value: string; selectionStart: number; selectionEnd: number } }) => void
 	placeholder?: string
 	numberOfLines?: number
 	hasError?: boolean
@@ -67,7 +55,6 @@ const MentionsInput = forwardRef<HTMLDivElement, Props>(
 				const matches = textBeforeCursor.match(regex) || []
 				position += matches.length * diff
 			})
-
 			return position
 		}
 
@@ -182,7 +169,6 @@ const MentionsInput = forwardRef<HTMLDivElement, Props>(
 			if (!inputRef.current || isUpdatingContent.current) return
 			lastCursorPosition.current = getCursorPositionInPlainText(inputRef.current)
 			const plainText = extractPlainText()
-
 			onChange({
 				target: {
 					value: plainText,
@@ -221,7 +207,6 @@ const MentionsInput = forwardRef<HTMLDivElement, Props>(
 			for (let i = 0; i < inputRef.current.childNodes.length; i++) {
 				result += processNode(inputRef.current.childNodes[i])
 			}
-
 			return result
 		}
 
@@ -269,7 +254,6 @@ const MentionsInput = forwardRef<HTMLDivElement, Props>(
 			if (hasFocus && lastCursorPosition.current !== null) {
 				restoreCursorPosition(lastCursorPosition.current)
 			}
-
 			isUpdatingContent.current = false
 		}, [value, mentionedUsers])
 
