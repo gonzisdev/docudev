@@ -14,7 +14,8 @@ const FormRadioButton = ({
 	options,
 	required = false,
 	icon,
-	readonly = false
+	readonly = false,
+	helperText
 }: Props) => {
 	const {
 		control,
@@ -27,7 +28,8 @@ const FormRadioButton = ({
 			label={label}
 			errorMessage={errors[id] ? errors[id].message?.toString() : ''}
 			required={required}
-			icon={icon}>
+			icon={icon}
+			helperText={helperText}>
 			<Controller
 				name={id}
 				control={control}

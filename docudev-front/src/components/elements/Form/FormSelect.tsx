@@ -12,10 +12,23 @@ interface Props extends FormProps {
 	placeholder?: string
 	disabled?: boolean
 	isClearable?: boolean
+	helperText?: string
 }
 
 const FormSelect = forwardRef<SelectInstance<Option, false, GroupBase<Option>>, Props>(
-	({ id, label, required = false, options, placeholder, disabled, isClearable = false }, ref) => {
+	(
+		{
+			id,
+			label,
+			required = false,
+			options,
+			placeholder,
+			disabled,
+			isClearable = false,
+			helperText
+		},
+		ref
+	) => {
 		const {
 			control,
 			formState: { errors, touchedFields }
@@ -26,7 +39,8 @@ const FormSelect = forwardRef<SelectInstance<Option, false, GroupBase<Option>>, 
 				id={id}
 				label={label}
 				errorMessage={getFormInputError(id, errors, touchedFields)}
-				required={required}>
+				required={required}
+				helperText={helperText}>
 				<Controller
 					name={id}
 					control={control}

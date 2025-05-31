@@ -12,7 +12,8 @@ import {
 	createDocuService,
 	deleteDocuService,
 	getDocuService,
-	updateDocuService
+	updateDocuService,
+	removeDocuFromTeamService
 } from 'services/docu'
 import { toast } from 'sonner'
 
@@ -88,6 +89,35 @@ const useDocu = ({ docuId }: Props) => {
 		}
 	})
 
+	const { mutateAsync: removeFromTeam, isPending: isRemovingFromTeam } = useMutation({
+		mutationFn: docuId ? () => removeDocuFromTeamService(docuId) : undefined,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [docuQueryKey, docuId]
+			})
+			queryClient.invalidateQueries({
+				queryKey: [docusQueryKey]
+			})
+			queryClient.invalidateQueries({
+				queryKey: [teamQueryKey, docu?.team]
+			})
+			queryClient.invalidateQueries({
+				queryKey: [teamsQueryKey]
+			})
+			queryClient.invalidateQueries({
+				queryKey: [teamDocusQueryKey]
+			})
+			toast.success(t('remove_from_team.toast.success_title'), {
+				description: t('remove_from_team.toast.success_description')
+			})
+		},
+		onError: () => {
+			toast.error(t('remove_from_team.toast.error_title'), {
+				description: t('remove_from_team.toast.error_description')
+			})
+		}
+	})
+
 	const { mutateAsync: deleteDocu, isPending: isDeletingDocu } = useMutation({
 		mutationFn: docuId ? () => deleteDocuService(docuId) : undefined,
 		onSuccess: () => {
@@ -122,6 +152,8 @@ const useDocu = ({ docuId }: Props) => {
 		isCreatingDocu,
 		updateDocu,
 		isUpdatingDocu,
+		removeFromTeam,
+		isRemovingFromTeam,
 		deleteDocu,
 		isDeletingDocu
 	}

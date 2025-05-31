@@ -11,6 +11,7 @@ import Loading from 'components/elements/Loading/Loading'
 import Button from 'components/elements/Button/Button'
 import Pagination from 'components/elements/Pagination/Pagination'
 import './Notifications.css'
+import { DOCU_URL } from 'constants/routes'
 
 const Notifications = () => {
 	const { t } = useTranslation()
@@ -32,7 +33,7 @@ const Notifications = () => {
 			await markAsRead({ notificationId: notification._id, response: 'read' })
 		}
 		if (typeof notification.docu === 'object') {
-			navigate(`/dashboard/docudev/${notification.docu._id}`)
+			navigate(`${DOCU_URL}/${notification.docu._id}`)
 		}
 	}
 

@@ -23,7 +23,8 @@ const FormInput = forwardRef<Ref, Props>(
 			icon,
 			readonly = false,
 			numberOfLines,
-			maxLength = 100
+			maxLength = 100,
+			helperText
 		},
 		ref
 	) => {
@@ -40,7 +41,8 @@ const FormInput = forwardRef<Ref, Props>(
 				label={label}
 				errorMessage={getFormInputError(id, errors, touchedFields)}
 				required={required}
-				icon={icon}>
+				icon={icon}
+				helperText={helperText}>
 				<Controller
 					name={id}
 					control={control}

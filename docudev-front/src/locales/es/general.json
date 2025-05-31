@@ -231,7 +231,7 @@
 		"update_team": "Editar equipo",
 		"save_team": "Guardar cambios",
 		"delete_team": "Eliminar equipo",
-		"delete_team_description": "¿Estás seguro de que quieres eliminar este equipo? Al eliminar un equipo se eliminan todos los docus asociados al equipo. Esta acción no se puede deshacer",
+		"delete_team_description": "¿Estás seguro de que quieres eliminar este equipo? Esta acción no se puede deshacer",
 		"name": "Nombre del equipo",
 		"name_placeholder": "Nombre del equipo",
 		"description": "Descripción del equipo",
@@ -258,7 +258,7 @@
 
 		"warning": {
 			"warning_title": "¡Actualiza tu plan para poder crear y gestionar equipos!",
-			"warning_description": "No puedes crear mas equipos o gestionarlos porque tu plan no lo permite",
+			"warning_description": "No puedes crear más equipos o gestionarlos porque tu plan no lo permite",
 			"warning_title_limit": "¡Has alcanzado el límite de equipos!",
 			"warning_description_limit": "No puedes crear más equipos porque has alcanzado el límite de tu plan"
 		}
@@ -303,7 +303,7 @@
 			"success_remove_collaborator_title": "¡Colaborador eliminado!",
 			"success_remove_collaborator_description": "La invitación se ha enviado correctamente",
 			"error_remove_collaborator_title": "Error al eliminar colaborador",
-			"error_remove_collaborator_ddescription": "No se ha podido eliminar el colaborador",
+			"error_remove_collaborator_description": "No se ha podido eliminar el colaborador",
 			"success_remove_multiple_collaborators_title": "¡Colaboradores eliminados!",
 			"success_remove_multiple_collaborators_description": "Los colaboradores han sido eliminados correctamente",
 			"error_remove_multiple_collaborators_title": "Error al eliminar colaboradores",
@@ -316,6 +316,7 @@
 		"export_pdf": "Exportar a PDF",
 		"update_docu": "Editar docu",
 		"delete_docu": "Eliminar docu",
+		"remove_from_team": "Eliminar del equipo",
 		"subtitle": "Tus docus en DocuDev",
 		"save_docu": "Guardar cambios",
 		"team": "Equipo",
@@ -349,7 +350,8 @@
 		"warning": {
 			"warning_title_save": "¡Importante!",
 			"warning_description_save": "Si no guardas el documento tus cambios se conservarán temporalmente durante 30 minutos"
-		}
+		},
+		"team_change_restricted_description": "Solo el propietario del documento puede cambiar la asignación de equipo"
 	},
 	"create_docu": {
 		"title": "Crear docu",
@@ -370,6 +372,16 @@
 			"success_description": "El docu se ha actualizado correctamente",
 			"error_title": "Error al actualizar el docu",
 			"error_description": "Error al actualizar el docu. Vuelve a intentarlo más tarde"
+		}
+	},
+	"remove_from_team": {
+		"title": "Eliminar del equipo",
+		"description": "¿Estás seguro de que quieres quitar este docu del equipo {{teamName}}? Esta acción no se puede deshacer",
+		"toast": {
+			"success_title": "¡Docu eliminado!",
+			"success_description": "El docu se ha eliminado correctamente",
+			"error_title": "Error al eliminar el docu",
+			"error_description": "Error al eliminar el docu. Vuelve a intentarlo más tarde"
 		}
 	},
 	"delete_docu": {
@@ -453,7 +465,7 @@
 		"image": "Imagen de perfil",
 		"save_changes": "Actualizar perfil",
 		"delete_account": "Eliminar cuenta",
-		"delete_account_description": "¿Estás seguro de que quieres eliminar tu cuenta? Al eliminar tu cuenta se eliminarán todos tus datos, tus equipos y su contenido, tus docus y tus comentarios. Esta acción no se puede deshacer",
+		"delete_account_description": "¿Estás seguro de que quieres eliminar tu cuenta? Al eliminar tu cuenta se eliminarán todos tus datos, tus equipos, tus docus y tus comentarios. Esta acción no se puede deshacer",
 		"validations": {
 			"email": {
 				"required": "Introduce tu correo electrónico",

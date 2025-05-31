@@ -89,66 +89,114 @@ export class TeamController {
   }
 
   static async leaveTeam(req: Request, res: Response) {
+    const session = await mongoose.startSession()
+    session.startTransaction()
     try {
       if (req.team.owner.toString() === req.user._id.toString()) {
+        await session.abortTransaction()
+        session.endSession()
         res.status(403).json({ error: 'Owner cannot leave the team' })
         return
       }
-      await Team.findByIdAndUpdate(req.team._id, {
-        $pull: { collaborators: req.user._id }
-      })
+      await Docu.updateMany(
+        { team: req.team._id, owner: req.user._id },
+        { $unset: { team: 1 } },
+        { session }
+      )
+      await Team.findByIdAndUpdate(
+        req.team._id,
+        { $pull: { collaborators: req.user._id } },
+        { session }
+      )
       await Docu.updateMany(
         { team: req.team._id },
-        { $pull: { collaborators: req.user._id } }
+        { $pull: { collaborators: req.user._id } },
+        { session }
       )
+      await session.commitTransaction()
+      session.endSession()
       res.status(200).json(true)
     } catch (error) {
+      await session.abortTransaction()
+      session.endSession()
       console.error('Error leaving team:', error)
       res.status(500).json({ error: 'Error leaving team' })
     }
   }
 
   static async removeCollaborator(req: Request, res: Response) {
+    const session = await mongoose.startSession()
+    session.startTransaction()
     try {
       const { collaboratorId } = req.body
       if (req.team.owner.toString() !== req.user._id.toString()) {
+        await session.abortTransaction()
+        session.endSession()
         res
           .status(403)
           .json({ error: 'Only the owner can remove collaborators' })
         return
       }
-      await Team.findByIdAndUpdate(req.team._id, {
-        $pull: { collaborators: collaboratorId }
-      })
+      await Docu.updateMany(
+        { team: req.team._id, owner: collaboratorId },
+        { $unset: { team: 1 } },
+        { session }
+      )
+      await Team.findByIdAndUpdate(
+        req.team._id,
+        { $pull: { collaborators: collaboratorId } },
+        { session }
+      )
       await Docu.updateMany(
         { team: req.team._id },
-        { $pull: { collaborators: collaboratorId } }
+        { $pull: { collaborators: collaboratorId } },
+        { session }
       )
+      await session.commitTransaction()
+      session.endSession()
       res.status(200).json(true)
     } catch (error) {
+      await session.abortTransaction()
+      session.endSession()
       console.error('Error removing collaborator:', error)
       res.status(500).json({ error: 'Error removing collaborator' })
     }
   }
 
   static async removeMultipleCollaborators(req: Request, res: Response) {
+    const session = await mongoose.startSession()
+    session.startTransaction()
     try {
       const { collaborators } = req.body
       if (req.team.owner.toString() !== req.user._id.toString()) {
+        await session.abortTransaction()
+        session.endSession()
         res
           .status(403)
           .json({ error: 'Only the owner can remove collaborators' })
         return
       }
-      await Team.findByIdAndUpdate(req.team._id, {
-        $pull: { collaborators: { $in: collaborators } }
-      })
+      await Docu.updateMany(
+        { team: req.team._id, owner: { $in: collaborators } },
+        { $unset: { team: 1 } },
+        { session }
+      )
+      await Team.findByIdAndUpdate(
+        req.team._id,
+        { $pull: { collaborators: { $in: collaborators } } },
+        { session }
+      )
       await Docu.updateMany(
         { team: req.team._id },
-        { $pull: { collaborators: { $in: collaborators } } }
+        { $pull: { collaborators: { $in: collaborators } } },
+        { session }
       )
+      await session.commitTransaction()
+      session.endSession()
       res.status(200).json(true)
     } catch (error) {
+      await session.abortTransaction()
+      session.endSession()
       console.error('Error removing multiple collaborators:', error)
       res.status(500).json({ error: 'Error removing multiple collaborators' })
     }
@@ -176,7 +224,11 @@ export class TeamController {
           )
         }
         await Comment.deleteMany({ docu: { $in: docuIds } }, { session })
-        await Docu.deleteMany({ team: team._id }, { session })
+        await Docu.updateMany(
+          { team: team._id },
+          { $unset: { team: 1 } },
+          { session }
+        )
       }
       await Notification.deleteMany({ team: team._id }, { session })
       await Team.findByIdAndDelete(team._id, { session })

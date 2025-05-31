@@ -5,7 +5,7 @@ import FormItemLayout from 'layouts/FormLayout/FormItemLayout/FormItemLayout'
 
 type Props = FormFileProps
 
-const FormFileInput = ({ id, typeFile, label, required = false, icon }: Props) => {
+const FormFileInput = ({ id, typeFile, label, required = false, icon, helperText }: Props) => {
 	const {
 		control,
 		formState: { errors }
@@ -17,7 +17,8 @@ const FormFileInput = ({ id, typeFile, label, required = false, icon }: Props) =
 			label={label}
 			errorMessage={errors[id] ? errors[id].message?.toString() : ''}
 			required={required}
-			icon={icon}>
+			icon={icon}
+			helperText={helperText}>
 			<Controller
 				name={id}
 				control={control}

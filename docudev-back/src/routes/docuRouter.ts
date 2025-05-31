@@ -59,6 +59,14 @@ router.put(
   DocuController.updateDocu
 )
 
+router.patch(
+  '/remove-from-team/:docuId',
+  authenticate,
+  validateUserStatus,
+  canAccessDocu,
+  DocuController.removeFromTeam
+)
+
 router.delete(
   '/delete-docu/:docuId',
   authenticate,

@@ -8,6 +8,7 @@ export interface FormProps {
 	required?: boolean
 	icon?: React.ReactNode
 	readonly?: boolean
+	helperText?: string
 }
 
 export interface FormFileProps extends FormProps {

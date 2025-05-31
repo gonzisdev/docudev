@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import { UseFormReturn } from 'react-hook-form'
-import { DocuFormPayload } from 'models/Docu'
+import { Docu, DocuFormPayload } from 'models/Docu'
 import { Team } from 'models/Team'
+import { useAuthStore } from 'stores/authStore'
 import Modal from 'components/elements/Modal/Modal'
 import Form from 'components/elements/Form/Form'
 import FormInput from 'components/elements/Form/FormInput'
@@ -14,35 +15,39 @@ interface Props {
 	isVisible: boolean
 	toggleVisibility: () => void
 	methods: UseFormReturn<DocuFormPayload>
-	docuId?: string
+
 	teams?: Team[]
 	isLoading: boolean
 	isSubmitting: boolean
 	onSubmit: (data: DocuFormPayload) => Promise<void>
+	docu?: Docu
 }
 
 const DocuFormModal = ({
 	isVisible,
 	toggleVisibility,
 	methods,
-	docuId,
+	docu,
 	teams,
 	isLoading,
 	isSubmitting,
 	onSubmit
 }: Props) => {
 	const { t } = useTranslation()
+	const { user } = useAuthStore()
+
+	const isDocumentOwner = docu && docu.owner?._id === user?._id
 
 	return (
 		<Modal
 			isVisible={isVisible}
 			toggleVisibility={toggleVisibility}
-			title={docuId ? t('update_docu.title') : t('create_docu.title')}>
-			{docuId && isLoading ? (
+			title={docu?._id ? t('update_docu.title') : t('create_docu.title')}>
+			{docu?._id && isLoading ? (
 				<Loading />
 			) : (
 				<Form methods={methods} onSubmit={methods.handleSubmit(onSubmit)}>
-					{docuId && (
+					{docu?._id && (
 						<Warning
 							title={t('docus.warning.warning_title_save')}
 							description={t('docus.warning.warning_description_save')}
@@ -64,11 +69,17 @@ const DocuFormModal = ({
 								label: team.name
 							}))}
 							isClearable={true}
+							disabled={docu?._id ? !isDocumentOwner : false}
+							helperText={
+								docu?._id && !isDocumentOwner
+									? t('docus.team_change_restricted_description')
+									: undefined
+							}
 						/>
 					)}
 					<footer>
 						<Button type='submit' variant='secondary' loading={isSubmitting} fullWidth>
-							{docuId ? t('update_docu.save_docu') : t('create_docu.title')}
+							{docu?._id ? t('update_docu.save_docu') : t('create_docu.title')}
 						</Button>
 					</footer>
 				</Form>

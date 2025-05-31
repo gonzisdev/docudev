@@ -26,6 +26,12 @@ export const updateDocuService = async (docuId: Docu['_id'], data: DocuFormPaylo
 	})
 }
 
+export const removeDocuFromTeamService = async (docuId: Docu['_id']) => {
+	return await customFetch<boolean>(`${endpoints.removeDocuFromTeam}/${docuId}`, {
+		method: 'PATCH'
+	})
+}
+
 export const deleteDocuService = async (docuId: Docu['_id']) => {
 	return await customFetch<boolean>(`${endpoints.deleteDocu}/${docuId}`, {
 		method: 'DELETE'

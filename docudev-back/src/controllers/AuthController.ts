@@ -112,26 +112,75 @@ export class AuthController {
   static async deleteAccount(req: Request, res: Response) {
     const session = await mongoose.startSession()
     session.startTransaction()
-
     try {
       const userId = req.user._id
       const ownedTeams = await Team.find({ owner: userId })
         .select('_id')
         .session(session)
       const ownedTeamIds = ownedTeams.map((team) => team._id)
-      const allUserDocus = await Docu.find({
-        $or: [{ owner: userId }, { team: { $in: ownedTeamIds } }]
-      })
+      const userDocus = await Docu.find({ owner: userId })
         .select('_id')
         .session(session)
-      const allDocuIds = allUserDocus.map((docu) => docu._id)
-      if (allDocuIds.length > 0) {
-        await Comment.deleteMany({ docu: { $in: allDocuIds } }, { session })
-        await Docu.deleteMany({ _id: { $in: allDocuIds } }, { session })
+      const userDocuIds = userDocus.map((docu) => docu._id)
+      if (userDocuIds.length > 0) {
+        const comments = await Comment.find({ docu: { $in: userDocuIds } })
+          .select('_id')
+          .session(session)
+        const commentIds = comments.map((comment) => comment._id)
+        await Notification.deleteMany(
+          { docu: { $in: userDocuIds } },
+          { session }
+        )
+        if (commentIds.length > 0) {
+          await Notification.deleteMany(
+            { comment: { $in: commentIds } },
+            { session }
+          )
+        }
+        await Comment.deleteMany({ docu: { $in: userDocuIds } }, { session })
+        await Docu.deleteMany({ owner: userId }, { session })
+      }
+      if (ownedTeamIds.length > 0) {
+        const otherUserDocsInOwnedTeams = await Docu.find({
+          team: { $in: ownedTeamIds },
+          owner: { $ne: userId }
+        }).session(session)
+        if (otherUserDocsInOwnedTeams.length > 0) {
+          const otherDocIds = otherUserDocsInOwnedTeams.map((docu) => docu._id)
+          const commentsOfOtherDocs = await Comment.find({
+            docu: { $in: otherDocIds }
+          })
+            .select('_id')
+            .session(session)
+          const commentIdsOfOtherDocs = commentsOfOtherDocs.map(
+            (comment) => comment._id
+          )
+          await Notification.deleteMany(
+            { docu: { $in: otherDocIds } },
+            { session }
+          )
+          if (commentIdsOfOtherDocs.length > 0) {
+            await Notification.deleteMany(
+              { comment: { $in: commentIdsOfOtherDocs } },
+              { session }
+            )
+          }
+          await Comment.deleteMany({ docu: { $in: otherDocIds } }, { session })
+          await Docu.updateMany(
+            { team: { $in: ownedTeamIds }, owner: { $ne: userId } },
+            { $unset: { team: 1 } },
+            { session }
+          )
+        }
       }
       await Comment.deleteMany({ author: userId }, { session })
       await Team.deleteMany({ owner: userId }, { session })
       await Team.updateMany(
+        { collaborators: userId },
+        { $pull: { collaborators: userId } },
+        { session }
+      )
+      await Docu.updateMany(
         { collaborators: userId },
         { $pull: { collaborators: userId } },
         { session }

@@ -151,20 +151,47 @@ export class DocuController {
   static async updateDocu(req: Request, res: Response) {
     try {
       const { title, content, team } = req.body
-      if (req.docu.team && req.docu.team.toString() !== team) {
-        await Team.findByIdAndUpdate(req.docu.team, {
+      const currentTeam = req.docu.team?.toString()
+      const newTeam = team || null
+      const isChangingTeam = currentTeam !== newTeam
+      if (
+        isChangingTeam &&
+        req.docu.owner.toString() !== req.user._id.toString()
+      ) {
+        res.status(403).json({
+          error: 'Only the document owner can change the team assignment'
+        })
+        return
+      }
+      if (isChangingTeam && newTeam) {
+        const teamFound = await Team.findById(newTeam)
+        if (
+          !teamFound ||
+          (req.user._id.toString() !== teamFound.owner.toString() &&
+            !teamFound.collaborators.some(
+              (collaborator) =>
+                collaborator._id.toString() === req.user._id.toString()
+            ))
+        ) {
+          res.status(403).json({ error: 'Invalid team access' })
+          return
+        }
+      }
+      if (currentTeam && isChangingTeam) {
+        await Team.findByIdAndUpdate(currentTeam, {
           $pull: { docus: req.docu._id }
         })
       }
-      if (team && (!req.docu.team || req.docu.team.toString() !== team)) {
-        await Team.findByIdAndUpdate(team, {
+      if (newTeam && isChangingTeam) {
+        await Team.findByIdAndUpdate(newTeam, {
           $push: { docus: req.docu._id }
         })
       }
       req.docu.title = title
       req.docu.content = content
-      req.docu.team = team ? team : null
+      req.docu.team = newTeam
       await req.docu.save()
+
       res.status(200).json(true)
     } catch (error) {
       console.error('Error updating docu:', error)
@@ -172,10 +199,45 @@ export class DocuController {
     }
   }
 
+  static async removeFromTeam(req: Request, res: Response) {
+    const session = await mongoose.startSession()
+    session.startTransaction()
+    try {
+      const teamId = req.docu.team
+      await Team.findByIdAndUpdate(
+        teamId,
+        { $pull: { docus: req.docu._id } },
+        { session }
+      )
+      await Docu.findByIdAndUpdate(
+        req.docu._id,
+        { $unset: { team: 1 } },
+        { session }
+      )
+
+      await session.commitTransaction()
+      session.endSession()
+      res.status(200).json(true)
+    } catch (error) {
+      await session.abortTransaction()
+      session.endSession()
+      console.error('Error removing document from team:', error)
+      res.status(500).json({ error: 'Error removing document from team' })
+    }
+  }
+
   static async deleteDocu(req: Request, res: Response) {
     const session = await mongoose.startSession()
     session.startTransaction()
     try {
+      if (req.docu.owner.toString() !== req.user._id.toString()) {
+        await session.abortTransaction()
+        session.endSession()
+        res
+          .status(403)
+          .json({ error: 'Only the document owner can delete this document' })
+        return
+      }
       const docuId = req.docu._id
       await Notification.deleteMany({ docu: docuId }, { session })
       const comments = await Comment.find({ docu: docuId })

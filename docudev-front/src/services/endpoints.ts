@@ -20,6 +20,7 @@ export const endpoints = {
 	createDocu: 'docus/create-docu',
 	updateDocu: 'docus/update-docu',
 	deleteDocu: 'docus/delete-docu',
+	removeDocuFromTeam: 'docus/remove-from-team',
 
 	notifications: 'notifications',
 	sendInvite: 'notifications/invite',

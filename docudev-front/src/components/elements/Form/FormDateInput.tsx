@@ -8,9 +8,17 @@ import { Controller, useFormContext } from 'react-hook-form'
 interface Props extends FormProps {
 	dateType?: dateType
 	placeholder?: string
+	helperText?: string
 }
 
-const FormDateInput = ({ id, label, required = false, dateType = 'date', placeholder }: Props) => {
+const FormDateInput = ({
+	id,
+	label,
+	required = false,
+	dateType = 'date',
+	placeholder,
+	helperText
+}: Props) => {
 	const {
 		control,
 		formState: { errors, touchedFields }
@@ -21,7 +29,8 @@ const FormDateInput = ({ id, label, required = false, dateType = 'date', placeho
 			id={id}
 			label={label}
 			errorMessage={getFormInputError(id, errors, touchedFields)}
-			required={required}>
+			required={required}
+			helperText={helperText}>
 			<Controller
 				name={id}
 				control={control}

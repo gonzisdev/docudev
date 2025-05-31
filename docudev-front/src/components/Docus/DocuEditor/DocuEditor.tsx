@@ -17,6 +17,7 @@ import Button from 'components/elements/Button/Button'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Loading from 'components/elements/Loading/Loading'
 import DocuFormModal from '../Modals/DocuFormModal'
+import RemoveFromTeamModal from '../Modals/RemoveFromTeamModal'
 import DeleteDocuModal from '../Modals/DeleteDocuModal'
 import CollaborationStatus from './CollaborationStatus/CollaborationStatus'
 import { BlockNoteView } from '@blocknote/shadcn'
@@ -50,6 +51,7 @@ const DocuEditor = () => {
 	const [editorReady, setEditorReady] = useState(false)
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+	const [isRemoveFromTeamModalOpen, setIsRemoveFromTeamModalOpen] = useState(false)
 	const [localUser] = useState(() => ({
 		id: user?._id,
 		name: `${user?.name} ${user?.surname}`,
@@ -65,6 +67,8 @@ const DocuEditor = () => {
 		isCreatingDocu,
 		updateDocu,
 		isUpdatingDocu,
+		removeFromTeam,
+		isRemovingFromTeam,
 		deleteDocu,
 		isDeletingDocu
 	} = useDocu(docuId ? { docuId } : {})
@@ -169,9 +173,6 @@ const DocuEditor = () => {
 		resolver: zodResolver(validationSchema)
 	})
 
-	const openModal = () => setIsModalOpen(true)
-	const closeModal = () => setIsModalOpen(false)
-
 	const handleSubmit = async (data: any) => {
 		const editorContent = JSON.stringify(editor.document)
 		const docuData = { ...data, content: editorContent }
@@ -182,7 +183,17 @@ const DocuEditor = () => {
 			await createDocu(docuData)
 			docuData.team ? navigate(`${TEAM_URL}/${docuData.team}`) : navigate(DOCUS_URL)
 		}
-		closeModal()
+		setIsModalOpen(false)
+	}
+
+	const handleRemoveFromTeam = async () => {
+		if (docuId) {
+			await removeFromTeam()
+			setIsRemoveFromTeamModalOpen(false)
+			if (user?._id !== docu?.owner?._id) {
+				navigate(DOCUS_URL)
+			}
+		}
 	}
 
 	const handleDeleteDocu = async () => {
@@ -228,13 +239,24 @@ const DocuEditor = () => {
 							)
 						}>
 						<div className='docu-editor-header-actions'>
-							<Button variant='primary' onClick={openModal}>
+							<Button variant='primary' onClick={() => setIsModalOpen(true)}>
 								{t('docus.save_docu')}
 							</Button>
 							{docuId && (
-								<Button variant='danger' onClick={() => setIsDeleteModalOpen(true)}>
-									{t('docus.delete_docu')}
-								</Button>
+								<>
+									<Button
+										variant='danger'
+										onClick={() => setIsRemoveFromTeamModalOpen(true)}
+										disabled={!docu?.team}>
+										{t('docus.remove_from_team')}
+									</Button>
+									<Button
+										variant='danger'
+										onClick={() => setIsDeleteModalOpen(true)}
+										disabled={docu?.owner?._id !== user?._id}>
+										{t('docus.delete_docu')}
+									</Button>
+								</>
 							)}
 						</div>
 					</Header>
@@ -296,14 +318,23 @@ const DocuEditor = () => {
 			)}
 			<DocuFormModal
 				isVisible={isModalOpen}
-				toggleVisibility={closeModal}
+				toggleVisibility={() => setIsModalOpen(false)}
 				methods={methods}
-				docuId={docuId}
 				teams={teams}
 				isLoading={isLoadingDocu}
 				isSubmitting={isCreatingDocu || isUpdatingDocu}
 				onSubmit={handleSubmit}
+				docu={docu}
 			/>
+			{docu?.team && typeof docu.team === 'object' && (
+				<RemoveFromTeamModal
+					isVisible={isRemoveFromTeamModalOpen}
+					toggleVisibility={() => setIsRemoveFromTeamModalOpen(false)}
+					onConfirm={handleRemoveFromTeam}
+					isLoading={isRemovingFromTeam}
+					teamName={docu.team.name}
+				/>
+			)}
 			<DeleteDocuModal
 				isVisible={isDeleteModalOpen}
 				toggleVisibility={() => setIsDeleteModalOpen(false)}

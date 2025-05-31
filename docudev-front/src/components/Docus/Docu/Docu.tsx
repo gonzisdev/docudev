@@ -14,6 +14,7 @@ import Loading from 'components/elements/Loading/Loading'
 import Button from 'components/elements/Button/Button'
 import CommentsPanel from '../CommentsPanel/CommentsPanel'
 import DeleteDocuModal from '../Modals/DeleteDocuModal'
+import RemoveFromTeamModal from '../Modals/RemoveFromTeamModal'
 import { useCreateBlockNote } from '@blocknote/react'
 import { PartialBlock } from '@blocknote/core'
 import { BlockNoteView } from '@blocknote/shadcn'
@@ -30,9 +31,18 @@ const Docu = () => {
 	const navigate = useNavigate()
 	const editorRef = useRef(null)
 	const { user } = useAuthStore()
-	const { docu, isLoadingDocu, errorDocu, deleteDocu, isDeletingDocu } = useDocu({ docuId })
+	const {
+		docu,
+		isLoadingDocu,
+		errorDocu,
+		removeFromTeam,
+		isRemovingFromTeam,
+		deleteDocu,
+		isDeletingDocu
+	} = useDocu({ docuId })
 
 	const [initialContent, setInitialContent] = useState<PartialBlock[] | undefined>(undefined)
+	const [isRemoveFromTeamModalOpen, setIsRemoveFromTeamModalOpen] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
 	const editor = useCreateBlockNote({
@@ -40,13 +50,20 @@ const Docu = () => {
 		codeBlock
 	})
 
-	const openDeleteModal = () => setIsDeleteModalOpen(true)
-	const closeDeleteModal = () => setIsDeleteModalOpen(false)
+	const handleRemoveFromTeam = async () => {
+		if (docuId) {
+			await removeFromTeam()
+			setIsRemoveFromTeamModalOpen(false)
+			if (user?._id !== docu?.owner?._id) {
+				navigate(DOCUS_URL)
+			}
+		}
+	}
 
 	const handleDeleteDocu = async () => {
 		if (docuId) {
 			await deleteDocu()
-			closeDeleteModal()
+			setIsDeleteModalOpen(false)
 			navigate(DOCUS_URL)
 		}
 	}
@@ -106,7 +123,16 @@ const Docu = () => {
 								onClick={() => exportToPdf(editorRef.current, docu?.title)}>
 								{t('docus.export_pdf')}
 							</Button>
-							<Button variant='danger' onClick={openDeleteModal}>
+							<Button
+								variant='danger'
+								onClick={() => setIsRemoveFromTeamModalOpen(true)}
+								disabled={!docu?.team}>
+								{t('docus.remove_from_team')}
+							</Button>
+							<Button
+								variant='danger'
+								onClick={() => setIsDeleteModalOpen(true)}
+								disabled={docu?.owner?._id !== user?._id}>
 								{t('docus.delete_docu')}
 							</Button>
 						</div>
@@ -176,9 +202,18 @@ const Docu = () => {
 					</Container>
 				</>
 			)}
+			{docu?.team && typeof docu.team === 'object' && (
+				<RemoveFromTeamModal
+					isVisible={isRemoveFromTeamModalOpen}
+					toggleVisibility={() => setIsRemoveFromTeamModalOpen(false)}
+					onConfirm={handleRemoveFromTeam}
+					isLoading={isRemovingFromTeam}
+					teamName={docu.team.name}
+				/>
+			)}
 			<DeleteDocuModal
 				isVisible={isDeleteModalOpen}
-				toggleVisibility={closeDeleteModal}
+				toggleVisibility={() => setIsDeleteModalOpen(false)}
 				onConfirm={handleDeleteDocu}
 				isLoading={isDeletingDocu}
 			/>

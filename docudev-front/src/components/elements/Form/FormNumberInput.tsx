@@ -12,7 +12,8 @@ const FormNumberInput = ({
 	placeholder,
 	required = false,
 	icon,
-	readonly = false
+	readonly = false,
+	helperText
 }: Props) => {
 	const {
 		control,
@@ -25,7 +26,8 @@ const FormNumberInput = ({
 			label={label}
 			errorMessage={getFormInputError(id, errors, touchedFields)}
 			required={required}
-			icon={icon}>
+			icon={icon}
+			helperText={helperText}>
 			<Controller
 				name={id}
 				control={control}

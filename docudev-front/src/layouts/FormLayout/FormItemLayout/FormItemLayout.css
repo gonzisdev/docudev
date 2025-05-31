@@ -9,9 +9,6 @@
 		font-size: 0.875rem;
 		font-weight: 400;
 		line-height: 1.137rem;
-	}
-
-	.form-item-label {
 		text-align: left;
 		margin-bottom: 0.3rem;
 		color: var(--text-label);
@@ -26,6 +23,21 @@
 		&.error {
 			color: var(--error);
 		}
+
+		.form-tooltip-container {
+			display: inline-flex;
+			align-items: center;
+
+			.form-tooltip-icon {
+				cursor: help;
+				transition: all 0.2s ease;
+
+				path {
+					stroke: var(--warning);
+					transition: stroke 0.2s ease;
+				}
+			}
+		}
 	}
 
 	.form-item-error {
@@ -33,5 +45,26 @@
 		font-size: 0.625rem;
 		margin-top: 0.25rem;
 		color: var(--error);
+	}
+}
+
+.form-tooltip-fixed {
+	position: fixed;
+	transform: translateX(-50%);
+	padding: 0.5rem 0.75rem;
+	background-color: var(--primary-light);
+	font-size: 0.75rem;
+	border-radius: 0.375rem;
+	white-space: nowrap;
+	pointer-events: none;
+
+	&::after {
+		content: '';
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		border: 0.5rem solid transparent;
+		border-top-color: var(--primary-light);
 	}
 }
