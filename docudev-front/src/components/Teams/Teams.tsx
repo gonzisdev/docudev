@@ -55,7 +55,9 @@ const Teams = () => {
 		teamId: selectedTeamId!
 	})
 
-	const ownedTeams = teams?.filter((team) => team.owner === user?._id).length || 0
+	const ownedTeams =
+		teams?.filter((team) => typeof team.owner === 'object' && team.owner._id === user?._id)
+			.length || 0
 
 	const validationSchema = z.object({
 		name: z
@@ -203,14 +205,19 @@ const Teams = () => {
 						<div className='teams-grid'>
 							<div className='user-owned-teams'>
 								<h3>{t('teams.my_teams_subtitle')}</h3>
-								{teams && teams.filter((team) => team.owner === user?._id).length > 0 ? (
+								{teams &&
+								teams.filter(
+									(team) => typeof team.owner === 'object' && team.owner._id === user?._id
+								).length > 0 ? (
 									<SwipeableList
 										type={ListType.IOS}
 										fullSwipe={true}
 										threshold={0.3}
 										className='teams-swipeable-list'>
 										{teams
-											.filter((team) => team.owner === user?._id)
+											.filter(
+												(team) => typeof team.owner === 'object' && team.owner._id === user?._id
+											)
 											.map((team) => (
 												<SwipeableListItem
 													key={team._id}
@@ -228,14 +235,19 @@ const Teams = () => {
 							</div>
 							<div className='collaborative-teams'>
 								<h3>{t('teams.collaborative_teams_subtitle')}</h3>
-								{teams && teams.filter((team) => team.owner !== user?._id).length > 0 ? (
+								{teams &&
+								teams.filter(
+									(team) => typeof team.owner === 'object' && team.owner._id !== user?._id
+								).length > 0 ? (
 									<SwipeableList
 										type={ListType.IOS}
 										fullSwipe={true}
 										threshold={0.5}
 										className='teams-swipeable-list'>
 										{teams
-											?.filter((team) => team.owner !== user?._id)
+											?.filter(
+												(team) => typeof team.owner === 'object' && team.owner._id !== user?._id
+											)
 											.map((team) => (
 												<SwipeableListItem
 													key={team._id}
