@@ -220,7 +220,7 @@ const DocuEditor = () => {
 	}, [docu, methods])
 
 	if (errorDocu) return <Navigate to={DOCUS_URL} />
-	console.log('Editor:', docu)
+
 	return (
 		<DashboardLayout>
 			{isLoadingDocu || isLoadingTeams || !editor ? (
