@@ -15,7 +15,6 @@ interface Props {
 	isVisible: boolean
 	toggleVisibility: () => void
 	methods: UseFormReturn<DocuFormPayload>
-
 	teams?: Team[]
 	isLoading: boolean
 	isSubmitting: boolean
@@ -35,8 +34,6 @@ const DocuFormModal = ({
 }: Props) => {
 	const { t } = useTranslation()
 	const { user } = useAuthStore()
-
-	const isDocumentOwner = docu && docu.owner?._id === user?._id
 
 	return (
 		<Modal
@@ -66,12 +63,13 @@ const DocuFormModal = ({
 							placeholder={t('docus.form.team_placeholder')}
 							options={teams.map((team) => ({
 								value: team._id,
-								label: team.name
+								label: team.name,
+								isDisabled: !(typeof team.owner === 'object' && team.owner.role === 'admin')
 							}))}
 							isClearable={true}
-							disabled={docu?._id ? !isDocumentOwner : false}
+							disabled={docu?._id ? docu && docu.owner?._id !== user?._id : false}
 							helperText={
-								docu?._id && !isDocumentOwner
+								docu?._id && docu && docu.owner?._id !== user?._id
 									? t('docus.team_change_restricted_description')
 									: undefined
 							}

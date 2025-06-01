@@ -220,7 +220,7 @@ const DocuEditor = () => {
 	}, [docu, methods])
 
 	if (errorDocu) return <Navigate to={DOCUS_URL} />
-
+	console.log('Editor:', docu)
 	return (
 		<DashboardLayout>
 			{isLoadingDocu || isLoadingTeams || !editor ? (
@@ -239,7 +239,14 @@ const DocuEditor = () => {
 							)
 						}>
 						<div className='docu-editor-header-actions'>
-							<Button variant='primary' onClick={() => setIsModalOpen(true)}>
+							<Button
+								variant='primary'
+								onClick={() => setIsModalOpen(true)}
+								disabled={
+									typeof docu?.team === 'object' &&
+									typeof docu.team.owner === 'object' &&
+									docu.team.owner.role !== 'admin'
+								}>
 								{t('docus.save_docu')}
 							</Button>
 							{docuId && (

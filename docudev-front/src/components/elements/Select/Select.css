@@ -120,6 +120,16 @@
 					background: var(--secondary);
 				}
 
+				&.select__option--is-disabled {
+					color: var(--neutral-neutral10) !important;
+					cursor: not-allowed !important;
+
+					&:hover {
+						color: var(--neutral-neutral10) !important;
+						background: var(--background) !important;
+					}
+				}
+
 				&:first-child {
 					&.select__option--is-selected {
 						border-top-left-radius: var(--input-border-radius);

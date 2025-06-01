@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import Team from '../models/Team'
+import Team, { ITeam } from '../models/Team'
 import Docu, { IDocu } from '../models/Docu'
 import Comment from '../models/Comment'
 import Notification from '../models/Notification'
@@ -10,16 +10,29 @@ export class DocuController {
     try {
       const { title, content, team } = req.body
       if (team) {
-        const teamFound = await Team.findById(team)
+        const teamFound = (await Team.findById(team).populate(
+          'owner',
+          'role'
+        )) as unknown as (ITeam & { owner: { role: string } }) | null
+        if (!teamFound) {
+          res.status(404).json({ error: 'Team not found' })
+          return
+        }
         if (
-          !teamFound ||
-          (req.user._id.toString() !== teamFound.owner.toString() &&
-            !teamFound.collaborators.some(
-              (collaborator) =>
-                collaborator._id.toString() === req.user._id.toString()
-            ))
+          req.user._id.toString() !== teamFound.owner._id.toString() &&
+          !teamFound.collaborators.some(
+            (collaborator) =>
+              collaborator._id.toString() === req.user._id.toString()
+          )
         ) {
-          res.status(403).json({ error: 'Invalid credentials' })
+          res.status(403).json({ error: 'Invalid team access' })
+          return
+        }
+        if (teamFound.owner.role !== 'admin') {
+          res.status(403).json({
+            error:
+              'Team owner does not have an admin plan. Cannot create documents in this team'
+          })
           return
         }
       }
@@ -137,7 +150,7 @@ export class DocuController {
           path: 'team',
           select: 'name color owner collaborators',
           populate: [
-            { path: 'owner', select: 'name surname image' },
+            { path: 'owner', select: 'name surname image role' },
             { path: 'collaborators', select: 'name surname image' }
           ]
         })
@@ -164,16 +177,43 @@ export class DocuController {
         return
       }
       if (isChangingTeam && newTeam) {
-        const teamFound = await Team.findById(newTeam)
+        const teamFound = (await Team.findById(newTeam).populate(
+          'owner',
+          'role'
+        )) as unknown as (ITeam & { owner: { role: string } }) | null
+        if (!teamFound) {
+          res.status(404).json({ error: 'Team not found' })
+          return
+        }
+
         if (
-          !teamFound ||
-          (req.user._id.toString() !== teamFound.owner.toString() &&
-            !teamFound.collaborators.some(
-              (collaborator) =>
-                collaborator._id.toString() === req.user._id.toString()
-            ))
+          req.user._id.toString() !== teamFound.owner._id.toString() &&
+          !teamFound.collaborators.some(
+            (collaborator) =>
+              collaborator._id.toString() === req.user._id.toString()
+          )
         ) {
           res.status(403).json({ error: 'Invalid team access' })
+          return
+        }
+        if (teamFound.owner.role !== 'admin') {
+          res.status(403).json({
+            error:
+              'Team owner does not have an admin plan. Cannot assign documents to this team'
+          })
+          return
+        }
+      }
+      if (req.docu.team) {
+        const currentTeamData = (await Team.findById(req.docu.team).populate(
+          'owner',
+          'role'
+        )) as unknown as (ITeam & { owner: { role: string } }) | null
+        if (currentTeamData && currentTeamData.owner.role !== 'admin') {
+          res.status(403).json({
+            error:
+              'Team owner does not have an admin plan. Cannot edit documents in this team'
+          })
           return
         }
       }

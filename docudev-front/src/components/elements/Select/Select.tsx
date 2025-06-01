@@ -93,6 +93,7 @@ const Select = forwardRef<SelectInstance<Option, false>, Props>(
 				onChange={(option) => onChange(option?.value || '')}
 				onBlur={onBlur}
 				options={options}
+				isOptionDisabled={(option) => option.isDisabled || false}
 				placeholder={placeholder}
 				isDisabled={disabled}
 				isSearchable={isSearchable}

@@ -34,6 +34,7 @@ import {
 import 'react-swipeable-list/dist/styles.css'
 import UserPlaceholder from 'assets/images/user-placeholder.jpg'
 import './Team.css'
+import Warning from 'components/elements/Warning/Warning'
 
 const Team = () => {
 	const { t } = useTranslation()
@@ -156,12 +157,16 @@ const Team = () => {
 								variant='secondary'
 								onClick={() => navigate(CREATE_DOCU_URL)}
 								//TODO: disabled={DOCS USER LIMIT}
-							>
+								disabled={typeof team?.owner === 'object' && team?.owner.role === 'user'}>
 								{t('team.create_docu')}
 							</Button>
 						</div>
 					</Header>
 					<Container subtitle={team?.description}>
+						<Warning
+							title={t('team.warning.warning_title_plan')}
+							description={t('team.warning.warning_description_plan')}
+						/>
 						<div className='team-info'>
 							<div className='team-members-layout'>
 								<div className='owner-container'>
@@ -268,7 +273,7 @@ const Team = () => {
 										<SwipeableListItem
 											key={docu._id}
 											leadingActions={leadingActions(docu._id)}
-											trailingActions={trailingActions(docu._id)}
+											trailingActions={docu.owner._id === user?._id && trailingActions(docu._id)}
 											onSwipeStart={() => setIsSwiping(true)}
 											onSwipeEnd={() => setIsSwiping(false)}>
 											<DocuCard docu={docu} />

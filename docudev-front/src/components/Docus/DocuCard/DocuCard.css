@@ -83,5 +83,11 @@
 		g path:last-child {
 			fill: var(--primary);
 		}
+
+		&.disabled {
+			g path:first-child {
+				fill: var(--error-light);
+			}
+		}
 	}
 }

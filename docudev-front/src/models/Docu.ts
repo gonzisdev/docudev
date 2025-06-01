@@ -2,7 +2,7 @@ import { User } from 'models/Auth'
 import { Team } from 'models/Team'
 
 export type DocuOwner = Pick<User, '_id' | 'name' | 'surname' | 'image'>
-export type TeamMember = Pick<User, '_id' | 'name' | 'surname' | 'image'>
+export type TeamMember = Pick<User, '_id' | 'name' | 'surname' | 'image' | 'role'>
 
 export interface Docu {
 	_id: string
@@ -15,7 +15,7 @@ export interface Docu {
 				_id: Team['_id']
 				name: Team['name']
 				color: Team['color']
-				owner?: TeamMember | User['_id']
+				owner: TeamMember | User['_id']
 				collaborators?: TeamMember[] | User['_id'][]
 		  }
 	views: number

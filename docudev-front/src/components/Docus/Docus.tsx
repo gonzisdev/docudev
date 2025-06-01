@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useAuthStore } from 'stores/authStore'
 import { CREATE_DOCU_URL, EDIT_DOCU_URL } from 'constants/routes'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import useTeams from 'hooks/useTeams'
@@ -33,6 +34,7 @@ import './Docus.css'
 const Docus = () => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
+	const { user } = useAuthStore()
 	const {
 		docus,
 		pagination,
@@ -197,7 +199,7 @@ const Docus = () => {
 										<SwipeableListItem
 											key={docu._id}
 											leadingActions={leadingActions(docu._id)}
-											trailingActions={trailingActions(docu._id)}
+											trailingActions={docu.owner._id === user?._id && trailingActions(docu._id)}
 											onSwipeStart={() => setIsSwiping(true)}
 											onSwipeEnd={() => setIsSwiping(false)}>
 											<DocuCard docu={docu} />

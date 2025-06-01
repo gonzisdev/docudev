@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useAuthStore } from 'stores/authStore'
 import { DOCU_URL, TEAM_URL } from 'constants/routes'
 import { Docu } from 'models/Docu'
 import Card from 'components/elements/Card/Card'
@@ -13,6 +14,7 @@ interface Props {
 
 const DocuCard = ({ docu }: Props) => {
 	const { t } = useTranslation()
+	const { user } = useAuthStore()
 	const navigate = useNavigate()
 
 	return (
@@ -56,7 +58,9 @@ const DocuCard = ({ docu }: Props) => {
 					</div>
 				</div>
 			</div>
-			<TwoArrowsIcon className='docu-card-swipe-hint' />
+			<TwoArrowsIcon
+				className={`docu-card-swipe-hint ${docu.owner._id !== user?._id ? 'disabled' : ''}`}
+			/>
 		</Card>
 	)
 }

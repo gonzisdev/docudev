@@ -5,4 +5,5 @@ export type DateTypeValidation = 'dd/MM/yyyy' | 'dd/MM/yyyy HH:mm' | 'yyyy'
 export interface Option {
 	label: string
 	value: string
+	isDisabled?: boolean
 }

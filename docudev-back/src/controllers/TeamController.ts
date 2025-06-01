@@ -33,16 +33,20 @@ export class TeamController {
 
   static async getTeams(req: Request, res: Response) {
     try {
-      const ownedTeams = await Team.find({ owner: req.user._id }).populate({
-        path: 'collaborators',
-        select: '-password -code -token'
-      })
+      const ownedTeams = await Team.find({ owner: req.user._id })
+        .populate({ path: 'owner', select: '-password -code -token' })
+        .populate({
+          path: 'collaborators',
+          select: '-password -code -token'
+        })
       const collaborativeTeams = await Team.find({
         collaborators: req.user._id
-      }).populate({
-        path: 'collaborators',
-        select: '-password -code -token'
       })
+        .populate({ path: 'owner', select: '-password -code -token' })
+        .populate({
+          path: 'collaborators',
+          select: '-password -code -token'
+        })
       const allTeams = [...ownedTeams, ...collaborativeTeams]
       res.status(200).json(allTeams)
     } catch (error) {

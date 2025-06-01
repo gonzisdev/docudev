@@ -308,6 +308,10 @@
 			"success_remove_multiple_collaborators_description": "Los colaboradores han sido eliminados correctamente",
 			"error_remove_multiple_collaborators_title": "Error al eliminar colaboradores",
 			"error_remove_multiple_collaborators_description": "Ha ocurrido un error al intentar eliminar los colaboradores. Por favor, inténtalo de nuevo."
+		},
+		"warning": {
+			"warning_title_plan": "¡Plan caducado!",
+			"warning_description_plan": "El plan del dueño del equipo ha caducado. No podrás crer docus ni editarlos hasta que se actualice el plan"
 		}
 	},
 	"docus": {
