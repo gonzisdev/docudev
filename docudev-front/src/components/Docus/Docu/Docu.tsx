@@ -77,7 +77,8 @@ const Docu = () => {
 				_id: owner._id,
 				name: owner.name,
 				surname: owner.surname,
-				image: owner.image
+				image: owner.image,
+				role: owner.role
 			})
 		}
 		if (Array.isArray(docu.team.collaborators)) {
@@ -87,7 +88,8 @@ const Docu = () => {
 						_id: collab._id,
 						name: collab.name,
 						surname: collab.surname,
-						image: collab.image
+						image: collab.image,
+						role: collab.role
 					})
 				}
 			})
@@ -191,7 +193,8 @@ const Docu = () => {
 												_id: user!._id,
 												name: user!.name,
 												surname: user!.surname,
-												image: user!.image
+												image: user!.image,
+												role: user!.role
 											}}
 										/>
 									)

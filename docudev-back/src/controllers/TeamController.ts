@@ -34,6 +34,7 @@ export class TeamController {
   static async getTeams(req: Request, res: Response) {
     try {
       const ownedTeams = await Team.find({ owner: req.user._id })
+        .sort({ name: 1 })
         .populate({ path: 'owner', select: '-password -code -token' })
         .populate({
           path: 'collaborators',
@@ -42,6 +43,7 @@ export class TeamController {
       const collaborativeTeams = await Team.find({
         collaborators: req.user._id
       })
+        .sort({ name: 1 })
         .populate({ path: 'owner', select: '-password -code -token' })
         .populate({
           path: 'collaborators',

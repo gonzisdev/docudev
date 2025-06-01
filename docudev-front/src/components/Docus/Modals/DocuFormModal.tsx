@@ -68,11 +68,7 @@ const DocuFormModal = ({
 							}))}
 							isClearable={true}
 							disabled={docu?._id ? docu && docu.owner?._id !== user?._id : false}
-							helperText={
-								docu?._id && docu && docu.owner?._id !== user?._id
-									? t('docus.team_change_restricted_description')
-									: undefined
-							}
+							helperText={t('docus.team_change_restricted_description')}
 						/>
 					)}
 					<footer>

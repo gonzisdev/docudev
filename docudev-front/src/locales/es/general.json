@@ -7,7 +7,10 @@
 		"settings": "Configuración",
 		"update_plan": "Actualizar plan",
 		"save": "Guardar",
-		"no_options": "No hay opciones disponibles"
+		"no_options": "No hay opciones disponibles",
+		"language": "Idioma",
+		"spanish": "Español",
+		"english": "Inglés"
 	},
 	"common": {
 		"home": "Inicio",

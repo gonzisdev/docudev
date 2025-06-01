@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
 import { Route, Routes, Navigate, useLocation, Outlet } from 'react-router-dom'
 import { useAuthStore } from './stores/authStore'
 import {
@@ -35,14 +34,14 @@ import Notifications from 'components/Notifications/Notifications'
 import { Settings } from 'components/Settings/Settings'
 import { Toaster } from 'sonner'
 
-const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 	const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 	const location = useLocation()
 	if (!isAuthenticated) return <Navigate to='/login' state={{ from: location }} replace />
 	return children
 }
 
-const PublicRoute = ({ children }: { children: ReactNode }) => {
+const PublicRoute = ({ children }: { children: React.ReactNode }) => {
 	const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 	const location = useLocation()
 	if (isAuthenticated) return <Navigate to='/home' state={{ from: location }} replace />
@@ -66,7 +65,6 @@ export const App = () => {
 					<Route path={FORGOT_PASSWORD_URL} element={<ForgotPassword />} />
 					<Route path={RECOVER_PASSWORD_URL} element={<RecoverPassword />} />
 				</Route>
-
 				{/* Protected routes */}
 				<Route
 					element={
@@ -90,7 +88,7 @@ export const App = () => {
 					<Route path={TEAM_MANAGEMENT_URL} element={<TeamManagement />} />
 					{/* Notification routes */}
 					<Route path={NOTIFICATIONS_URL} element={<Notifications />} />
-
+					{/* Settings route */}
 					<Route path={SETTINGS_URL} element={<Settings />} />
 				</Route>
 

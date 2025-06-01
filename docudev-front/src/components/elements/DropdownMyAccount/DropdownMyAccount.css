@@ -92,6 +92,17 @@
 				font-weight: 500;
 			}
 		}
+
+		.language-option {
+			select {
+				margin-left: 0.625rem;
+				font-size: 0.875rem;
+				font-weight: 500;
+				padding: 0.2rem 0.5rem;
+				border-radius: 4px;
+				outline: none;
+			}
+		}
 	}
 
 	.dashboard-sidebar.collapsed & .dropdown-my-account-options {
