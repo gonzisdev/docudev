@@ -130,7 +130,7 @@ const Team = () => {
 	}, [debouncedSearch])
 
 	if (errorTeam) return <Navigate to={TEAMS_URL} />
-
+	console.log('teamDocus', team)
 	return (
 		<DashboardLayout>
 			{isLoadingTeamDocus || isLoadingTeam ? (
@@ -157,16 +157,18 @@ const Team = () => {
 								variant='secondary'
 								onClick={() => navigate(CREATE_DOCU_URL)}
 								//TODO: disabled={DOCS USER LIMIT}
-								disabled={typeof team?.owner === 'object' && team?.owner.role === 'user'}>
+								disabled={typeof team?.owner === 'object' && team?.owner.role !== 'admin'}>
 								{t('team.create_docu')}
 							</Button>
 						</div>
 					</Header>
 					<Container subtitle={team?.description}>
-						<Warning
-							title={t('team.warning.warning_title_plan')}
-							description={t('team.warning.warning_description_plan')}
-						/>
+						{typeof team?.owner === 'object' && team?.owner.role !== 'admin' && (
+							<Warning
+								title={t('team.warning.warning_title_plan')}
+								description={t('team.warning.warning_description_plan')}
+							/>
+						)}
 						<div className='team-info'>
 							<div className='team-members-layout'>
 								<div className='owner-container'>
