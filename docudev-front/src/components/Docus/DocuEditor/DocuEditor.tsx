@@ -244,7 +244,7 @@ const DocuEditor = () => {
 								onClick={() => setIsModalOpen(true)}
 								disabled={
 									typeof docu?.team === 'object' &&
-									typeof docu.team.owner === 'object' &&
+									typeof docu.team?.owner === 'object' &&
 									docu.team.owner.role !== 'admin'
 								}>
 								{t('docus.save_docu')}
