@@ -69,11 +69,12 @@
 		background: none;
 		border: none;
 
-		&:hover {
+		&:not(.disabled):hover {
 			color: var(--secondary);
 		}
 
 		&.disabled {
+			color: var(--neutral-neutral20);
 			cursor: not-allowed;
 		}
 	}

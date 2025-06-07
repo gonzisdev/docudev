@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuthStore } from 'stores/authStore'
-import { ADMIN_TEAM_LIMIT } from 'constants/limits'
+import { ADMIN_TEAM_LIMIT, TEAM_MEMBER_LIMIT } from 'constants/limits'
 import { Team, TeamFormPayload } from 'models/Team'
 import { User } from 'models/Auth'
 import { Option } from 'models/Common'
@@ -64,7 +64,11 @@ const TeamManagement = () => {
 		isRemovingCollaborators
 	} = useTeam({ teamId: selectedTeamId })
 
-	const ownedTeams = teams?.filter((team) => team.owner === user?._id).length || 0
+	const ownedTeams =
+		teams?.filter((team) => typeof team.owner === 'object' && team.owner._id === user?._id)
+			.length || 0
+
+	const teamMembersCount = (collaborators?.length || 0) + 1
 
 	const validationSchema = z.object({
 		name: z
@@ -230,7 +234,9 @@ const TeamManagement = () => {
 
 	useEffect(() => {
 		if (teams && teams.length > 0) {
-			const ownerTeams = teams.filter((team) => team.owner === user?._id)
+			const ownerTeams = teams.filter(
+				(team) => typeof team.owner === 'object' && team.owner._id === user?._id
+			)
 			const options = ownerTeams.map((team) => ({
 				value: team._id,
 				label: team.name
@@ -300,8 +306,7 @@ const TeamManagement = () => {
 									<Button
 										variant='link'
 										onClick={() => setIsInviteModalOpen(true)}
-										//TODO: disabled={COLLABORATORS LIMIT}
-									>
+										disabled={TEAM_MEMBER_LIMIT >= teamMembersCount}>
 										{t('team.invite')}
 									</Button>
 									<Button variant='primary' onClick={() => openEditModal(selectedTeamId)}>

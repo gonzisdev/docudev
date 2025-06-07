@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { CREATE_DOCU_URL, EDIT_DOCU_URL, TEAMS_URL } from 'constants/routes'
+import { TEAM_MEMBER_LIMIT } from 'constants/limits'
 import { useAuthStore } from 'stores/authStore'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import useTeam from 'hooks/useTeam'
@@ -62,6 +63,8 @@ const Team = () => {
 	const [inputSearchValue, setInputSearchValue] = useState(searchTerm)
 
 	const { deleteDocu, isDeletingDocu } = useDocu(docuToDelete ? { docuId: docuToDelete } : {})
+
+	const teamMembersCount = (team?.collaborators?.length || 0) + 1
 
 	const sortOptions = getSortOptions(t)
 	const uniqueUsers = useMemo(() => getUniqueOwners(teamDocus), [teamDocus])
@@ -130,7 +133,7 @@ const Team = () => {
 	}, [debouncedSearch])
 
 	if (errorTeam) return <Navigate to={TEAMS_URL} />
-	console.log('teamDocus', team)
+
 	return (
 		<DashboardLayout>
 			{isLoadingTeamDocus || isLoadingTeam ? (
@@ -143,8 +146,7 @@ const Team = () => {
 								<Button
 									variant='link'
 									onClick={() => setIsInviteModalOpen(true)}
-									//TODO: disabled={COLLABORATORS LIMIT}
-								>
+									disabled={TEAM_MEMBER_LIMIT >= teamMembersCount}>
 									{t('team.invite')}
 								</Button>
 							)}

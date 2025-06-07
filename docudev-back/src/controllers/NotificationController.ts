@@ -18,6 +18,11 @@ export class NotificationController {
       res.status(403).json({ error: 'Only the team owner can invite users' })
       return
     }
+    const currentMembers = (team.collaborators?.length || 0) + 1
+    if (currentMembers >= 10) {
+      res.status(400).json({ error: 'Team member limit reached' })
+      return
+    }
     if (
       team.owner.toString() === receiver._id.toString() ||
       team.collaborators.some(
