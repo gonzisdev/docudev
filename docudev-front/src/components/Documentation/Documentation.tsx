@@ -10,7 +10,6 @@ import useDocu from 'hooks/useDocu'
 import DocumentationLayout from 'layouts/DocumentationLayout/DocumentationLayout'
 import Header from 'components/elements/Header/Header'
 import Loading from 'components/elements/Loading/Loading'
-import Card from 'components/elements/Card/Card'
 import Button from 'components/elements/Button/Button'
 import Editor from 'components/elements/Editor/Editor'
 import { useCreateBlockNote } from '@blocknote/react'
@@ -33,12 +32,12 @@ const Documentation = () => {
 	const { teams, isLoadingTeams } = useTeams()
 	const { docus, isLoadingDocus } = useDocus({ limit: 0 })
 	const navigate = useNavigate()
-	const { docuId } = useParams<{ docuId: string }>()
+	const { docuId } = useParams<{ docuId: Docu['_id'] }>()
 	const editorRef = useRef(null)
 
 	const [expandedTeams, setExpandedTeams] = useState<Record<string, boolean>>({})
 	const [groupedDocus, setGroupedDocus] = useState<GroupedDocus>({ withTeam: {}, withoutTeam: [] })
-	const [activeDocuId, setActiveDocuId] = useState<string | null>(docuId || null)
+	const [activeDocuId, setActiveDocuId] = useState<Docu['_id'] | null>(docuId || null)
 	const [initialContent, setInitialContent] = useState<PartialBlock[] | undefined>(undefined)
 	const [noTeamExpanded, setNoTeamExpanded] = useState(true)
 
@@ -119,7 +118,6 @@ const Documentation = () => {
 	}, [teams, groupedDocus])
 
 	const navigationInfo = useMemo(() => {
-		if (!activeDocuId || !orderedDocsForNavigation.length) return null
 		const currentIndex = orderedDocsForNavigation.findIndex((doc) => doc._id === activeDocuId)
 		if (currentIndex === -1) return null
 		return {
@@ -184,74 +182,65 @@ const Documentation = () => {
 							</Button>
 						</div>
 					</Header>
-					{activeDocuId ? (
-						docu ? (
-							<>
-								<div className='documentation-details'>
-									<div className='documentation-details-info'>
-										<div className='documentation-details-left'>
+					{activeDocuId && docu ? (
+						<>
+							<div className='documentation-details'>
+								<div className='documentation-details-info'>
+									<div className='documentation-details-left'>
+										<span>
+											<span>{t('docus.owner')}:</span> {docu.owner?.name} {docu.owner?.surname}
+										</span>
+										{docu.team && (
 											<span>
-												<span>{t('docus.owner')}:</span> {docu.owner?.name} {docu.owner?.surname}
-											</span>
-											{docu.team && (
-												<span>
-													<span>{t('docus.team')}:</span>{' '}
-													<span
-														onClick={() =>
-															typeof docu.team === 'object' &&
-															'_id' in docu.team &&
-															navigate(`${TEAM_URL}/${docu.team._id}`)
-														}
-														className='documentation-team-name'
-														style={{
-															color: typeof docu.team === 'object' ? docu.team.color : undefined
-														}}>
-														{typeof docu.team === 'object' ? docu.team.name : ''}
-													</span>
+												<span>{t('docus.team')}:</span>{' '}
+												<span
+													onClick={() =>
+														typeof docu.team === 'object' &&
+														'_id' in docu.team &&
+														navigate(`${TEAM_URL}/${docu.team._id}`)
+													}
+													className='documentation-team-name'
+													style={{
+														color: typeof docu.team === 'object' ? docu.team.color : undefined
+													}}>
+													{typeof docu.team === 'object' ? docu.team.name : ''}
 												</span>
-											)}
-										</div>
-										<div className='documentation-details-right'>
-											<span>
-												<span>{t('docus.created')}:</span> {formatDateWithTime(docu.createdAt)}
 											</span>
-											<span>
-												<span>{t('docus.updated')}:</span> {formatDateWithTime(docu.updatedAt)}
-											</span>
-											<div className='documentation-details-views'>
-												<EyeIcon width={18} height={18} />
-												<span>{docu.views}</span>
-											</div>
+										)}
+									</div>
+									<div className='documentation-details-right'>
+										<span>
+											<span>{t('docus.created')}:</span> {formatDateWithTime(docu.createdAt)}
+										</span>
+										<span>
+											<span>{t('docus.updated')}:</span> {formatDateWithTime(docu.updatedAt)}
+										</span>
+										<div className='documentation-details-views'>
+											<EyeIcon width={18} height={18} />
+											<span>{docu.views}</span>
 										</div>
 									</div>
 								</div>
-								{navigationInfo && (
-									<div className='documentation-navigation'>
-										<Button
-											variant='secondary'
-											disabled={!navigationInfo.previousDocu}
-											onClick={handlePreviousDocu}>
-											<span className='navigation-button-text'>{t('documentation.previous')}</span>
-										</Button>
-										<Button
-											variant='secondary'
-											disabled={!navigationInfo.nextDocu}
-											onClick={handleNextDocu}>
-											<span className='navigation-button-text'>{t('documentation.next')}</span>
-										</Button>
-									</div>
-								)}
-								{docu.content ? (
-									<Editor editorRef={editorRef}>
-										<BlockNoteView editor={editor} editable={false} />
-									</Editor>
-								) : (
-									<p className='empty-content'>{t('documentation.no_content')}</p>
-								)}
-							</>
-						) : (
-							<Card empty>{t('documentation.document_not_found')}</Card>
-						)
+							</div>
+							<div className='documentation-navigation'>
+								<Button
+									variant='secondary'
+									disabled={!navigationInfo?.previousDocu}
+									onClick={handlePreviousDocu}>
+									<span className='navigation-button-text'>{t('documentation.previous')}</span>
+								</Button>
+								<Button
+									variant='secondary'
+									disabled={!navigationInfo?.nextDocu}
+									onClick={handleNextDocu}>
+									<span className='navigation-button-text'>{t('documentation.next')}</span>
+								</Button>
+							</div>
+
+							<Editor editorRef={editorRef}>
+								<BlockNoteView editor={editor} editable={false} />
+							</Editor>
+						</>
 					) : (
 						<div className='welcome-message'>
 							<h2>{t('documentation.welcome_title')}</h2>
