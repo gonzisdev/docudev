@@ -165,7 +165,7 @@ npm run preview
 
 ## Licencia
 
-**Este software es propietario.**  
+**Este software no tiene licencia.**  
 Copyright (c) 2025 Gonzalo Vasco López.  
 Todos los derechos reservados.  
 No está permitido el uso, copia, modificación ni distribución sin autorización expresa del autor.
