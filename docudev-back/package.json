@@ -10,7 +10,6 @@
     "start": "node ./dist/index.js",
     "start:ws": "node ./dist/ws-server.js",
     "start:all": "concurrently \"npm run start\" \"npm run start:ws\"",
-    "docs:generate": "node scripts/generate-docs.js",
     "build": "tsc"
   },
   "author": "Gonzalo Vasco López",
@@ -35,7 +34,6 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
-    "@types/dom-mediacapture-record": "^1.0.22",
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.8",
     "@types/morgan": "^1.9.9",
