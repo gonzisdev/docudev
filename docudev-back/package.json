@@ -13,7 +13,7 @@
     "build": "tsc"
   },
   "author": "Gonzalo Vasco López",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "dependencies": {
     "@y/websocket-server": "^0.1.1",
     "bcrypt": "^5.1.1",
