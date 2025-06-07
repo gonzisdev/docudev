@@ -1,4 +1,4 @@
-# 📄 DocuDev
+# 🖥️ DocuDev
 
 DocuDev es una aplicación MERN (MongoDB, Express, React, Node.js) enfocada en la gestión y elaboración de documentación colaborativa para empresas.
 
@@ -118,7 +118,7 @@ cp .env.template .env
 
 ---
 
-## Ejecución
+## 💣 Ejecución
 
 ### Desarrollo
 
@@ -134,13 +134,6 @@ npm run dev:all
 ```bash
 cd docudev-front
 npm run dev
-```
-
-#### Frontend en modo producción:
-
-```bash
-cd docudev-front
-npm run dev:prod
 ```
 
 ### Producción
