@@ -49,3 +49,7 @@ export interface GroupedDocus {
 	withTeam: Record<string, Docu[]>
 	withoutTeam: Docu[]
 }
+
+export interface DocuCount {
+	amount: number
+}

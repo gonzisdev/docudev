@@ -1,5 +1,6 @@
 import customFetch from './customFetch'
-import { Docu, DocuFormPayload, DocusParams, DocusResponse } from 'models/Docu'
+import { Docu, DocuCount, DocuFormPayload, DocusParams, DocusResponse } from 'models/Docu'
+import { Team } from 'models/Team'
 import { endpoints } from './endpoints'
 
 export const createDocuService = async (data: DocuFormPayload) => {
@@ -12,6 +13,12 @@ export const createDocuService = async (data: DocuFormPayload) => {
 export const getDocusService = async (params?: DocusParams) => {
 	return await customFetch<DocusResponse>(endpoints.docus, {
 		params: params ? { ...params } : undefined
+	})
+}
+
+export const getDocuCountsService = async (teamId?: Team['_id']) => {
+	return await customFetch<DocuCount>(`${endpoints.docuCounts}`, {
+		params: teamId ? { teamId } : undefined
 	})
 }
 

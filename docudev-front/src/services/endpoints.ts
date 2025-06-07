@@ -21,6 +21,7 @@ export const endpoints = {
 	updateDocu: 'docus/update-docu',
 	deleteDocu: 'docus/delete-docu',
 	removeDocuFromTeam: 'docus/remove-from-team',
+	docuCounts: 'docus/counts',
 
 	notifications: 'notifications',
 	sendInvite: 'notifications/invite',

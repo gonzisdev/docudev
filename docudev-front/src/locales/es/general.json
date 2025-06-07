@@ -314,7 +314,9 @@
 		},
 		"warning": {
 			"warning_title_plan": "¡Plan caducado!",
-			"warning_description_plan": "El plan del dueño del equipo ha caducado. No podrás crer docus ni editarlos hasta que se actualice el plan"
+			"warning_description_plan": "El plan del dueño del equipo ha caducado. No podrás crer docus ni editarlos hasta que se actualice el plan",
+			"warning_title_docu_limit": "¡Límite de docus alcanzado!",
+			"warning_description_docu_limit": "El equipo ha alcandado el límite máximo de docus permitidos"
 		}
 	},
 	"docus": {
@@ -352,11 +354,15 @@
 					"min_length": "El nombre debe tener al menos 2 caracteres",
 					"max_length": "El nombre no puede tener más de 50 caracteres"
 				}
-			}
+			},
+			"team_limit_reached": "Límite de docus alcanzado",
+			"team_no_admin_plan": "Plan caducado"
 		},
 		"warning": {
 			"warning_title_save": "¡Importante!",
-			"warning_description_save": "Si no guardas el documento tus cambios se conservarán temporalmente durante 30 minutos"
+			"warning_description_save": "Si no guardas el documento tus cambios se conservarán temporalmente durante 30 minutos",
+			"warning_title_docu_limit": "¡Límite de docus alcanzado!",
+			"warning_description_docu_limit": "Has alcanzado el máximo de docus sin equipo permitidos"
 		},
 		"team_change_restricted_description": "Solo el propietario del documento puede cambiar la asignación de equipo"
 	},

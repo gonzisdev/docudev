@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { CREATE_DOCU_URL, EDIT_DOCU_URL, TEAMS_URL } from 'constants/routes'
-import { TEAM_MEMBER_LIMIT } from 'constants/limits'
+import { DOCU_LIMIT, TEAM_MEMBER_LIMIT } from 'constants/limits'
 import { useAuthStore } from 'stores/authStore'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import useTeam from 'hooks/useTeam'
@@ -65,6 +65,7 @@ const Team = () => {
 	const { deleteDocu, isDeletingDocu } = useDocu(docuToDelete ? { docuId: docuToDelete } : {})
 
 	const teamMembersCount = (team?.collaborators?.length || 0) + 1
+	const teamDocusCount = team?.docus.length || 0
 
 	const sortOptions = getSortOptions(t)
 	const uniqueUsers = useMemo(() => getUniqueOwners(teamDocus), [teamDocus])
@@ -146,7 +147,7 @@ const Team = () => {
 								<Button
 									variant='link'
 									onClick={() => setIsInviteModalOpen(true)}
-									disabled={TEAM_MEMBER_LIMIT >= teamMembersCount}>
+									disabled={teamMembersCount >= TEAM_MEMBER_LIMIT}>
 									{t('team.invite')}
 								</Button>
 							)}
@@ -158,8 +159,7 @@ const Team = () => {
 							<Button
 								variant='secondary'
 								onClick={() => navigate(CREATE_DOCU_URL)}
-								//TODO: disabled={DOCS USER LIMIT}
-								disabled={typeof team?.owner === 'object' && team?.owner.role !== 'admin'}>
+								disabled={teamDocusCount >= DOCU_LIMIT}>
 								{t('team.create_docu')}
 							</Button>
 						</div>
@@ -169,6 +169,12 @@ const Team = () => {
 							<Warning
 								title={t('team.warning.warning_title_plan')}
 								description={t('team.warning.warning_description_plan')}
+							/>
+						)}
+						{teamDocusCount >= DOCU_LIMIT && (
+							<Warning
+								title={t('team.warning.warning_title_docu_limit')}
+								description={t('team.warning_description_docu_limit')}
 							/>
 						)}
 						<div className='team-info'>

@@ -35,7 +35,26 @@ export class DocuController {
           })
           return
         }
+        const teamDocusCount = await Docu.countDocuments({ team: team })
+        if (teamDocusCount >= 100) {
+          res
+            .status(400)
+            .json({ error: 'Team document limit reached (100 documents)' })
+          return
+        }
+      } else {
+        const userDocusWithoutTeamCount = await Docu.countDocuments({
+          owner: req.user._id,
+          team: null
+        })
+        if (userDocusWithoutTeamCount >= 100) {
+          res
+            .status(400)
+            .json({ error: 'Personal document limit reached (100 documents)' })
+          return
+        }
       }
+
       const newDocu = await Docu.create({
         title,
         content,
@@ -137,6 +156,29 @@ export class DocuController {
     }
   }
 
+  static async getDocuCounts(req: Request, res: Response) {
+    try {
+      const { teamId } = req.query
+      if (teamId) {
+        const teamDocusCount = await Docu.countDocuments({ team: teamId })
+        res.status(200).json({
+          amount: teamDocusCount
+        })
+      } else {
+        const userDocusWithoutTeamCount = await Docu.countDocuments({
+          owner: req.user._id,
+          team: null
+        })
+        res.status(200).json({
+          amount: userDocusWithoutTeamCount
+        })
+      }
+    } catch (error) {
+      console.error('Error getting docu counts:', error)
+      res.status(500).json({ error: 'Error getting docu counts' })
+    }
+  }
+
   static async getDocu(req: Request, res: Response) {
     try {
       await Docu.updateOne(
@@ -200,6 +242,25 @@ export class DocuController {
           res.status(403).json({
             error:
               'Team owner does not have an admin plan. Cannot assign documents to this team'
+          })
+          return
+        }
+        const teamDocusCount = await Docu.countDocuments({ team: newTeam })
+        if (teamDocusCount >= 100) {
+          res.status(400).json({
+            error: 'Team document limit reached (100 documents)'
+          })
+          return
+        }
+      }
+      if (isChangingTeam && !newTeam) {
+        const userDocusWithoutTeamCount = await Docu.countDocuments({
+          owner: req.user._id,
+          team: null
+        })
+        if (userDocusWithoutTeamCount >= 100) {
+          res.status(400).json({
+            error: 'Personal document limit reached (100 documents)'
           })
           return
         }

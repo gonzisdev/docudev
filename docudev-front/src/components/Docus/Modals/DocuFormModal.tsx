@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { UseFormReturn } from 'react-hook-form'
+import { DOCU_LIMIT } from 'constants/limits'
 import { Docu, DocuFormPayload } from 'models/Docu'
 import { Team } from 'models/Team'
 import { useAuthStore } from 'stores/authStore'
@@ -10,6 +11,7 @@ import FormSelect from 'components/elements/Form/FormSelect'
 import Button from 'components/elements/Button/Button'
 import Loading from 'components/elements/Loading/Loading'
 import Warning from 'components/elements/Warning/Warning'
+import { useDocuCounts } from 'hooks/useDocuCounts'
 
 interface Props {
 	isVisible: boolean
@@ -34,6 +36,12 @@ const DocuFormModal = ({
 }: Props) => {
 	const { t } = useTranslation()
 	const { user } = useAuthStore()
+	const { data: userDocusCount } = useDocuCounts()
+
+	const selectedTeam = methods.watch('team')
+	const isCreatingWithoutTeam = !docu?._id && !selectedTeam
+	const personalDocsCount = userDocusCount?.amount || 0
+	const isPersonalLimitReached = personalDocsCount >= DOCU_LIMIT
 
 	return (
 		<Modal
@@ -50,6 +58,12 @@ const DocuFormModal = ({
 							description={t('docus.warning.warning_description_save')}
 						/>
 					)}
+					{isCreatingWithoutTeam && isPersonalLimitReached && (
+						<Warning
+							title={t('docus.warning.warning_title_docu_limit')}
+							description={t('docus.warning.warning_description_docu_limit')}
+						/>
+					)}
 					<FormInput
 						id='title'
 						label={t('docus.form.title')}
@@ -61,18 +75,35 @@ const DocuFormModal = ({
 							id='team'
 							label={t('docus.form.team')}
 							placeholder={t('docus.form.team_placeholder')}
-							options={teams.map((team) => ({
-								value: team._id,
-								label: team.name,
-								isDisabled: !(typeof team.owner === 'object' && team.owner.role === 'admin')
-							}))}
+							options={teams.map((team) => {
+								const teamDocusCount = team.docus.length || 0
+								const isAtLimit = teamDocusCount >= DOCU_LIMIT
+								const isNotAdminTeamOwner = !(
+									typeof team.owner === 'object' && team.owner.role === 'admin'
+								)
+								const labelSuffix = isAtLimit
+									? ` (${t('docus.form.team_limit_reached')})`
+									: isNotAdminTeamOwner
+										? ` (${t('docus.form.team_no_admin_plan')})`
+										: ''
+								return {
+									value: team._id,
+									label: `${team.name}${labelSuffix}`,
+									isDisabled: isNotAdminTeamOwner || isAtLimit
+								}
+							})}
 							isClearable={true}
 							disabled={docu?._id ? docu && docu.owner?._id !== user?._id : false}
 							helperText={t('docus.team_change_restricted_description')}
 						/>
 					)}
 					<footer>
-						<Button type='submit' variant='secondary' loading={isSubmitting} fullWidth>
+						<Button
+							type='submit'
+							variant='secondary'
+							loading={isSubmitting}
+							fullWidth
+							disabled={isCreatingWithoutTeam && isPersonalLimitReached}>
 							{docu?._id ? t('update_docu.save_docu') : t('create_docu.title')}
 						</Button>
 					</footer>

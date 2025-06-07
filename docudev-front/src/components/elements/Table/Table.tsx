@@ -65,6 +65,7 @@ interface Props<T> {
 	enableRowSelection?: boolean
 	onChangeRowSelection?: (selectedRows: Row<T>[]) => void
 	setIsRemoveCollaboratorModalOpen: Dispatch<SetStateAction<boolean>>
+	hidePagination?: boolean
 }
 
 const Table = <T,>({
@@ -73,7 +74,8 @@ const Table = <T,>({
 	isLoading = false,
 	enableRowSelection = false,
 	onChangeRowSelection,
-	setIsRemoveCollaboratorModalOpen
+	setIsRemoveCollaboratorModalOpen,
+	hidePagination = false
 }: Props<T>) => {
 	const { t } = useTranslation()
 
@@ -309,7 +311,7 @@ const Table = <T,>({
 					</div>
 				) : null}
 			</div>
-			<Pagination table={table} rowSelection={rowSelection} />
+			<Pagination table={table} rowSelection={rowSelection} hidePagination={hidePagination} />
 		</div>
 	)
 }

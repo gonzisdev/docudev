@@ -34,6 +34,14 @@ router.post(
 router.get('/', authenticate, DocuController.getDocus)
 
 router.get(
+  '/counts',
+  authenticate,
+  validateUserStatus,
+  updateUserActivity,
+  DocuController.getDocuCounts
+)
+
+router.get(
   '/:docuId',
   authenticate,
   validateUserStatus,

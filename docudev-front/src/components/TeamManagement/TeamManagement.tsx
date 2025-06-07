@@ -306,7 +306,7 @@ const TeamManagement = () => {
 									<Button
 										variant='link'
 										onClick={() => setIsInviteModalOpen(true)}
-										disabled={TEAM_MEMBER_LIMIT >= teamMembersCount}>
+										disabled={teamMembersCount >= TEAM_MEMBER_LIMIT}>
 										{t('team.invite')}
 									</Button>
 									<Button variant='primary' onClick={() => openEditModal(selectedTeamId)}>
@@ -334,6 +334,7 @@ const TeamManagement = () => {
 									onChangeRowSelection={(rows) =>
 										setSelectedCollaboratorIds(rows.map((row) => row.original._id))
 									}
+									hidePagination
 								/>
 							)}
 				</>
