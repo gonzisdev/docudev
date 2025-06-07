@@ -12,6 +12,7 @@ import notificationRouter from './routes/notificationRouter'
 import statsRouter from './routes/statsRouter'
 import commentRouter from './routes/commentRouter'
 import { corsConfig, publicCorsConfig } from './config/cors'
+import { startUserInactivityJob } from './utils/startUserInactivityJob'
 import cors from 'cors'
 
 connectDB()
@@ -19,13 +20,13 @@ connectDB()
 const app = express()
 const server = http.createServer(app)
 
+startUserInactivityJob()
+
 const uploadsPath = path.join(__dirname, '..', 'uploads')
 app.use('/api/uploads', cors(publicCorsConfig), express.static(uploadsPath))
 
 app.use(cors(corsConfig))
-
 app.use(morgan('dev'))
-
 app.use(express.json())
 
 app.use('/api/auth', authRouter)

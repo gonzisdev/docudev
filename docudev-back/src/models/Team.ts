@@ -6,6 +6,7 @@ export interface ITeam extends Document {
   owner: mongoose.Types.ObjectId
   collaborators: mongoose.Types.ObjectId[]
   docs: mongoose.Types.ObjectId[]
+  trelloBoardId: string
   createdAt: Date
   updatedAt: Date
 }

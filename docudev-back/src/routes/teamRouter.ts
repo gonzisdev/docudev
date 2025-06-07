@@ -4,6 +4,7 @@ import { TeamController } from '../controllers/TeamController'
 import { handleInputErrors } from '../middleware/validation'
 import { authenticate, validateUserStatus } from '../middleware/auth'
 import { canAccessTeam, isTeamOwnerAdmin } from '../middleware/team'
+import { updateUserActivity } from '../middleware/lastActivity'
 import { limiter } from '../config/limiter'
 
 const router = Router()
@@ -14,6 +15,7 @@ router.post(
   '/create-team',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   body('name')
     .notEmpty()
     .withMessage('Team name is required')
@@ -54,6 +56,7 @@ router.get(
   '/:teamId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   canAccessTeam,
   TeamController.getTeam
 )
@@ -62,6 +65,7 @@ router.patch(
   '/update-team/:teamId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   isTeamOwnerAdmin,
   body('name')
     .notEmpty()
@@ -91,6 +95,7 @@ router.patch(
   '/leave/:teamId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   canAccessTeam,
   TeamController.leaveTeam
 )
@@ -99,6 +104,7 @@ router.patch(
   '/remove-collaborator/:teamId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   isTeamOwnerAdmin,
   body('collaboratorId')
     .notEmpty()
@@ -114,6 +120,7 @@ router.patch(
   '/remove-collaborators/:teamId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   isTeamOwnerAdmin,
   body('collaborators')
     .notEmpty()
@@ -128,6 +135,7 @@ router.delete(
   '/delete-team/:teamId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   isTeamOwnerAdmin,
   TeamController.deleteTeam
 )

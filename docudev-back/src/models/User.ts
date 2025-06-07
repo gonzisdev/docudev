@@ -12,6 +12,7 @@ export interface IUser extends Document {
   phone: string
   status: 'active' | 'inactive' | 'suspended'
   code: string
+  lastActivity: Date
   comparePassword(candidatePassword: string): Promise<boolean>
 }
 
@@ -60,6 +61,10 @@ const UserSchema: Schema = new Schema(
       type: String,
       default: '',
       expires: '1h'
+    },
+    lastActivity: {
+      type: Date,
+      default: Date.now
     }
   },
   {

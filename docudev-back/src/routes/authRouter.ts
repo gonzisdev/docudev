@@ -3,6 +3,7 @@ import { body } from 'express-validator'
 import { AuthController } from '../controllers/AuthController'
 import { handleInputErrors } from '../middleware/validation'
 import { authenticate, validateUserStatus } from '../middleware/auth'
+import { updateUserActivity } from '../middleware/lastActivity'
 import { upload, deletePreviousImage, deleteImage } from '../middleware/multer'
 import { limiter } from '../config/limiter'
 
@@ -91,6 +92,7 @@ router.put(
   '/update-account',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   upload.single('image'),
   deletePreviousImage,
   body('name')
@@ -143,6 +145,7 @@ router.patch(
   '/update-plan',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   AuthController.updatePlan
 )
 

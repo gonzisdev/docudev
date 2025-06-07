@@ -1,8 +1,9 @@
 import { Router } from 'express'
 import { CommentController } from '../controllers/CommentController'
 import { limiter } from '../config/limiter'
-import { canAccessDocu } from '../middleware/docu'
 import { authenticate, validateUserStatus } from '../middleware/auth'
+import { canAccessDocu } from '../middleware/docu'
+import { updateUserActivity } from '../middleware/lastActivity'
 
 const router = Router()
 
@@ -12,6 +13,7 @@ router.get(
   '/:docuId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   canAccessDocu,
   CommentController.getComments
 )
@@ -20,6 +22,7 @@ router.post(
   '/:docuId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   canAccessDocu,
   CommentController.createComment
 )
@@ -28,6 +31,7 @@ router.delete(
   '/:docuId/:commentId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   canAccessDocu,
   CommentController.deleteComment
 )

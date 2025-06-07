@@ -4,6 +4,7 @@ import { DocuController } from '../controllers/DocuController'
 import { handleInputErrors } from '../middleware/validation'
 import { authenticate, validateUserStatus } from '../middleware/auth'
 import { canAccessDocu } from '../middleware/docu'
+import { updateUserActivity } from '../middleware/lastActivity'
 import { limiter } from '../config/limiter'
 
 const router = Router()
@@ -14,6 +15,7 @@ router.post(
   '/create-docu',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   body('title')
     .notEmpty()
     .withMessage('Docu title is required')
@@ -35,6 +37,7 @@ router.get(
   '/:docuId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   canAccessDocu,
   DocuController.getDocu
 )
@@ -43,6 +46,7 @@ router.put(
   '/update-docu/:docuId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   canAccessDocu,
   body('title')
     .notEmpty()
@@ -63,6 +67,7 @@ router.patch(
   '/remove-from-team/:docuId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   canAccessDocu,
   DocuController.removeFromTeam
 )
@@ -71,6 +76,7 @@ router.delete(
   '/delete-docu/:docuId',
   authenticate,
   validateUserStatus,
+  updateUserActivity,
   canAccessDocu,
   DocuController.deleteDocu
 )
