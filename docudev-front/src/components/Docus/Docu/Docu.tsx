@@ -181,27 +181,25 @@ const Docu = () => {
 								</div>
 							</div>
 						)}
-						{docu?.content && (
-							<Editor
-								editorRef={editorRef}
-								commentsPanel={
-									docuId && (
-										<CommentsPanel
-											docuId={docuId}
-											teamUsers={teamUsers}
-											currentUser={{
-												_id: user!._id,
-												name: user!.name,
-												surname: user!.surname,
-												image: user!.image,
-												role: user!.role
-											}}
-										/>
-									)
-								}>
-								<BlockNoteView editor={editor} editable={false} />
-							</Editor>
-						)}
+						<Editor
+							editorRef={editorRef}
+							commentsPanel={
+								docuId && (
+									<CommentsPanel
+										docuId={docuId}
+										teamUsers={teamUsers}
+										currentUser={{
+											_id: user!._id,
+											name: user!.name,
+											surname: user!.surname,
+											image: user!.image,
+											role: user!.role
+										}}
+									/>
+								)
+							}>
+							<BlockNoteView editor={editor} editable={false} />
+						</Editor>
 					</Container>
 				</>
 			)}

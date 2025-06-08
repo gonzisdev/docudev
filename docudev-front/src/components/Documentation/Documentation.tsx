@@ -236,7 +236,6 @@ const Documentation = () => {
 									<span className='navigation-button-text'>{t('documentation.next')}</span>
 								</Button>
 							</div>
-
 							<Editor editorRef={editorRef}>
 								<BlockNoteView editor={editor} editable={false} />
 							</Editor>
