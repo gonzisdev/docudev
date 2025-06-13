@@ -135,11 +135,7 @@ const Docus = () => {
 				<>
 					<Header title={t('docus.title')}>
 						{' '}
-						<Button
-							variant='secondary'
-							onClick={() => navigate(CREATE_DOCU_URL)}
-							//TODO: disabled={DOCS USER LIMIT}
-						>
+						<Button variant='secondary' onClick={() => navigate(CREATE_DOCU_URL)}>
 							{t('docus.create_docu')}
 						</Button>
 					</Header>
