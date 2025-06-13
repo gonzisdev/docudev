@@ -100,7 +100,7 @@ cp .env.template .env
 # - FRONTEND_URL: URL del frontend (ej: http://localhost:5173)
 # - NODE_ENV: Establece el entorno (development o production)
 # - RESEND_API_KEY: clave de API de Resend para emails
-# - INACTIVITY_DAYS: días de inactividad antes de suspender cuenta
+# - INACTIVITY_DAYS: días de inactividad antes de cambiar estado a inactivo
 ```
 
 ### 3. Configurar el Frontend
