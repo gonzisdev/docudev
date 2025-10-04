@@ -7,7 +7,7 @@ interface Options {
 	params?: Record<string, string | number>
 	headers?: Record<string, string>
 	hideHeaders?: boolean
-	skipAuth?: boolean
+
 	baseURL?: string
 	onUploadProgress?: (progressEvent: AxiosProgressEvent) => void
 }
@@ -21,7 +21,6 @@ export default async function customFetch<T>(
 		params,
 		headers = {},
 		hideHeaders = false,
-		skipAuth = false,
 		onUploadProgress
 	}: Options = {}
 ): Promise<T> {
@@ -41,7 +40,6 @@ export default async function customFetch<T>(
 		headers: hideHeaders ? {} : headers,
 		data: bodyReq,
 		params,
-		skipAuth,
 		onUploadProgress: contentType === 'multipart/form-data' ? onUploadProgress : undefined
 	}
 

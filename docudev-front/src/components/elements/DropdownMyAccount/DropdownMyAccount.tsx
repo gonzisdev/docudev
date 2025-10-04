@@ -75,7 +75,7 @@ const DropdownMyAccount = ({ user, logout }: Props) => {
 					<img
 						src={
 							user?.image
-								? `${import.meta.env.VITE_API_URL}/uploads/${user.image}`
+								? `${import.meta.env.VITE_API_URL}/uploads/avatars/${user.image}`
 								: UserPlaceholder
 						}
 						alt='user-placeholder'

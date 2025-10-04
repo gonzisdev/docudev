@@ -9,7 +9,6 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useAuthStore } from 'stores/authStore'
 import { useSidebarStore } from 'stores/sidebarStore'
-import { useUser } from 'hooks/useUser'
 import useNotifications from 'hooks/useNotifications'
 import DropdownMyAccount from 'components/elements/DropdownMyAccount/DropdownMyAccount'
 import { GroupIcon, HomeIcon, BellIcon, DocsIcon, Logo, ManagementIcon } from 'assets/svgs'
@@ -29,8 +28,6 @@ const DashboardLayout = ({ children }: Props) => {
 
 	const { notifications } = useNotifications({})
 	const pendingCount = notifications?.filter((n) => n.status === 'pending').length || 0
-
-	useUser()
 
 	const routes = [
 		{

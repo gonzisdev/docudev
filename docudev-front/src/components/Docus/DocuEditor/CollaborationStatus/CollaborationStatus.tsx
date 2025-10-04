@@ -37,7 +37,7 @@ const CollaborationStatus = ({ isConnected, activeUsers }: Props) => {
 								{user.image ? (
 									<>
 										<img
-											src={`${import.meta.env.VITE_API_URL}/uploads/${user.image}`}
+											src={`${import.meta.env.VITE_API_URL}/uploads/avatars/${user.image}`}
 											alt={user.name}
 											className='user-image'
 										/>

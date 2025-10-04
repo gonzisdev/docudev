@@ -1,6 +1,7 @@
 export const endpoints = {
 	createAccount: 'auth/create-account',
 	login: 'auth/login',
+	logout: 'auth/logout',
 	user: 'auth/user',
 	recoverPassword: 'auth/recover-password',
 	newPassword: 'auth/new-password',

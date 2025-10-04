@@ -188,7 +188,7 @@ const Team = () => {
 											<img
 												src={
 													team.owner.image
-														? `${import.meta.env.VITE_API_URL}/uploads/${team.owner.image}`
+														? `${import.meta.env.VITE_API_URL}/uploads/avatars/${team.owner.image}`
 														: UserPlaceholder
 												}
 												alt={`${team.owner.name} ${team.owner.surname}`}
@@ -211,7 +211,7 @@ const Team = () => {
 														<img
 															src={
 																collaborator.image
-																	? `${import.meta.env.VITE_API_URL}/uploads/${collaborator.image}`
+																	? `${import.meta.env.VITE_API_URL}/uploads/avatars/${collaborator.image}`
 																	: UserPlaceholder
 															}
 															alt={`${collaborator.name} ${collaborator.surname}`}

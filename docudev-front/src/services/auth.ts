@@ -11,32 +11,34 @@ import { endpoints } from './endpoints'
 export const createAccountService = async (data: UserRegisterPayload) => {
 	return await customFetch<boolean>(endpoints.createAccount, {
 		method: 'POST',
-		bodyReq: data,
-		skipAuth: true
+		bodyReq: data
 	})
 }
 
 export const loginService = async (data: UserFormPayload) => {
 	return await customFetch<User>(endpoints.login, {
 		method: 'POST',
-		bodyReq: data,
-		skipAuth: true
+		bodyReq: data
+	})
+}
+
+export const logoutService = async () => {
+	return await customFetch<boolean>(endpoints.logout, {
+		method: 'POST'
 	})
 }
 
 export const recoverPasswordService = async (email: User['email']) => {
 	return await customFetch<boolean>(endpoints.recoverPassword, {
 		method: 'POST',
-		bodyReq: { email },
-		skipAuth: true
+		bodyReq: { email }
 	})
 }
 
 export const newPasswordService = async (data: UserNewPasswordPayload) => {
 	return await customFetch<boolean>(endpoints.newPassword, {
 		method: 'PATCH',
-		bodyReq: data,
-		skipAuth: true
+		bodyReq: data
 	})
 }
 

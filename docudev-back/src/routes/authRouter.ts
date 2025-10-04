@@ -4,7 +4,11 @@ import { AuthController } from '../controllers/AuthController'
 import { handleInputErrors } from '../middleware/validation'
 import { authenticate, validateUserStatus } from '../middleware/auth'
 import { updateUserActivity } from '../middleware/lastActivity'
-import { upload, deletePreviousImage, deleteImage } from '../middleware/multer'
+import {
+  uploadAvatarImage,
+  deletePreviousImage,
+  deleteImage
+} from '../middleware/multer'
 import { limiter } from '../config/limiter'
 
 const router = Router()
@@ -55,6 +59,8 @@ router.post(
   AuthController.login
 )
 
+router.post('/logout', AuthController.logout)
+
 router.post(
   '/recover-password',
   validateUserStatus,
@@ -93,7 +99,7 @@ router.put(
   authenticate,
   validateUserStatus,
   updateUserActivity,
-  upload.single('image'),
+  uploadAvatarImage.single('image'),
   deletePreviousImage,
   body('name')
     .notEmpty()

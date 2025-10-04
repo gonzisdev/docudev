@@ -202,7 +202,7 @@ const CommentsPanel = ({ docuId, teamUsers, currentUser }: Props) => {
 									<div className='mention-avatar'>
 										{user.image ? (
 											<img
-												src={`${import.meta.env.VITE_API_URL}/uploads/${user.image}`}
+												src={`${import.meta.env.VITE_API_URL}/uploads/avatars/${user.image}`}
 												alt={`${user.name} ${user.surname}`}
 												onError={(e) => {
 													e.currentTarget.src = UserPlaceholder
@@ -238,7 +238,7 @@ const CommentsPanel = ({ docuId, teamUsers, currentUser }: Props) => {
 										<div className='comment-author'>
 											{comment.author.image ? (
 												<img
-													src={`${import.meta.env.VITE_API_URL}/uploads/${comment.author.image}`}
+													src={`${import.meta.env.VITE_API_URL}/uploads/avatars/${comment.author.image}`}
 													alt={`${comment.author.name} ${comment.author.surname}`}
 													className='author-avatar'
 												/>

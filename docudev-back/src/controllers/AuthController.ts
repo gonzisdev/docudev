@@ -41,27 +41,32 @@ export class AuthController {
         res.status(401).json({ error: 'Invalid credentials' })
         return
       }
-      if (req.user.token) {
-        try {
-          jwt.verify(req.user.token, process.env.JWT_SECRET)
-        } catch (err) {
-          const token = generateJWT(req.user._id.toString())
-          req.user.token = token
-        }
-      } else {
-        const token = generateJWT(req.user._id.toString())
-        req.user.token = token
-      }
-      req.user.status = 'active'
-      await req.user.save()
+      const token = generateJWT(req.user._id.toString())
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+      })
+
       const userResponse = await User.findById(req.user._id)
         .select('-password -code ')
         .lean()
+
       res.status(200).json(userResponse)
     } catch (error) {
       console.error('Error during login:', error)
       res.status(500).json({ error: 'Error during login' })
     }
+  }
+
+  static async logout(req: Request, res: Response) {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax'
+    })
+    res.status(200).json(true)
   }
 
   static async recoverPassword(req: Request, res: Response) {

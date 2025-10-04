@@ -33,22 +33,24 @@ import TeamManagement from './components/TeamManagement/TeamManagement'
 import Notifications from 'components/Notifications/Notifications'
 import { Settings } from 'components/Settings/Settings'
 import { Toaster } from 'sonner'
+import useAuthInit from 'hooks/useAuthInit'
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-	const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+	const user = useAuthStore((state) => state.user)
 	const location = useLocation()
-	if (!isAuthenticated) return <Navigate to='/login' state={{ from: location }} replace />
-	return children
+	if (!user) return <Navigate to='/login' state={{ from: location }} replace />
+	return <>{children}</>
 }
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-	const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+	const user = useAuthStore((state) => state.user)
 	const location = useLocation()
-	if (isAuthenticated) return <Navigate to='/home' state={{ from: location }} replace />
-	return children
+	if (user) return <Navigate to='/home' state={{ from: location }} replace />
+	return <>{children}</>
 }
 
 export const App = () => {
+	useAuthInit()
 	return (
 		<>
 			<Routes>

@@ -10,20 +10,11 @@ declare module 'axios' {
 const BASE_URL = import.meta.env.VITE_API_URL || 'https://YOUR-URL/'
 
 const createApiInstance = (baseURL: string = BASE_URL): AxiosInstance => {
-	const api: AxiosInstance = axios.create({ baseURL })
+	const api: AxiosInstance = axios.create({ baseURL, withCredentials: true })
 
 	// Request interceptor
 	api.interceptors.request.use(
 		(config: InternalAxiosRequestConfig) => {
-			if (config.skipAuth) {
-				delete config.headers.Authorization
-				return config
-			}
-
-			const token = useAuthStore.getState().user?.token
-			if (token) {
-				config.headers.Authorization = `Bearer ${token}`
-			}
 			return config
 		},
 		(error) => Promise.reject(error)
@@ -45,8 +36,6 @@ const createApiInstance = (baseURL: string = BASE_URL): AxiosInstance => {
 			if (error.response && error.response.status === 401 && error.response.data?.invalidToken) {
 				const authStore = useAuthStore.getState()
 				authStore.logout()
-			} else if (useAuthStore.getState().isAuthenticated) {
-				useAuthStore.getState().refreshUser()
 			}
 			const errorMessage =
 				error.response?.data?.error || error.response?.data || error.message || 'Unknown error'

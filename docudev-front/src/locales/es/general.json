@@ -382,6 +382,7 @@
 		"title": "Editar docu",
 		"subtitle": "Perfecciona tu documentación, actualiza su contenido y comparte con tu equipo",
 		"save_docu": "Guardar cambios",
+		"info_image_removal": "Si eliminas una imagen y no la eliminas del docu, al guardarlo dejará de estar disponible",
 		"toast": {
 			"success_title": "¡Docu actualizado!",
 			"success_description": "El docu se ha actualizado correctamente",

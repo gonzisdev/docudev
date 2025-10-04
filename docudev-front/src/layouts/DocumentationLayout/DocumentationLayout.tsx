@@ -6,7 +6,6 @@ import { Team } from 'models/Team'
 import { Docu, GroupedDocus } from 'models/Docu'
 import { useAuthStore } from 'stores/authStore'
 import { useDocSidebarStore } from 'stores/docSidebarStore'
-import { useUser } from 'hooks/useUser'
 import DropdownMyAccount from 'components/elements/DropdownMyAccount/DropdownMyAccount'
 import Loading from 'components/elements/Loading/Loading'
 import Input from 'components/elements/Input/Input'
@@ -47,8 +46,6 @@ const DocumentationLayout = ({
 	const [expandedTeamsFiltered, setExpandedTeamsFiltered] =
 		useState<typeof expandedTeams>(expandedTeams)
 	const [noTeamExpandedFiltered, setNoTeamExpandedFiltered] = useState(false)
-
-	useUser()
 
 	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(e.target.value)

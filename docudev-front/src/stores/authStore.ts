@@ -15,115 +15,91 @@ import {
 	getUserService,
 	updateAccountService,
 	deleteAccountService,
-	updatePlanService
+	updatePlanService,
+	logoutService
 } from '../services/auth'
+import { clearAllStores } from 'utils/cleanStores'
 
 interface AuthState {
 	user: User | null
-	setUser: (user: User) => void
+	setUser: (user: User | null) => void
 	refreshUser: () => Promise<User | null>
 	login: (data: UserFormPayload) => Promise<User | void>
 	register: (data: UserRegisterPayload) => Promise<boolean>
-	logout: () => void
+	logout: () => Promise<boolean>
 	recoverPassword: (email: User['email']) => Promise<boolean>
 	newPassword: (data: UserNewPasswordPayload) => Promise<boolean>
 	updateAccount: (data: UserAccountPayload | FormData) => Promise<boolean>
 	updatePlan: () => Promise<boolean>
 	deleteAccount: () => Promise<boolean>
-	isAuthenticated: boolean
 }
 
 export const useAuthStore = create<AuthState>()(
 	persist(
-		(set, get) => {
-			return {
-				user: null,
-				setUser: (user) =>
-					set((state) => ({
-						...state,
-						user,
-						isAuthenticated: !!user
-					})),
-				refreshUser: async () => {
-					if (!get().isAuthenticated) return null
+		(set) => ({
+			user: null,
+			setUser: (user) => set({ user }),
+			refreshUser: async () => {
+				try {
 					const user = await getUserService()
-					set((state) => ({
-						...state,
-						user,
-						isAuthenticated: !!user
-					}))
+					set({ user })
 					return user
-				},
-				login: async (data: UserFormPayload) => {
-					const store = get()
-					const response = await loginService(data)
-					if (response && response.token) {
-						store.setUser(response)
-						set({ isAuthenticated: true })
-						return response
-					}
-				},
-				register: async (data: UserRegisterPayload) => {
-					return await createAccountService(data)
-				},
-				logout: () =>
-					set((state) => {
-						return {
-							...state,
-							user: null,
-							isAuthenticated: false
-						}
-					}),
-				recoverPassword: async (email: string) => {
-					return await recoverPasswordService(email)
-				},
-				newPassword: async (data: UserNewPasswordPayload) => {
-					return await newPasswordService(data)
-				},
-				updateAccount: async (data: UserAccountPayload | FormData) => {
-					const result = await updateAccountService(data)
-					if (result) {
-						const user = await getUserService()
-						set((state) => ({
-							...state,
-							user,
-							isAuthenticated: !!user
-						}))
-					}
-					return result
-				},
-				updatePlan: async () => {
-					const result = await updatePlanService()
-					if (result) {
-						const user = await getUserService()
-						set((state) => ({
-							...state,
-							user,
-							isAuthenticated: !!user
-						}))
-					}
-					return result
-				},
-				deleteAccount: async () => {
-					const result = await deleteAccountService()
-					if (result) {
-						set((state) => ({
-							...state,
-							user: null,
-							isAuthenticated: false
-						}))
-					}
-					return result
-				},
-				isAuthenticated: false
+				} catch {
+					set({ user: null })
+					return null
+				}
+			},
+			login: async (data: UserFormPayload) => {
+				const user = await loginService(data)
+				if (user) {
+					set({ user })
+					return user
+				}
+			},
+			register: async (data: UserRegisterPayload) => {
+				return await createAccountService(data)
+			},
+			logout: async () => {
+				await logoutService()
+				clearAllStores()
+				set({ user: null })
+				return true
+			},
+			recoverPassword: async (email: User['email']) => {
+				return await recoverPasswordService(email)
+			},
+			newPassword: async (data: UserNewPasswordPayload) => {
+				return await newPasswordService(data)
+			},
+			updateAccount: async (data: UserAccountPayload | FormData) => {
+				const result = await updateAccountService(data)
+				if (result) {
+					const user = await getUserService()
+					set({ user })
+				}
+				return result
+			},
+			updatePlan: async () => {
+				const result = await updatePlanService()
+				if (result) {
+					const user = await getUserService()
+					set({ user })
+				}
+				return result
+			},
+			deleteAccount: async () => {
+				const result = await deleteAccountService()
+				if (result) {
+					set({ user: null })
+				}
+				return result
 			}
-		},
+		}),
 		{
 			name: 'auth',
 			storage: createJSONStorage(() => localStorage),
 			partialize: (state) => ({
-				user: state.user,
-				isAuthenticated: state.isAuthenticated
+				user: state.user
 			})
 		}
 	)

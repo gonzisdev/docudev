@@ -14,7 +14,8 @@ export const corsConfig: CorsOptions = {
     } else {
       callback(new Error('Error de CORS'))
     }
-  }
+  },
+  credentials: true
 }
 
 export const publicCorsConfig = {

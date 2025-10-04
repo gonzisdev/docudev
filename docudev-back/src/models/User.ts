@@ -6,7 +6,6 @@ export interface IUser extends Document {
   surname: string
   email: string
   password: string
-  token: string
   image: string
   role: 'admin' | 'user'
   phone: string
@@ -36,9 +35,6 @@ const UserSchema: Schema = new Schema(
     password: {
       type: String,
       required: true
-    },
-    token: {
-      type: String
     },
     image: {
       type: String,

@@ -6,7 +6,7 @@ import { authenticate, validateUserStatus } from '../middleware/auth'
 import { canAccessDocu } from '../middleware/docu'
 import { updateUserActivity } from '../middleware/lastActivity'
 import { limiter } from '../config/limiter'
-import { upload } from '../middleware/multer'
+import { uploadDocuImage } from '../middleware/multer'
 
 const router = Router()
 
@@ -95,7 +95,7 @@ router.post(
   authenticate,
   validateUserStatus,
   canAccessDocu,
-  upload.single('image'),
+  uploadDocuImage.single('image'),
   DocuController.uploadDocuImage
 )
 

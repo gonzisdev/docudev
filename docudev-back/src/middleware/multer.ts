@@ -4,9 +4,9 @@ import path from 'path'
 import { generateUniqueId } from '../utils/generateUniqueId'
 import User from '../models/User'
 
-const storage = multer.diskStorage({
+const avatarStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/')
+    cb(null, 'uploads/avatars')
   },
   filename: (req, file, cb) => {
     const extension = file.originalname.substring(
@@ -17,7 +17,25 @@ const storage = multer.diskStorage({
   }
 })
 
-export const upload = multer({ storage: storage })
+const docuImagesStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const dir = 'uploads/docu-images'
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true })
+    }
+    cb(null, dir)
+  },
+  filename: (req, file, cb) => {
+    const extension = file.originalname.substring(
+      file.originalname.lastIndexOf('.'),
+      file.originalname.length
+    )
+    cb(null, `${generateUniqueId()}${extension}`)
+  }
+})
+
+export const uploadAvatarImage = multer({ storage: avatarStorage })
+export const uploadDocuImage = multer({ storage: docuImagesStorage })
 
 export const deletePreviousImage = async (req, res, next) => {
   try {

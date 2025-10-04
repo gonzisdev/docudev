@@ -15,16 +15,9 @@ export const authenticate = async (
   res: Response,
   next: NextFunction
 ) => {
-  const bearer = req.headers.authorization
-  if (!bearer) {
-    const error = new Error('Missing authorization header')
-    res.status(401).json({ error: error.message, invalidToken: true })
-    return
-  }
-  const [, token] = bearer.split(' ')
+  const token = req.cookies?.token
   if (!token) {
-    const error = new Error('Missing token')
-    res.status(401).json({ error: error.message, invalidToken: true })
+    res.status(401).json({ error: 'Missing token', invalidToken: true })
     return
   }
   try {
@@ -33,11 +26,24 @@ export const authenticate = async (
       const user = (await User.findById(decoded.id).select(
         '-password -code'
       )) as IUser
-      if (!user.token || user.token !== token) {
+      if (!user) {
         res.status(401).json({ error: 'Invalid token', invalidToken: true })
         return
       }
       req.user = user
+      if (decoded.exp) {
+        const now = Math.floor(Date.now() / 1000)
+        const secondsLeft = decoded.exp - now
+        const oneDay = 60 * 60 * 24
+        if (secondsLeft < oneDay) {
+          res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+            maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+          })
+        }
+      }
       next()
     }
   } catch (error) {

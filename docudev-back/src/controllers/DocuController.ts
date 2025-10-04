@@ -403,7 +403,7 @@ export class DocuController {
       docu.images.push(filename)
       await docu.save()
 
-      res.status(201).json({ url: `/uploads/${filename}`, filename })
+      res.status(201).json({ url: `uploads/docu-images/${filename}`, filename })
     } catch (err) {
       res.status(500).json({ error: 'Error uploading image' })
     }
@@ -417,7 +417,7 @@ export class DocuController {
         return
       }
       const images = (docu.images || []).map((filename) => ({
-        url: `/uploads/${filename}`,
+        url: `/uploads/docu-images/${filename}`,
         filename
       }))
       res.json(images)
@@ -438,7 +438,11 @@ export class DocuController {
       docu.images = (docu.images || []).filter((img) => img !== filename)
       await docu.save()
 
-      const filePath = path.join(path.resolve(), 'uploads', filename)
+      const filePath = path.join(
+        path.resolve(),
+        '/uploads/docu-images',
+        filename
+      )
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
 
       res.status(200).json(true)
