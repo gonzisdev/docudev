@@ -16,6 +16,7 @@ import Editor from 'components/elements/Editor/Editor'
 import Button from 'components/elements/Button/Button'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
 import Loading from 'components/elements/Loading/Loading'
+import ImagePanel from '../ImagePanel/ImagePanel'
 import DocuFormModal from '../Modals/DocuFormModal'
 import RemoveFromTeamModal from '../Modals/RemoveFromTeamModal'
 import DeleteDocuModal from '../Modals/DeleteDocuModal'
@@ -70,7 +71,12 @@ const DocuEditor = () => {
 		removeFromTeam,
 		isRemovingFromTeam,
 		deleteDocu,
-		isDeletingDocu
+		isDeletingDocu,
+		docuImages,
+		isLoadingDocuImages,
+		uploadDocuImage,
+		isUploadingDocuImage,
+		deleteDocuImage
 	} = useDocu(docuId ? { docuId } : {})
 	const { teams, isLoadingTeams } = useTeams()
 
@@ -219,11 +225,11 @@ const DocuEditor = () => {
 		}
 	}, [docu, methods])
 
-	if (errorDocu) return <Navigate to={DOCUS_URL} />
+	if (errorDocu) return <Navigate to={'*'} />
 
 	return (
 		<DashboardLayout>
-			{isLoadingDocu || isLoadingTeams || !editor ? (
+			{isLoadingDocu || isLoadingTeams || isLoadingDocuImages || !editor ? (
 				<Loading />
 			) : (
 				<>
@@ -317,7 +323,18 @@ const DocuEditor = () => {
 						) : (
 							<h2>{t('create_docu.subtitle')}</h2>
 						)}
-						<Editor editorRef={editorRef}>
+						<Editor
+							editorRef={editorRef}
+							imagesPanel={
+								docuId ? (
+									<ImagePanel
+										docuImages={docuImages}
+										uploadDocuImage={uploadDocuImage}
+										isUploadingDocuImage={isUploadingDocuImage}
+										deleteDocuImage={deleteDocuImage}
+									/>
+								) : undefined
+							}>
 							<BlockNoteView editor={editor} ref={editorRef} />
 						</Editor>
 					</Container>

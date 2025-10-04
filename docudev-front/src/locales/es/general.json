@@ -60,10 +60,14 @@
 		"next": "Siguiente"
 	},
 	"forms": {
-		"attach_file": "Adjuntar archivo",
+		"attach_file": "Adjunta un archivo",
+		"attach_image": "Adjunta una imagen",
 		"search_file": "Buscar archivo",
+		"search_image": "Buscar imagen",
 		"change_file": "Cambiar archivo",
-		"drop_here": "Suelta aquí el archivo"
+		"drop_file_here": "Suelta aquí tu archivo",
+		"drop_image_here": "Suelta aquí tu imagen",
+		"url_copied": "¡URL copiada al portapapeles!"
 	},
 	"register": {
 		"title": "Crear cuenta",
@@ -403,6 +407,22 @@
 			"success_description": "El docu se ha eliminado correctamente",
 			"error_title": "Error al eliminar el docu",
 			"error_description": "Error al eliminar el docu. Vuelve a intentarlo más tarde"
+		}
+	},
+	"upload_docu_image": {
+		"toast": {
+			"success_title": "¡Imagen subida!",
+			"success_description": "La imagen se ha subido correctamente",
+			"error_title": "Error al subir la imagen",
+			"error_description": "Error al subir la imagen. Vuelve a intentarlo más tarde"
+		}
+	},
+	"delete_docu_image": {
+		"toast": {
+			"success_title": "¡Imagen eliminada!",
+			"success_description": "La imagen se ha eliminado correctamente",
+			"error_title": "Error al eliminar la imagen",
+			"error_description": "Error al eliminar la imagen. Vuelve a intentarlo más tarde"
 		}
 	},
 	"team_management": {

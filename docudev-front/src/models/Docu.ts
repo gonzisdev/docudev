@@ -19,6 +19,7 @@ export interface Docu {
 				collaborators?: TeamMember[] | User['_id'][]
 		  }
 	views: number
+	images: string[]
 	createdAt: Date
 	updatedAt: Date
 }
@@ -31,6 +32,11 @@ export interface DocusResponse {
 		limit: number
 		pages: number
 	}
+}
+
+export interface DocuImage {
+	url: string
+	filename: string
 }
 
 export type DocuFormPayload = Pick<Docu, 'title' | 'content' | 'team'>

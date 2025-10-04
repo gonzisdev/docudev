@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
+	docuImagesQueryKey,
 	docuQueryKey,
 	docusQueryKey,
 	teamDocusQueryKey,
@@ -13,7 +14,10 @@ import {
 	deleteDocuService,
 	getDocuService,
 	updateDocuService,
-	removeDocuFromTeamService
+	removeDocuFromTeamService,
+	getDocuImagesService,
+	deleteDocuImageService,
+	uploadDocuImageService
 } from 'services/docu'
 import { toast } from 'sonner'
 
@@ -47,7 +51,7 @@ const useDocu = ({ docuId }: Props) => {
 				queryKey: [teamQueryKey, docu?.team]
 			})
 			queryClient.invalidateQueries({
-				queryKey: [teamsQueryKey, docu?.team]
+				queryKey: [teamsQueryKey]
 			})
 			queryClient.invalidateQueries({
 				queryKey: [teamDocusQueryKey]
@@ -76,7 +80,7 @@ const useDocu = ({ docuId }: Props) => {
 				queryKey: [teamQueryKey, docu?.team]
 			})
 			queryClient.invalidateQueries({
-				queryKey: [teamsQueryKey, docu?.team]
+				queryKey: [teamsQueryKey]
 			})
 			toast.success(t('update_docu.toast.success_title'), {
 				description: t('update_docu.toast.success_description')
@@ -128,10 +132,16 @@ const useDocu = ({ docuId }: Props) => {
 				queryKey: [docusQueryKey]
 			})
 			queryClient.invalidateQueries({
+				queryKey: [docuImagesQueryKey, docuId]
+			})
+			queryClient.invalidateQueries({
 				queryKey: [teamQueryKey, docu?.team]
 			})
 			queryClient.invalidateQueries({
-				queryKey: [teamsQueryKey, docu?.team]
+				queryKey: [teamsQueryKey]
+			})
+			queryClient.invalidateQueries({
+				queryKey: [teamDocusQueryKey]
 			})
 			toast.success(t('delete_docu.toast.success_title'), {
 				description: t('delete_docu.toast.success_description')
@@ -140,6 +150,56 @@ const useDocu = ({ docuId }: Props) => {
 		onError: () => {
 			toast.error(t('delete_docu.toast.error_title'), {
 				description: t('delete_docu.toast.error_description')
+			})
+		}
+	})
+
+	const {
+		data: docuImages = [],
+		isLoading: isLoadingDocuImages,
+		refetch: refetchDocuImages
+	} = useQuery({
+		queryKey: [docuImagesQueryKey, docuId],
+		queryFn: () => getDocuImagesService(docuId!),
+		enabled: !!docuId
+	})
+
+	const { mutateAsync: uploadDocuImage, isPending: isUploadingDocuImage } = useMutation({
+		mutationFn: ({ file }: { file: File }) => uploadDocuImageService(docuId!, file),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [docuQueryKey, docuId]
+			})
+			queryClient.invalidateQueries({
+				queryKey: [docuImagesQueryKey, docuId]
+			})
+			toast.success(t('upload_docu_image.toast.success_title'), {
+				description: t('upload_docu_image.toast.success_description')
+			})
+		},
+		onError: () => {
+			toast.error(t('upload_docu_image.toast.error_title'), {
+				description: t('upload_docu_image.toast.error_description')
+			})
+		}
+	})
+
+	const { mutateAsync: deleteDocuImage, isPending: isDeletingDocuImage } = useMutation({
+		mutationFn: (filename: string) => deleteDocuImageService(docuId!, filename),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [docuQueryKey, docuId]
+			})
+			queryClient.invalidateQueries({
+				queryKey: [docuImagesQueryKey, docuId]
+			})
+			toast.success(t('delete_docu_image.toast.success_title'), {
+				description: t('delete_docu_image.toast.success_description')
+			})
+		},
+		onError: () => {
+			toast.error(t('delete_docu_image.toast.error_title'), {
+				description: t('delete_docu_image.toast.error_description')
 			})
 		}
 	})
@@ -155,7 +215,14 @@ const useDocu = ({ docuId }: Props) => {
 		removeFromTeam,
 		isRemovingFromTeam,
 		deleteDocu,
-		isDeletingDocu
+		isDeletingDocu,
+		docuImages,
+		isLoadingDocuImages,
+		uploadDocuImage,
+		isUploadingDocuImage,
+		deleteDocuImage,
+		isDeletingDocuImage,
+		refetchDocuImages
 	}
 }
 

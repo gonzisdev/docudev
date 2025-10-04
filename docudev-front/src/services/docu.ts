@@ -1,5 +1,12 @@
 import customFetch from './customFetch'
-import { Docu, DocuCount, DocuFormPayload, DocusParams, DocusResponse } from 'models/Docu'
+import {
+	Docu,
+	DocuCount,
+	DocuFormPayload,
+	DocuImage,
+	DocusParams,
+	DocusResponse
+} from 'models/Docu'
 import { Team } from 'models/Team'
 import { endpoints } from './endpoints'
 
@@ -41,6 +48,28 @@ export const removeDocuFromTeamService = async (docuId: Docu['_id']) => {
 
 export const deleteDocuService = async (docuId: Docu['_id']) => {
 	return await customFetch<boolean>(`${endpoints.deleteDocu}/${docuId}`, {
+		method: 'DELETE'
+	})
+}
+
+export const uploadDocuImageService = async (docuId: Docu['_id'], file: File) => {
+	const formData = new FormData()
+	formData.append('image', file)
+	return await customFetch<DocuImage>(`${endpoints.docus}/${docuId}/images`, {
+		method: 'POST',
+		bodyReq: formData
+	})
+}
+
+export const getDocuImagesService = async (docuId: Docu['_id']) => {
+	return await customFetch<DocuImage[]>(`${endpoints.docus}/${docuId}/images`)
+}
+
+export const deleteDocuImageService = async (
+	docuId: Docu['_id'],
+	filename: DocuImage['filename']
+) => {
+	return await customFetch<boolean>(`${endpoints.docus}/${docuId}/images/${filename}`, {
 		method: 'DELETE'
 	})
 }

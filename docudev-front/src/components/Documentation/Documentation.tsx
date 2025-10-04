@@ -150,7 +150,7 @@ const Documentation = () => {
 
 	const isLoading = isLoadingTeams || isLoadingDocus
 
-	if (errorDocu) return <Navigate to={HOME_URL} />
+	if (errorDocu) return <Navigate to={'*'} />
 
 	return (
 		<DocumentationLayout

@@ -6,6 +6,7 @@ import { authenticate, validateUserStatus } from '../middleware/auth'
 import { canAccessDocu } from '../middleware/docu'
 import { updateUserActivity } from '../middleware/lastActivity'
 import { limiter } from '../config/limiter'
+import { upload } from '../middleware/multer'
 
 const router = Router()
 
@@ -87,6 +88,31 @@ router.delete(
   updateUserActivity,
   canAccessDocu,
   DocuController.deleteDocu
+)
+
+router.post(
+  '/:docuId/images',
+  authenticate,
+  validateUserStatus,
+  canAccessDocu,
+  upload.single('image'),
+  DocuController.uploadDocuImage
+)
+
+router.get(
+  '/:docuId/images',
+  authenticate,
+  validateUserStatus,
+  canAccessDocu,
+  DocuController.getDocuImages
+)
+
+router.delete(
+  '/:docuId/images/:filename',
+  authenticate,
+  validateUserStatus,
+  canAccessDocu,
+  DocuController.deleteDocuImage
 )
 
 export default router

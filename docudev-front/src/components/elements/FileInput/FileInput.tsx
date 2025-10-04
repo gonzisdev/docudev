@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, forwardRef, useEffect } from 'react'
 import { FileArrowUpIcon, FileIcon } from 'assets/svgs'
 import { useTranslation } from 'react-i18next'
 import Button from 'components/elements/Button/Button'
@@ -11,15 +11,18 @@ interface Props {
 	type?: '.jpg' | '.png' | '.pdf' | '.gif' | '.webp' | string
 }
 
-const FileInput = ({ id, onChange, type = 'image/*' }: Props) => {
+const FileInput = forwardRef<HTMLInputElement, Props>(({ id, onChange, type = 'image/*' }, ref) => {
+	const { t } = useTranslation()
 	const [fileUploaded, setFileUploaded] = useState<File | null>(null)
 	const [isDragging, setIsDragging] = useState(false)
-	const { t } = useTranslation()
 
 	const fileInputRef = useRef<HTMLInputElement>(null)
+	const inputRef = (ref as React.RefObject<HTMLInputElement>) || fileInputRef
+
+	const isImage = type === 'image/*'
 
 	const onPressInputFile = () => {
-		fileInputRef.current?.click()
+		inputRef.current?.click()
 	}
 
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,6 +71,12 @@ const FileInput = ({ id, onChange, type = 'image/*' }: Props) => {
 		}
 	}
 
+	useEffect(() => {
+		if (inputRef.current && inputRef.current.value === '') {
+			setFileUploaded(null)
+		}
+	}, [inputRef.current?.value])
+
 	return (
 		<div
 			className={`file-input-wrapper ${fileUploaded ? 'uploaded' : ''} ${isDragging ? 'dragging' : ''}`}
@@ -80,23 +89,37 @@ const FileInput = ({ id, onChange, type = 'image/*' }: Props) => {
 				{fileUploaded
 					? DOMPurify.sanitize(fileUploaded.name)
 					: isDragging
-						? t('forms.drop_here') || 'Suelta aquí tu archivo'
-						: t('forms.attach_file')}
+						? isImage
+							? t('forms.drop_image_here')
+							: t('forms.drop_file_here')
+						: isImage
+							? t('forms.attach_image')
+							: t('forms.attach_file')}
 			</p>
 			<input
 				id={id}
 				className='file-input'
 				type='file'
-				ref={fileInputRef}
+				ref={inputRef}
 				onChange={handleFileChange}
 				accept={type}
-				aria-label={fileUploaded ? fileUploaded.name : t('forms.attach_file')}
+				aria-label={
+					fileUploaded
+						? fileUploaded.name
+						: isImage
+							? t('forms.attach_image')
+							: t('forms.attach_file')
+				}
 			/>
 			<Button type='button' variant='primary' onClick={onPressInputFile}>
-				{fileUploaded ? t('forms.change_file') : t('forms.search_file')}
+				{fileUploaded
+					? t('forms.change_file')
+					: isImage
+						? t('forms.search_image') || 'Buscar imagen'
+						: t('forms.search_file')}
 			</Button>
 		</div>
 	)
-}
+})
 
 export default FileInput

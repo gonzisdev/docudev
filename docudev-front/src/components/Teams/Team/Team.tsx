@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
-import { CREATE_DOCU_URL, EDIT_DOCU_URL, TEAMS_URL } from 'constants/routes'
+import { CREATE_DOCU_URL, EDIT_DOCU_URL } from 'constants/routes'
 import { DOCU_LIMIT, TEAM_MEMBER_LIMIT } from 'constants/limits'
 import { useAuthStore } from 'stores/authStore'
 import DashboardLayout from 'layouts/DashboardLayout/DashboardLayout'
@@ -133,7 +133,7 @@ const Team = () => {
 		}
 	}, [debouncedSearch])
 
-	if (errorTeam) return <Navigate to={TEAMS_URL} />
+	if (errorTeam) return <Navigate to={'*'} />
 
 	return (
 		<DashboardLayout>

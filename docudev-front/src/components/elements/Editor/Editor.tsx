@@ -5,9 +5,10 @@ interface Props {
 	children: React.ReactNode
 	editorRef?: React.RefObject<HTMLDivElement | null>
 	commentsPanel?: React.ReactNode
+	imagesPanel?: React.ReactNode
 }
 
-const Editor = ({ children, editorRef, commentsPanel }: Props) => {
+const Editor = ({ children, editorRef, commentsPanel, imagesPanel }: Props) => {
 	const editorContainerRef = useRef<HTMLDivElement>(null)
 	const defaultEditorRef = useRef<HTMLDivElement>(null)
 	const finalEditorRef = editorRef || defaultEditorRef
@@ -20,6 +21,7 @@ const Editor = ({ children, editorRef, commentsPanel }: Props) => {
 				</div>
 			</div>
 			{commentsPanel}
+			{imagesPanel}
 		</div>
 	)
 }

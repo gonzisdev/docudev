@@ -8,6 +8,8 @@ import jwt from 'jsonwebtoken'
 import { generateJWT } from '../utils/jwt'
 import { sendEmail } from '../utils/email'
 import mongoose from 'mongoose'
+import fs from 'fs'
+import path from 'path'
 
 export class AuthController {
   static async createAccount(req: Request, res: Response) {
@@ -121,6 +123,20 @@ export class AuthController {
       const userDocus = await Docu.find({ owner: userId })
         .select('_id')
         .session(session)
+      for (const docu of userDocus) {
+        if (Array.isArray(docu.images)) {
+          for (const filename of docu.images) {
+            const filePath = path.join(path.resolve(), 'uploads', filename)
+            if (fs.existsSync(filePath)) {
+              try {
+                fs.unlinkSync(filePath)
+              } catch (err) {
+                console.error(`Error deleting file ${filename}:`, err)
+              }
+            }
+          }
+        }
+      }
       const userDocuIds = userDocus.map((docu) => docu._id)
       if (userDocuIds.length > 0) {
         const comments = await Comment.find({ docu: { $in: userDocuIds } })

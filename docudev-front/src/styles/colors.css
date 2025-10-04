@@ -15,6 +15,7 @@
 	/* Error */
 	--error: #fc8b8b;
 	--error-light: #fc8b8b0f;
+	--error-dark: #9c101091;
 
 	/* Warning */
 	--warning-light: #fff3cd;

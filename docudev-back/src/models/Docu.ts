@@ -6,6 +6,7 @@ export interface IDocu extends Document {
   owner: mongoose.Types.ObjectId
   team: mongoose.Types.ObjectId
   views: number
+  images: string[]
   createdAt: Date
   updatedAt: Date
 }
@@ -33,6 +34,10 @@ const DocuSchema: Schema = new Schema(
     views: {
       type: Number,
       default: 0
+    },
+    images: {
+      type: [String],
+      default: []
     }
   },
   {

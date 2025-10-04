@@ -4,6 +4,8 @@ import Docu, { IDocu } from '../models/Docu'
 import Comment from '../models/Comment'
 import Notification from '../models/Notification'
 import mongoose, { FilterQuery } from 'mongoose'
+import fs from 'fs'
+import path from 'path'
 
 export class DocuController {
   static async createDocu(req: Request, res: Response) {
@@ -340,6 +342,18 @@ export class DocuController {
         return
       }
       const docuId = req.docu._id
+      if (Array.isArray(req.docu.images)) {
+        for (const filename of req.docu.images) {
+          const filePath = path.join(path.resolve(), 'uploads', filename)
+          if (fs.existsSync(filePath)) {
+            try {
+              fs.unlinkSync(filePath)
+            } catch (err) {
+              console.error(`Error deleting file ${filename}:`, err)
+            }
+          }
+        }
+      }
       await Notification.deleteMany({ docu: docuId }, { session })
       const comments = await Comment.find({ docu: docuId })
         .select('_id')
@@ -368,6 +382,68 @@ export class DocuController {
       session.endSession()
       console.error('Error deleting docu:', error)
       res.status(500).json({ error: 'Error deleting docu' })
+    }
+  }
+
+  static async uploadDocuImage(req: Request, res: Response) {
+    try {
+      const image = (req as any).file
+      if (!image) {
+        res.status(400).json({ error: 'No file uploaded' })
+        return
+      }
+      const docu = await Docu.findById(req.params.docuId)
+      if (!docu) {
+        res.status(404).json({ error: 'Docu not found' })
+        return
+      }
+
+      const filename = image.filename
+      if (!docu.images) docu.images = []
+      docu.images.push(filename)
+      await docu.save()
+
+      res.status(201).json({ url: `/uploads/${filename}`, filename })
+    } catch (err) {
+      res.status(500).json({ error: 'Error uploading image' })
+    }
+  }
+
+  static async getDocuImages(req: Request, res: Response) {
+    try {
+      const docu = await Docu.findById(req.params.docuId)
+      if (!docu) {
+        res.status(404).json({ error: 'Docu not found' })
+        return
+      }
+      const images = (docu.images || []).map((filename) => ({
+        url: `/uploads/${filename}`,
+        filename
+      }))
+      res.json(images)
+    } catch (err) {
+      res.status(500).json({ error: 'Error fetching images' })
+    }
+  }
+
+  static async deleteDocuImage(req: Request, res: Response) {
+    try {
+      const { docuId, filename } = req.params
+      const docu = await Docu.findById(docuId)
+      if (!docu) {
+        res.status(404).json({ error: 'Docu not found' })
+        return
+      }
+
+      docu.images = (docu.images || []).filter((img) => img !== filename)
+      await docu.save()
+
+      const filePath = path.join(path.resolve(), 'uploads', filename)
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
+
+      res.status(200).json(true)
+    } catch (err) {
+      res.status(500).json({ error: 'Error deleting image' })
     }
   }
 }

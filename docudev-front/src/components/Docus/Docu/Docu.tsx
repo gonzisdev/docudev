@@ -107,7 +107,7 @@ const Docu = () => {
 		}
 	}, [docu, editor])
 
-	if (errorDocu) return <Navigate to={DOCUS_URL} />
+	if (errorDocu) return <Navigate to={'*'} />
 
 	return (
 		<DashboardLayout>
