@@ -7,7 +7,7 @@ DocuDev es una aplicación MERN (MongoDB, Express, React, Node.js) enfocada en l
 ## ✨ Características principales
 
 - Creación y edición de documentos de manera colaborativa y en tiempo real.
-- Gestión de equipos y organización de colaboradores por roles.
+- Gestión de equipos y organización de colaboradores.
 - Vista personalizada para cada usuario con los documentos de sus equipos.
 - Control de acceso basado en roles:
   - **Usuario Premium:** permisos avanzados de administración.
