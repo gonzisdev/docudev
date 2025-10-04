@@ -15,6 +15,7 @@ export const colors = {
 	// Error
 	error: '#fc8b8b',
 	erroright: '#fc8b8b0f',
+	errorDark: '#9c101091',
 
 	/* Warning */
 	warningLight: '#fff3cd',

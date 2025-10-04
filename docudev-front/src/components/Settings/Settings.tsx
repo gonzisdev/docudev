@@ -17,7 +17,7 @@ import { toast } from 'sonner'
 import UserPlaceholder from 'assets/images/user-placeholder.jpg'
 import './Settings.css'
 
-export const Settings = () => {
+const Settings = () => {
 	const { t } = useTranslation()
 	const [loading, setLoading] = useState(false)
 	const [previewImage, setPreviewImage] = useState<string | null>(null)
@@ -202,3 +202,5 @@ export const Settings = () => {
 		</DashboardLayout>
 	)
 }
+
+export default Settings

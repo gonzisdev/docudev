@@ -1,5 +1,6 @@
 import { Route, Routes, Navigate, useLocation, Outlet } from 'react-router-dom'
 import { useAuthStore } from './stores/authStore'
+import useAuthInit from 'hooks/useAuthInit'
 import {
 	BASE_URL,
 	CREATE_DOCU_URL,
@@ -31,9 +32,8 @@ import Teams from './components/Teams/Teams'
 import Team from 'components/Teams/Team/Team'
 import TeamManagement from './components/TeamManagement/TeamManagement'
 import Notifications from 'components/Notifications/Notifications'
-import { Settings } from 'components/Settings/Settings'
+import Settings from 'components/Settings/Settings'
 import { Toaster } from 'sonner'
-import useAuthInit from 'hooks/useAuthInit'
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 	const user = useAuthStore((state) => state.user)
