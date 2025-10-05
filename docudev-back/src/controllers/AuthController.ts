@@ -4,8 +4,8 @@ import Docu from '../models/Docu'
 import Team from '../models/Team'
 import Comment from '../models/Comment'
 import Notification from '../models/Notification'
-import jwt from 'jsonwebtoken'
-import { generateJWT } from '../utils/jwt'
+import jwt, { JwtPayload } from 'jsonwebtoken'
+import { generateAccessToken, generateRefreshToken } from '../utils/jwt'
 import { sendEmail } from '../utils/email'
 import mongoose from 'mongoose'
 import fs from 'fs'
@@ -41,18 +41,32 @@ export class AuthController {
         res.status(401).json({ error: 'Invalid credentials' })
         return
       }
-      const token = generateJWT(req.user._id.toString())
-      res.cookie('token', token, {
+      const accessToken = generateAccessToken(req.user._id.toString())
+      const refreshToken = generateRefreshToken(req.user._id.toString())
+      req.user.refreshTokens = req.user.refreshTokens || []
+      if (req.user.refreshTokens.length >= +process.env.MAX_REFRESH_TOKENS!) {
+        req.user.refreshTokens.shift()
+      }
+      req.user.refreshTokens.push(refreshToken)
+      res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        maxAge: 1000 * 60 * 15 // 15 min
+      })
+      res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
         maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
       })
-
+      await User.findByIdAndUpdate(req.user._id, {
+        lastActivity: new Date(),
+        refreshTokens: req.user.refreshTokens
+      })
       const userResponse = await User.findById(req.user._id)
-        .select('-password -code ')
+        .select('-password -code -refreshTokens')
         .lean()
-
       res.status(200).json(userResponse)
     } catch (error) {
       console.error('Error during login:', error)
@@ -60,13 +74,103 @@ export class AuthController {
     }
   }
 
+  static async refreshToken(req: Request, res: Response) {
+    const refreshToken = req.cookies?.refreshToken
+
+    if (!refreshToken) {
+      res
+        .status(401)
+        .json({ error: 'Missing refresh token', invalidToken: true })
+      return
+    }
+
+    try {
+      const decoded = jwt.verify(
+        refreshToken,
+        process.env.JWT_REFRESH_SECRET!
+      ) as JwtPayload
+      const user = await User.findById(decoded.id)
+      if (!user) {
+        res
+          .status(401)
+          .json({ error: 'Invalid refresh token', invalidToken: true })
+        return
+      }
+      if (!user.refreshTokens || !user.refreshTokens.includes(refreshToken)) {
+        user.refreshTokens = []
+        await user.save()
+        res.status(401).json({
+          error: 'Refresh token reuse detected. All sessions invalidated.',
+          invalidToken: true
+        })
+        return
+      }
+      if (user.status !== 'active') {
+        res
+          .status(401)
+          .json({ error: 'Account not active', invalidToken: true })
+        return
+      }
+      user.refreshTokens = user.refreshTokens.filter((t) => t !== refreshToken)
+      const newRefreshToken = generateRefreshToken(user._id.toString())
+      user.refreshTokens.push(newRefreshToken)
+      const newAccessToken = generateAccessToken(user._id.toString())
+      res.cookie('accessToken', newAccessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        maxAge: 1000 * 60 * 15 // 15 min
+      })
+      res.cookie('refreshToken', newRefreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+      })
+      await User.findByIdAndUpdate(user._id, {
+        lastActivity: new Date(),
+        refreshTokens: user.refreshTokens
+      })
+      res.status(200).json(true)
+    } catch (error) {
+      if (
+        error instanceof jwt.JsonWebTokenError ||
+        error instanceof jwt.TokenExpiredError
+      ) {
+        res.status(401).json({
+          error: 'Invalid or expired refresh token',
+          invalidToken: true
+        })
+        return
+      }
+      res.status(500).json({ error: 'Server error' })
+    }
+  }
+
   static async logout(req: Request, res: Response) {
-    res.clearCookie('token', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax'
-    })
-    res.status(200).json(true)
+    try {
+      const refreshToken = req.cookies?.refreshToken
+      if (refreshToken && req.user) {
+        req.user.refreshTokens = req.user.refreshTokens.filter(
+          (t) => t !== refreshToken
+        )
+        await req.user.save()
+      }
+      res.clearCookie('accessToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax'
+      })
+      res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax'
+      })
+      res.status(200).json(true)
+    } catch (error) {
+      console.error('Error during logout:', error)
+      res.status(500).json({ error: 'Error during logout' })
+    }
   }
 
   static async recoverPassword(req: Request, res: Response) {

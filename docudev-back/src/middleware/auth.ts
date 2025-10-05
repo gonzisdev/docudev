@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import User, { IUser } from '../models/User'
 
 declare global {
@@ -15,48 +15,46 @@ export const authenticate = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies?.token
-  if (!token) {
+  const accessToken = req.cookies?.accessToken
+
+  if (!accessToken) {
     res.status(401).json({ error: 'Missing token', invalidToken: true })
     return
   }
+
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    if (typeof decoded === 'object' && decoded.id) {
-      const user = (await User.findById(decoded.id).select(
-        '-password -code'
-      )) as IUser
-      if (!user) {
-        res.status(401).json({ error: 'Invalid token', invalidToken: true })
-        return
-      }
-      req.user = user
-      if (decoded.exp) {
-        const now = Math.floor(Date.now() / 1000)
-        const secondsLeft = decoded.exp - now
-        const oneDay = 60 * 60 * 24
-        if (secondsLeft < oneDay) {
-          res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-            maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
-          })
-        }
-      }
-      next()
+    const decoded = jwt.verify(
+      accessToken,
+      process.env.JWT_SECRET!
+    ) as JwtPayload
+
+    const user = (await User.findById(decoded.id).select(
+      '-password -code -refreshTokens'
+    )) as IUser
+
+    if (!user) {
+      res.status(401).json({ error: 'Invalid token', invalidToken: true })
+      return
     }
+
+    req.user = user
+    next()
   } catch (error) {
-    if (
-      error instanceof jwt.JsonWebTokenError ||
-      error instanceof jwt.TokenExpiredError
-    ) {
-      res
-        .status(401)
-        .json({ error: 'Expired or invalid session', invalidToken: true })
-    } else {
-      res.status(500).json({ error: 'There was a server error' })
+    if (error instanceof jwt.TokenExpiredError) {
+      res.status(401).json({
+        error: 'Token expired',
+        invalidToken: true,
+        shouldRefresh: true
+      })
+      return
     }
+
+    if (error instanceof jwt.JsonWebTokenError) {
+      res.status(401).json({ error: 'Invalid token', invalidToken: true })
+      return
+    }
+
+    res.status(500).json({ error: 'Server error during authentication' })
   }
 }
 

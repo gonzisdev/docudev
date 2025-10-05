@@ -59,7 +59,9 @@ router.post(
   AuthController.login
 )
 
-router.post('/logout', AuthController.logout)
+router.post('/refresh-token', AuthController.refreshToken)
+
+router.post('/logout', authenticate, AuthController.logout)
 
 router.post(
   '/recover-password',

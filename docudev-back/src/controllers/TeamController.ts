@@ -35,19 +35,19 @@ export class TeamController {
     try {
       const ownedTeams = await Team.find({ owner: req.user._id })
         .sort({ name: 1 })
-        .populate({ path: 'owner', select: '-password -code -token' })
+        .populate({ path: 'owner', select: '-password -code -refreshTokens' })
         .populate({
           path: 'collaborators',
-          select: '-password -code -token'
+          select: '-password -code -refreshTokens'
         })
       const collaborativeTeams = await Team.find({
         collaborators: req.user._id
       })
         .sort({ name: 1 })
-        .populate({ path: 'owner', select: '-password -code -token' })
+        .populate({ path: 'owner', select: '-password -code -refreshTokens' })
         .populate({
           path: 'collaborators',
-          select: '-password -code -token'
+          select: '-password -code -refreshTokens'
         })
       const allTeams = [...ownedTeams, ...collaborativeTeams]
       res.status(200).json(allTeams)
@@ -65,8 +65,11 @@ export class TeamController {
         return
       }
       const team = await Team.findById(teamId)
-        .populate({ path: 'owner', select: '-password -code -token' })
-        .populate({ path: 'collaborators', select: '-password -code -token' })
+        .populate({ path: 'owner', select: '-password -code -refreshTokens' })
+        .populate({
+          path: 'collaborators',
+          select: '-password -code -refreshTokens'
+        })
 
       if (!team) {
         res.status(404).json({ error: 'Team not found' })

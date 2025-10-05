@@ -15,6 +15,7 @@ import { corsConfig } from './config/cors'
 import { startUserInactivityJob } from './utils/startUserInactivityJob'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import { startTokenCleanupJob } from './utils/cleanUpTokens'
 
 connectDB()
 
@@ -22,6 +23,7 @@ const app = express()
 const server = http.createServer(app)
 
 startUserInactivityJob()
+startTokenCleanupJob()
 
 app.use(cors(corsConfig))
 app.use(morgan('dev'))

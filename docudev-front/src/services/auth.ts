@@ -64,3 +64,7 @@ export const updatePlanService = async () => {
 export const getUserService = async () => {
 	return await customFetch<User>(endpoints.user)
 }
+
+export const refreshTokenService = async () => {
+	return await customFetch<User>(endpoints.refreshToken, { method: 'POST' })
+}

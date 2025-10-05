@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema, Model } from 'mongoose'
 import { hashPassword, checkPassword } from '../utils/auth'
+import jwt from 'jsonwebtoken'
 
 export interface IUser extends Document {
   name: string
@@ -11,6 +12,7 @@ export interface IUser extends Document {
   phone: string
   status: 'active' | 'inactive' | 'suspended'
   code: string
+  refreshTokens: string[]
   lastActivity: Date
   comparePassword(candidatePassword: string): Promise<boolean>
 }
@@ -58,6 +60,10 @@ const UserSchema: Schema = new Schema(
       default: '',
       expires: '1h'
     },
+    refreshTokens: {
+      type: [String],
+      default: []
+    },
     lastActivity: {
       type: Date,
       default: Date.now
@@ -77,6 +83,25 @@ UserSchema.pre('save', async function (next) {
   } catch (error) {
     next(error instanceof Error ? error : new Error(String(error)))
   }
+})
+
+UserSchema.pre('save', function (next) {
+  const tokens = this.refreshTokens as string[]
+  if (tokens && tokens.length > 0) {
+    const validTokens = tokens.filter((token) => {
+      try {
+        jwt.verify(token, process.env.JWT_REFRESH_SECRET!)
+        return true
+      } catch {
+        return false
+      }
+    })
+
+    if (validTokens.length !== tokens.length) {
+      this.refreshTokens = validTokens
+    }
+  }
+  next()
 })
 
 UserSchema.methods.comparePassword = async function (

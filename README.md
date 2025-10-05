@@ -93,7 +93,9 @@ npm install
 # Configurar variables de entorno
 cp .env.template .env
 # Edita el archivo .env con tus valores:
-# - JWT_SECRET: clave secreta para JWT
+# - JWT_SECRET: clave secreta para access token JWT
+# - JWT_REFRESH_SECRET: clave secreta para refresh token JWT
+# - MAX_REFRESH_TOKENS: máximo de refresh tokens permitidos
 # - MONGODB_URI: URI de conexión a MongoDB
 # - PORT: puerto del servidor API (ej: 3000)
 # - WS_PORT: puerto del servidor WebSocket (ej: 1234)

@@ -16,7 +16,8 @@ import {
 	updateAccountService,
 	deleteAccountService,
 	updatePlanService,
-	logoutService
+	logoutService,
+	refreshTokenService
 } from '../services/auth'
 import { clearAllStores } from 'utils/cleanStores'
 
@@ -24,6 +25,7 @@ interface AuthState {
 	user: User | null
 	setUser: (user: User | null) => void
 	refreshUser: () => Promise<User | null>
+	refreshToken: () => Promise<boolean>
 	login: (data: UserFormPayload) => Promise<User | void>
 	register: (data: UserRegisterPayload) => Promise<boolean>
 	logout: () => Promise<boolean>
@@ -47,6 +49,14 @@ export const useAuthStore = create<AuthState>()(
 				} catch {
 					set({ user: null })
 					return null
+				}
+			},
+			refreshToken: async () => {
+				try {
+					await refreshTokenService()
+					return true
+				} catch {
+					return false
 				}
 			},
 			login: async (data: UserFormPayload) => {
