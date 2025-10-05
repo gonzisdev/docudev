@@ -1,7 +1,10 @@
 .image-panel {
-	width: 27.5rem;
+	width: 28rem;
+	min-width: 28rem;
 	height: 100%;
-	max-height: 60rem;
+	border: 1px solid var(--input-border-color);
+	border-radius: var(--input-border-radius);
+	padding: 1rem;
 
 	.image-panel-header {
 		display: flex;
@@ -34,14 +37,16 @@
 		gap: 1rem;
 		flex-wrap: wrap;
 		margin-top: 1rem;
+		height: 17rem;
+		overflow: auto;
 
 		.image-item {
 			position: relative;
 			display: inline-block;
 
 			.docu-img {
-				width: 8.5rem;
-				height: 8.5rem;
+				width: 7.6rem;
+				height: 7.6rem;
 				object-fit: cover;
 				border-radius: var(--input-border-radius);
 				cursor: pointer;

@@ -2,6 +2,13 @@ import mongoose, { Document, Schema, Model } from 'mongoose'
 import { hashPassword, checkPassword } from '../utils/auth'
 import jwt from 'jsonwebtoken'
 
+export interface IRefreshToken {
+  token: string
+  userAgent: string
+  ip: string
+  createdAt: Date
+}
+
 export interface IUser extends Document {
   name: string
   surname: string
@@ -12,7 +19,7 @@ export interface IUser extends Document {
   phone: string
   status: 'active' | 'inactive' | 'suspended'
   code: string
-  refreshTokens: string[]
+  refreshTokens: IRefreshToken[]
   lastActivity: Date
   comparePassword(candidatePassword: string): Promise<boolean>
 }
@@ -60,10 +67,14 @@ const UserSchema: Schema = new Schema(
       default: '',
       expires: '1h'
     },
-    refreshTokens: {
-      type: [String],
-      default: []
-    },
+    refreshTokens: [
+      {
+        token: String,
+        userAgent: String,
+        ip: String,
+        createdAt: Date
+      }
+    ],
     lastActivity: {
       type: Date,
       default: Date.now

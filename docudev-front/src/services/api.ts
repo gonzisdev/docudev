@@ -35,7 +35,6 @@ const createApiInstance = (baseURL: string = BASE_URL): AxiosInstance => {
 		},
 		async (error) => {
 			const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
-
 			if (
 				error.response?.status === 401 &&
 				error.response?.data?.shouldRefresh &&

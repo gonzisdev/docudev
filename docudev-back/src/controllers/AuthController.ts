@@ -43,11 +43,22 @@ export class AuthController {
       }
       const accessToken = generateAccessToken(req.user._id.toString())
       const refreshToken = generateRefreshToken(req.user._id.toString())
+      const userAgent = req.headers['user-agent'] || 'unknown'
+      const ip = req.ip || req.socket?.remoteAddress || 'unknown'
+
       req.user.refreshTokens = req.user.refreshTokens || []
+
       if (req.user.refreshTokens.length >= +process.env.MAX_REFRESH_TOKENS!) {
         req.user.refreshTokens.shift()
       }
-      req.user.refreshTokens.push(refreshToken)
+
+      req.user.refreshTokens.push({
+        token: refreshToken,
+        userAgent,
+        ip,
+        createdAt: new Date()
+      })
+
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -58,7 +69,7 @@ export class AuthController {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 días
       })
       await User.findByIdAndUpdate(req.user._id, {
         lastActivity: new Date(),
@@ -76,6 +87,8 @@ export class AuthController {
 
   static async refreshToken(req: Request, res: Response) {
     const refreshToken = req.cookies?.refreshToken
+    const userAgent = req.headers['user-agent'] || 'unknown'
+    const ip = req.ip || req.socket?.remoteAddress || 'unknown'
 
     if (!refreshToken) {
       res
@@ -96,11 +109,22 @@ export class AuthController {
           .json({ error: 'Invalid refresh token', invalidToken: true })
         return
       }
-      if (!user.refreshTokens || !user.refreshTokens.includes(refreshToken)) {
+
+      const tokenEntry = (user.refreshTokens || []).find(
+        (t: any) => t.token === refreshToken
+      )
+      if (!tokenEntry) {
         user.refreshTokens = []
         await user.save()
         res.status(401).json({
           error: 'Refresh token reuse detected. All sessions invalidated.',
+          invalidToken: true
+        })
+        return
+      }
+      if (tokenEntry.userAgent !== userAgent || tokenEntry.ip !== ip) {
+        res.status(401).json({
+          error: 'Refresh token used from different device',
           invalidToken: true
         })
         return
@@ -111,9 +135,17 @@ export class AuthController {
           .json({ error: 'Account not active', invalidToken: true })
         return
       }
-      user.refreshTokens = user.refreshTokens.filter((t) => t !== refreshToken)
+
+      user.refreshTokens = user.refreshTokens.filter(
+        (t: any) => t.token !== refreshToken
+      )
       const newRefreshToken = generateRefreshToken(user._id.toString())
-      user.refreshTokens.push(newRefreshToken)
+      user.refreshTokens.push({
+        token: newRefreshToken,
+        userAgent,
+        ip,
+        createdAt: new Date()
+      })
       const newAccessToken = generateAccessToken(user._id.toString())
       res.cookie('accessToken', newAccessToken, {
         httpOnly: true,
@@ -125,7 +157,7 @@ export class AuthController {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 días
       })
       await User.findByIdAndUpdate(user._id, {
         lastActivity: new Date(),

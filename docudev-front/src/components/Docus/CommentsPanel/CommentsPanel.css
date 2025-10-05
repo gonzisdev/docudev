@@ -1,5 +1,6 @@
 .comments-panel {
-	width: 27.5rem;
+	width: 28rem;
+	min-width: 28rem;
 	height: 100%;
 	max-height: 60rem;
 	border: 1px solid var(--input-border-color);

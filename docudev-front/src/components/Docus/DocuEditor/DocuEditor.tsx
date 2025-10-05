@@ -1,10 +1,13 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import { useNavigate, useParams, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
+import { useQueryClient } from '@tanstack/react-query'
 import { DOCU_URL, DOCUS_URL, TEAM_URL } from 'constants/routes'
 import { codeBlock } from 'constants/editor'
-import { DocuFormPayload } from 'models/Docu'
+import { commentsQueryKey } from 'constants/queryKeys'
+import { COMMENTS_CHANGED, IMAGES_CHANGED } from 'constants/notifyChanges'
+import { DocuFormPayload, TeamMember } from 'models/Docu'
 import { ActiveUser } from 'models/Collaboration'
 import useTeams from 'hooks/useTeams'
 import useDocu from 'hooks/useDocu'
@@ -21,6 +24,7 @@ import DocuFormModal from '../Modals/DocuFormModal'
 import RemoveFromTeamModal from '../Modals/RemoveFromTeamModal'
 import DeleteDocuModal from '../Modals/DeleteDocuModal'
 import CollaborationStatus from './CollaborationStatus/CollaborationStatus'
+import CommentsPanel from '../CommentsPanel/CommentsPanel'
 import { BlockNoteView } from '@blocknote/shadcn'
 import { useBlockNote } from '@blocknote/react'
 import { WebsocketProvider } from 'y-websocket'
@@ -39,6 +43,7 @@ const DocuEditor = () => {
 	const { t, i18n } = useTranslation()
 	const { docuId } = useParams()
 	const navigate = useNavigate()
+	const queryClient = useQueryClient()
 	const { user } = useAuthStore()
 	const editorRef = useRef<HTMLDivElement>(null)
 
@@ -60,6 +65,18 @@ const DocuEditor = () => {
 		image: user!.image
 	}))
 
+	const notifyImagesChanged = () => {
+		if (provider) {
+			provider.awareness.setLocalStateField(IMAGES_CHANGED, Date.now())
+		}
+	}
+
+	const notifyCommentsChanged = () => {
+		if (provider) {
+			provider.awareness.setLocalStateField(COMMENTS_CHANGED, Date.now())
+		}
+	}
+
 	const {
 		docu,
 		isLoadingDocu,
@@ -77,7 +94,7 @@ const DocuEditor = () => {
 		uploadDocuImage,
 		isUploadingDocuImage,
 		deleteDocuImage
-	} = useDocu(docuId ? { docuId } : {})
+	} = useDocu(docuId ? { docuId, onImagesChanged: notifyImagesChanged } : {})
 	const { teams, isLoadingTeams } = useTeams()
 
 	useEffect(() => {
@@ -210,6 +227,52 @@ const DocuEditor = () => {
 		}
 	}
 
+	const teamUsers = useMemo(() => {
+		if (!docu?.team || typeof docu.team !== 'object') return []
+		const users: TeamMember[] = []
+		const owner = docu.team.owner
+		if (owner && typeof owner === 'object') {
+			users.push({
+				_id: owner._id,
+				name: owner.name,
+				surname: owner.surname,
+				image: owner.image,
+				role: owner.role
+			})
+		}
+		if (Array.isArray(docu.team.collaborators)) {
+			docu.team.collaborators.forEach((collab) => {
+				if (collab && typeof collab === 'object') {
+					users.push({
+						_id: collab._id,
+						name: collab.name,
+						surname: collab.surname,
+						image: collab.image,
+						role: collab.role
+					})
+				}
+			})
+		}
+		return users.filter((user, index, self) => index === self.findIndex((u) => u._id === user._id))
+	}, [docu?.team])
+
+	useEffect(() => {
+		if (!provider || !docuId) return
+		const onAwarenessChange = () => {
+			const states = Array.from(provider.awareness.getStates().values())
+			const someoneChangedImages = states.some((s) => s.imagesChanged)
+			const someoneChangedComments = states.some((s) => s.commentsChanged)
+			if (someoneChangedImages) {
+				queryClient.invalidateQueries({ queryKey: [docuImages, docuId] })
+			}
+			if (someoneChangedComments) {
+				queryClient.invalidateQueries({ queryKey: [commentsQueryKey, docuId] })
+			}
+		}
+		provider.awareness.on('change', onAwarenessChange)
+		return () => provider.awareness.off('change', onAwarenessChange)
+	}, [provider, docuId, queryClient])
+
 	useEffect(() => {
 		if (docu && !isModalOpen) {
 			const teamValue = docu.team
@@ -325,6 +388,22 @@ const DocuEditor = () => {
 						)}
 						<Editor
 							editorRef={editorRef}
+							commentsPanel={
+								docuId && (
+									<CommentsPanel
+										docuId={docuId}
+										teamUsers={teamUsers}
+										currentUser={{
+											_id: user!._id,
+											name: user!.name,
+											surname: user!.surname,
+											image: user!.image,
+											role: user!.role
+										}}
+										onCommentsChanged={notifyCommentsChanged}
+									/>
+								)
+							}
 							imagesPanel={
 								docuId ? (
 									<ImagePanel

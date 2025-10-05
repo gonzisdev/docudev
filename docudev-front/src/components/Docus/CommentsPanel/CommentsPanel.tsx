@@ -15,13 +15,14 @@ interface Props {
 	docuId: Docu['_id']
 	teamUsers: TeamMember[]
 	currentUser: TeamMember
+	onCommentsChanged?: () => void
 }
 
-const CommentsPanel = ({ docuId, teamUsers, currentUser }: Props) => {
+const CommentsPanel = ({ docuId, teamUsers, currentUser, onCommentsChanged }: Props) => {
 	const { t } = useTranslation()
 	const textareaRef = useRef<(HTMLDivElement & ((position: number) => void)) | undefined>(null)
 	const { comments, isLoadingComments, createComment, isCreatingComment, deleteComment } =
-		useComments({ docuId })
+		useComments({ docuId, onCommentsChanged })
 
 	const [comment, setComment] = useState('')
 	const [mentionSearch, setMentionSearch] = useState('')

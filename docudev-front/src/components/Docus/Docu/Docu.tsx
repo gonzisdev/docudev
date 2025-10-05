@@ -1,8 +1,11 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useQueryClient } from '@tanstack/react-query'
 import { DOCUS_URL, EDIT_DOCU_URL, TEAM_URL } from 'constants/routes'
 import { codeBlock } from 'constants/editor'
+import { commentsQueryKey } from 'constants/queryKeys'
+import { COMMENTS_CHANGED } from 'constants/notifyChanges'
 import { TeamMember } from 'models/Docu'
 import { useAuthStore } from 'stores/authStore'
 import useDocu from 'hooks/useDocu'
@@ -21,6 +24,8 @@ import { BlockNoteView } from '@blocknote/shadcn'
 import { exportToPdf } from 'utils/pdf'
 import { formatDateWithTime } from 'utils/dates'
 import { EyeIcon } from 'assets/svgs'
+import { WebsocketProvider } from 'y-websocket'
+import * as Y from 'yjs'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/shadcn/style.css'
 import './Docu.css'
@@ -31,6 +36,7 @@ const Docu = () => {
 	const navigate = useNavigate()
 	const editorRef = useRef(null)
 	const { user } = useAuthStore()
+	const queryClient = useQueryClient()
 	const {
 		docu,
 		isLoadingDocu,
@@ -41,6 +47,8 @@ const Docu = () => {
 		isDeletingDocu
 	} = useDocu({ docuId })
 
+	const [doc] = useState(() => new Y.Doc())
+	const [provider, setProvider] = useState<WebsocketProvider | null>(null)
 	const [initialContent, setInitialContent] = useState<PartialBlock[] | undefined>(undefined)
 	const [isRemoveFromTeamModalOpen, setIsRemoveFromTeamModalOpen] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -49,24 +57,6 @@ const Docu = () => {
 		initialContent,
 		codeBlock
 	})
-
-	const handleRemoveFromTeam = async () => {
-		if (docuId) {
-			await removeFromTeam()
-			setIsRemoveFromTeamModalOpen(false)
-			if (user?._id !== docu?.owner?._id) {
-				navigate(DOCUS_URL)
-			}
-		}
-	}
-
-	const handleDeleteDocu = async () => {
-		if (docuId) {
-			await deleteDocu()
-			setIsDeleteModalOpen(false)
-			navigate(DOCUS_URL)
-		}
-	}
 
 	const teamUsers = useMemo(() => {
 		if (!docu?.team || typeof docu.team !== 'object') return []
@@ -97,6 +87,30 @@ const Docu = () => {
 		return users.filter((user, index, self) => index === self.findIndex((u) => u._id === user._id))
 	}, [docu?.team])
 
+	const notifyCommentsChanged = () => {
+		if (provider) {
+			provider.awareness.setLocalStateField(COMMENTS_CHANGED, Date.now())
+		}
+	}
+
+	const handleRemoveFromTeam = async () => {
+		if (docuId) {
+			await removeFromTeam()
+			setIsRemoveFromTeamModalOpen(false)
+			if (user?._id !== docu?.owner?._id) {
+				navigate(DOCUS_URL)
+			}
+		}
+	}
+
+	const handleDeleteDocu = async () => {
+		if (docuId) {
+			await deleteDocu()
+			setIsDeleteModalOpen(false)
+			navigate(DOCUS_URL)
+		}
+	}
+
 	useEffect(() => {
 		if (docu) {
 			const parsedContent = JSON.parse(docu.content!)
@@ -106,6 +120,30 @@ const Docu = () => {
 			}
 		}
 	}, [docu, editor])
+
+	useEffect(() => {
+		if (!docuId) return
+		const wsProvider = new WebsocketProvider(import.meta.env.VITE_WEBSOCKET_URL, docuId, doc)
+		setProvider(wsProvider)
+		return () => {
+			wsProvider.disconnect()
+			wsProvider.destroy()
+			setProvider(null)
+		}
+	}, [docuId, doc])
+
+	useEffect(() => {
+		if (!provider || !docuId) return
+		const onAwarenessChange = () => {
+			const states = Array.from(provider.awareness.getStates().values())
+			const someoneChangedComments = states.some((s) => s.commentsChanged)
+			if (someoneChangedComments) {
+				queryClient.invalidateQueries({ queryKey: [commentsQueryKey, docuId] })
+			}
+		}
+		provider.awareness.on('change', onAwarenessChange)
+		return () => provider.awareness.off('change', onAwarenessChange)
+	}, [provider, docuId, queryClient])
 
 	if (errorDocu) return <Navigate to={'*'} />
 
@@ -195,6 +233,7 @@ const Docu = () => {
 											image: user!.image,
 											role: user!.role
 										}}
+										onCommentsChanged={notifyCommentsChanged}
 									/>
 								)
 							}>

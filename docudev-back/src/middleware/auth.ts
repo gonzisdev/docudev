@@ -16,27 +16,24 @@ export const authenticate = async (
   next: NextFunction
 ) => {
   const accessToken = req.cookies?.accessToken
-
   if (!accessToken) {
-    res.status(401).json({ error: 'Missing token', invalidToken: true })
+    res
+      .status(401)
+      .json({ error: 'Missing token', invalidToken: true, shouldRefresh: true })
     return
   }
-
   try {
     const decoded = jwt.verify(
       accessToken,
       process.env.JWT_SECRET!
     ) as JwtPayload
-
     const user = (await User.findById(decoded.id).select(
       '-password -code -refreshTokens'
     )) as IUser
-
     if (!user) {
       res.status(401).json({ error: 'Invalid token', invalidToken: true })
       return
     }
-
     req.user = user
     next()
   } catch (error) {
@@ -48,12 +45,10 @@ export const authenticate = async (
       })
       return
     }
-
     if (error instanceof jwt.JsonWebTokenError) {
       res.status(401).json({ error: 'Invalid token', invalidToken: true })
       return
     }
-
     res.status(500).json({ error: 'Server error during authentication' })
   }
 }

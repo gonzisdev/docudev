@@ -23,9 +23,10 @@ import { toast } from 'sonner'
 
 interface Props {
 	docuId?: Docu['_id']
+	onImagesChanged?: () => void
 }
 
-const useDocu = ({ docuId }: Props) => {
+const useDocu = ({ docuId, onImagesChanged }: Props) => {
 	const { t } = useTranslation()
 	const queryClient = useQueryClient()
 
@@ -173,6 +174,7 @@ const useDocu = ({ docuId }: Props) => {
 			queryClient.invalidateQueries({
 				queryKey: [docuImagesQueryKey, docuId]
 			})
+			if (onImagesChanged) onImagesChanged()
 			toast.success(t('upload_docu_image.toast.success_title'), {
 				description: t('upload_docu_image.toast.success_description')
 			})
@@ -193,6 +195,7 @@ const useDocu = ({ docuId }: Props) => {
 			queryClient.invalidateQueries({
 				queryKey: [docuImagesQueryKey, docuId]
 			})
+			if (onImagesChanged) onImagesChanged()
 			toast.success(t('delete_docu_image.toast.success_title'), {
 				description: t('delete_docu_image.toast.success_description')
 			})

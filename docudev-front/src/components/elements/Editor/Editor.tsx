@@ -20,8 +20,10 @@ const Editor = ({ children, editorRef, commentsPanel, imagesPanel }: Props) => {
 					{children}
 				</div>
 			</div>
-			{commentsPanel}
-			{imagesPanel}
+			<div className='side-panels'>
+				{imagesPanel}
+				{commentsPanel}
+			</div>
 		</div>
 	)
 }

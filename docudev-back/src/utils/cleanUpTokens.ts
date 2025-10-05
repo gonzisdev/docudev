@@ -18,9 +18,9 @@ export function startTokenCleanupJob() {
       for (const user of users) {
         const initialTokenCount = user.refreshTokens.length
 
-        const validTokens = user.refreshTokens.filter((token) => {
+        const validTokens = user.refreshTokens.filter((tokenObj) => {
           try {
-            jwt.verify(token, process.env.JWT_REFRESH_SECRET!)
+            jwt.verify(tokenObj.token, process.env.JWT_REFRESH_SECRET!)
             return true
           } catch (error) {
             return false
