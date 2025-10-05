@@ -45,20 +45,16 @@ export class AuthController {
       const refreshToken = generateRefreshToken(req.user._id.toString())
       const userAgent = req.headers['user-agent'] || 'unknown'
       const ip = req.ip || req.socket?.remoteAddress || 'unknown'
-
       req.user.refreshTokens = req.user.refreshTokens || []
-
       if (req.user.refreshTokens.length >= +process.env.MAX_REFRESH_TOKENS!) {
         req.user.refreshTokens.shift()
       }
-
       req.user.refreshTokens.push({
         token: refreshToken,
         userAgent,
         ip,
         createdAt: new Date()
       })
-
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -69,7 +65,7 @@ export class AuthController {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 días
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
       })
       await User.findByIdAndUpdate(req.user._id, {
         lastActivity: new Date(),
@@ -135,7 +131,6 @@ export class AuthController {
           .json({ error: 'Account not active', invalidToken: true })
         return
       }
-
       user.refreshTokens = user.refreshTokens.filter(
         (t: any) => t.token !== refreshToken
       )
@@ -157,7 +152,7 @@ export class AuthController {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 días
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
       })
       await User.findByIdAndUpdate(user._id, {
         lastActivity: new Date(),
